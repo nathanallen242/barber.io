@@ -54,27 +54,29 @@ const Home: React.FC<HomeProps> = ({ username }) => {
       </View>
     </TouchableOpacity>
 
-    <View style={styles.navigationContainer}>
-      <TouchableOpacity style={styles.componentContainer}>
-        <FontAwesome name="usd" size={24} color="#000" />
-        <Text style={styles.componentName}>Prices</Text>
-      </TouchableOpacity>
+    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width: '100%'}}>
+      <View style={styles.navigationContainer}>
+        <TouchableOpacity style={styles.componentContainer}>
+          <FontAwesome name="usd" size={24} color="#000" />
+          <Text style={styles.componentName}>Prices</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.componentContainer}>
-        <FontAwesome name="image" size={24} color="#000" />
-        <Text style={styles.componentName}>Gallery</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.componentContainer}>
+          <FontAwesome name="image" size={24} color="#000" />
+          <Text style={styles.componentName}>Gallery</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.componentContainer}>
-        <FontAwesome name="list-alt" size={24} color="#000" />
-        <Text style={styles.componentName}>Services</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.componentContainer}>
+          <FontAwesome name="list-alt" size={24} color="#000" />
+          <Text style={styles.componentName}>Services</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.componentContainer}>
-        <FontAwesome name="phone" size={24} color="#000" />
-        <Text style={styles.componentName}>Contact</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity style={styles.componentContainer}>
+          <FontAwesome name="phone" size={24} color="#000" />
+          <Text style={styles.componentName}>Contact</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
 
     <Text style={styles.title}>Most Recent Appointment</Text>
 
@@ -86,14 +88,24 @@ const Home: React.FC<HomeProps> = ({ username }) => {
     />
 
     {/* TODO: Add a button to book again */}
-    <TouchableOpacity style={styles.button}>
-      <Text style={styles.buttonText}>Book Again</Text>
-    </TouchableOpacity>
+    <View style={styles.buttonContainer}>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>Leave a Review</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>Book Again</Text>
+      </TouchableOpacity>
+    </View>
   </SafeAreaView>
  );
 };
 
 const styles = StyleSheet.create({
+ buttonContainer: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  width: '65%'
+ },
  title: {
   fontSize: 23,
   fontWeight: 'bold',
