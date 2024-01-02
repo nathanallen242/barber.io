@@ -1,7 +1,8 @@
 import React, { useState, useEffect} from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Card from '../components/profile/Card';
 
 interface HomeProps {
  username: string;
@@ -25,11 +26,11 @@ const Home: React.FC<HomeProps> = ({ username }) => {
         <Text style={styles.userName}>{username}</Text>
       </View>
       <View style={styles.profileContainer}>
-        <View style={styles.profilePlaceholder}></View>
+        <TouchableOpacity style={styles.profilePlaceholder} />
       </View>
     </View>
 
-    <View style={styles.cardContainer}>
+    <TouchableOpacity style={styles.cardContainer}>
       <View style={styles.parentContainer}>
         <View style={styles.leftContainer}>
           <View style={styles.profilePlaceholder}></View>
@@ -38,6 +39,7 @@ const Home: React.FC<HomeProps> = ({ username }) => {
           <Text style={styles.name}>John Doe</Text>
           <Text style={styles.jobTitle}>Software Engineer</Text>
         </View>
+        <FontAwesome name="chevron-right" size={20} color="#000" />
       </View>
 
       <View style={styles.additionalContainer}>
@@ -50,14 +52,67 @@ const Home: React.FC<HomeProps> = ({ username }) => {
           <Text style={styles.durationText}>00:00 - 00:00</Text>
         </View>
       </View>
+    </TouchableOpacity>
+
+    <View style={styles.navigationContainer}>
+      <TouchableOpacity style={styles.componentContainer}>
+        <FontAwesome name="usd" size={24} color="#000" />
+        <Text style={styles.componentName}>Prices</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.componentContainer}>
+        <FontAwesome name="image" size={24} color="#000" />
+        <Text style={styles.componentName}>Gallery</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.componentContainer}>
+        <FontAwesome name="list-alt" size={24} color="#000" />
+        <Text style={styles.componentName}>Services</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.componentContainer}>
+        <FontAwesome name="phone" size={24} color="#000" />
+        <Text style={styles.componentName}>Contact</Text>
+      </TouchableOpacity>
     </View>
 
-    {/* Additional Components can be added here */}
+    <Text style={styles.title}>Most Recent Appointment</Text>
+
+    <Card
+      name="John Doe"
+      jobTitle="Software Engineer"
+      date="Tuesday, 2 January"
+      duration="00:00 - 00:00"
+    />
+
+    {/* TODO: Add a button to book again */}
+    <TouchableOpacity style={styles.button}>
+      <Text style={styles.buttonText}>Book Again</Text>
+    </TouchableOpacity>
   </SafeAreaView>
  );
 };
 
 const styles = StyleSheet.create({
+ title: {
+  fontSize: 23,
+  fontWeight: 'bold',
+  marginTop: 20,
+  marginBottom: 10,
+  marginLeft: 20,
+  alignSelf: 'flex-start',
+ },
+ button: {
+  backgroundColor: '#007BFF',
+  padding: 10,
+  borderRadius: 5,
+  alignItems: 'center',
+  marginTop: 10,
+ },
+ buttonText: {
+  color: '#fff',
+  fontSize: 16,
+ },
  container: {
   flexDirection: 'column',
   alignItems: 'center',
@@ -144,11 +199,26 @@ const styles = StyleSheet.create({
  },
  name: {
   fontWeight: 'bold',
-  fontSize: 20,
+  fontSize: 23,
+  marginBottom: 8,
  },
  jobTitle: {
   color: 'grey',
-  fontSize: 16,
+  fontSize: 18,
+ },
+ navigationContainer: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  padding: 20,
+  marginTop: 20,
+ },
+ componentContainer: {
+  alignItems: 'center',
+  padding: 25,
+ },
+ componentName: {
+  fontSize: 18,
+  marginTop: 5,
  },
 });
 
