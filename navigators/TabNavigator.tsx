@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Home from '../screens/Home';
 import Schedule from '../screens/Schedule';
-// import Profile from '../screens/Profile'; // Import the Profile component
+import Profile from '../screens/profile/Profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -38,7 +38,7 @@ export default function TabNavigator({ username }: TabNavigatorProps) {
         ),
       }}
     />
-    {/* <Tab.Screen
+    <Tab.Screen
       name="Profile"
       component={Profile}
       options={{
@@ -46,7 +46,7 @@ export default function TabNavigator({ username }: TabNavigatorProps) {
           <Icon name="user" color={color} size={24} />
         ),
       }}
-    /> */}
+    />
   </Tab.Navigator>
  );
 }
