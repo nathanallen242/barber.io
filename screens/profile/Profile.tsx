@@ -1,31 +1,42 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import ProfileCard from '../../components/profile/ProfileCard';
 import Setting from '../../components/profile/Setting';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const Profile: React.FC = () => {
+ const { isAuthenticated } = useContext(AuthContext);
+
  return (
-   <>
-     <View style={styles.header}>
-       <Text style={styles.title}>Profile</Text>
-     </View>
-     <View style={styles.container}>
-       <ProfileCard name="example" email="example@email.com" />
-       <View style={styles.settingsContainer}>
-          <Setting icon="user" name="Account" description="Change your account settings" />
-          <Setting icon="credit-card" name="Payment" description="Change your payment settings" />
-          <Setting icon="bell"name="Notifications" description="Manage your notification settings" />
-          <Setting icon="sign-out"name="Logout" description="Log out of your account" />
-       </View>
-       <View style={styles.moreContainer}>
-          <Text style={styles.moreText}>More</Text>
-          <Setting icon="info-circle" name="About Us" description="Learn more about the app" />
-          <Setting icon="life-ring" name="Help & Support" description="Get help with your account" />
-       </View>
-     </View>
-   </>
+ <>
+  <View style={styles.header}>
+   <Text style={styles.title}>Profile</Text>
+  </View>
+  <View style={styles.container}>
+   <ProfileCard name="example" email="example@email.com" />
+   <View style={styles.settingsContainer}>
+    {isAuthenticated ? (
+     <>
+      <Setting icon="user" name="Account" description="Change your account settings" />
+      <Setting icon="credit-card" name="Payment" description="Change your payment settings" />
+      <Setting icon="bell"name="Notifications" description="Manage your notification settings" />
+      <Setting icon="sign-out"name="Logout" description="Log out of your account" />
+     </>
+    ) : (
+     <Setting icon="sign-in" name="Login" description="Log in to your account" />
+    )}
+   </View>
+   <View style={styles.moreContainer}>
+    <Text style={styles.moreText}>More</Text>
+    <Setting icon="info-circle" name="About Us" description="Learn more about the app" />
+    <Setting icon="life-ring" name="Help & Support" description="Get help with your account" />
+   </View>
+  </View>
+ </>
  );
 };
+
+// Rest of the code...
 
 const styles = StyleSheet.create({
  header: {
