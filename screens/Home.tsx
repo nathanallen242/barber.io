@@ -71,11 +71,13 @@ const Home: React.FC<HomeProps> = ({ username }) => {
       jobTitle="Software Engineer"
       date="Tuesday, 2 January"
       duration="00:00 - 00:00"
+      rating={4.5}
     />
 
-    {/* TODO: Add a button to book again */}
+    {/* TODO: Add a button to book again and view reviews */}
     <View style={styles.buttonContainer}>
       <TouchableOpacity style={styles.button}>
+        
         <Text style={styles.buttonText}>Leave a Review</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button}>
