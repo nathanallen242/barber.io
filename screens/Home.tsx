@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../components/profile/Card';
+import SearchBar from '../components/search/SearchBar';
 
 interface HomeProps {
  username: string;
@@ -30,31 +31,16 @@ const Home: React.FC<HomeProps> = ({ username }) => {
       </View>
     </View>
 
-    <TouchableOpacity style={styles.cardContainer}>
-      <View style={styles.parentContainer}>
-        <View style={styles.leftContainer}>
-          <View style={styles.profilePlaceholder}></View>
-        </View>
-        <View style={styles.rightContainer}>
-          <Text style={styles.name}>John Doe</Text>
-          <Text style={styles.jobTitle}>Software Engineer</Text>
-        </View>
-        <FontAwesome name="chevron-right" size={20} color="#000" />
-      </View>
+    <Card
+      name="John Doe"
+      jobTitle="Software Engineer"
+      date="Tuesday, 2 January"
+      duration="00:00 - 00:00"
+      rating={4.5}
+    />
 
-      <View style={styles.additionalContainer}>
-        <View style={styles.dateContainer}>
-          <FontAwesome name="calendar" size={15} color="#000" />
-          <Text style={styles.dateText}>Tuesday, 2 January</Text>
-        </View>
-        <View style={styles.durationContainer}>
-          <FontAwesome name="clock-o" size={15} color="#000" />
-          <Text style={styles.durationText}>00:00 - 00:00</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-
-    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width: '100%'}}>
+    <SearchBar />
+    
       <View style={styles.navigationContainer}>
         <TouchableOpacity style={styles.componentContainer}>
           <FontAwesome name="usd" size={24} color="#000" />
@@ -76,7 +62,7 @@ const Home: React.FC<HomeProps> = ({ username }) => {
           <Text style={styles.componentName}>Contact</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    
 
     <Text style={styles.title}>Most Recent Appointment</Text>
 
@@ -107,7 +93,7 @@ const styles = StyleSheet.create({
   width: '65%'
  },
  title: {
-  fontSize: 23,
+  fontSize: 25,
   fontWeight: 'bold',
   marginTop: 20,
   marginBottom: 10,
@@ -221,8 +207,7 @@ const styles = StyleSheet.create({
  navigationContainer: {
   flexDirection: 'row',
   justifyContent: 'space-between',
-  padding: 20,
-  marginTop: 20,
+  padding: 0
  },
  componentContainer: {
   alignItems: 'center',
