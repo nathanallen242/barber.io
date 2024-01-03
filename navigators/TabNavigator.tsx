@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Home from '../screens/Home';
-// import Schedule from '../screens/Schedule'; // Import the Schedule component
+import Schedule from '../screens/Schedule';
 // import Profile from '../screens/Profile'; // Import the Profile component
 
 const Tab = createBottomTabNavigator();
@@ -29,7 +29,7 @@ export default function TabNavigator({ username }: TabNavigatorProps) {
         ),
       }}
     />
-    {/* <Tab.Screen
+    <Tab.Screen
       name="Schedule"
       component={Schedule}
       options={{
@@ -38,7 +38,7 @@ export default function TabNavigator({ username }: TabNavigatorProps) {
         ),
       }}
     />
-    <Tab.Screen
+    {/* <Tab.Screen
       name="Profile"
       component={Profile}
       options={{

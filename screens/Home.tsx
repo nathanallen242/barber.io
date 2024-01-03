@@ -84,6 +84,7 @@ const Home: React.FC<HomeProps> = ({ username }) => {
         <Text style={styles.buttonText}>Book Again</Text>
       </TouchableOpacity>
     </View>
+
   </SafeAreaView>
  );
 };
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
  title: {
   fontSize: 25,
   fontWeight: 'bold',
-  marginTop: 20,
+  marginTop: 15,
   marginBottom: 10,
   marginLeft: 20,
   alignSelf: 'flex-start',
