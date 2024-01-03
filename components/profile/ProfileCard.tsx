@@ -9,7 +9,7 @@ interface ProfileCardProps {
 
 const ProfileCard: React.FC<ProfileCardProps> = ({ name, email }) => {
  return (
-  <TouchableOpacity style={styles.cardContainer}>
+  <View style={styles.cardContainer}>
     <View style={styles.parentContainer}>
       <View style={styles.leftContainer}>
         <View style={styles.profilePlaceholder}></View>
@@ -18,9 +18,11 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ name, email }) => {
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.email}>{email}</Text>
       </View>
-      <FontAwesome name="pencil" size={20} color="#000" />
+      <TouchableOpacity>
+        <FontAwesome name="pencil" size={20} color="#000" />
+      </TouchableOpacity>
     </View>
-  </TouchableOpacity>
+  </View>
  );
 };
 

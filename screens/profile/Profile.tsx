@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import ProfileCard from '../../components/profile/ProfileCard';
+import Setting from '../../components/profile/Setting';
 
 const Profile: React.FC = () => {
  return (
@@ -10,6 +11,17 @@ const Profile: React.FC = () => {
      </View>
      <View style={styles.container}>
        <ProfileCard name="example" email="example@email.com" />
+       <View style={styles.settingsContainer}>
+          <Setting icon="user" name="Account" description="Change your account settings" />
+          <Setting icon="credit-card" name="Payment" description="Change your payment settings" />
+          <Setting icon="bell"name="Notifications" description="Manage your notification settings" />
+          <Setting icon="sign-out"name="Logout" description="Log out of your account" />
+       </View>
+       <View style={styles.moreContainer}>
+          <Text style={styles.moreText}>More</Text>
+          <Setting icon="info-circle" name="About Us" description="Learn more about the app" />
+          <Setting icon="life-ring" name="Help & Support" description="Get help with your account" />
+       </View>
      </View>
    </>
  );
@@ -32,6 +44,29 @@ const styles = StyleSheet.create({
  title: {
    fontSize: 30,
    fontWeight: 'bold',
+ },
+ settingsContainer:{
+  flex: 1,
+  flexDirection: 'column',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
+  backgroundColor: '#f0f0f0',
+  padding: 20
+ },
+ moreContainer:{
+  flex: 1,
+  marginTop: 60,
+  flexDirection: 'column',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
+  backgroundColor: '#f0f0f0',
+  padding: 20,
+ },
+ moreText: {
+  fontSize: 22,
+  alignSelf: 'flex-start',
+  marginLeft: 15,
+  color: 'grey',
  },
 });
 
