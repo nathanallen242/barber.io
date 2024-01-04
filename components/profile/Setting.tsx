@@ -6,11 +6,12 @@ interface SettingProps {
  name: string;
  description: string;
  icon: string;
+ onPress?: () => void;
 }
 
-const Setting: React.FC<SettingProps> = ({ icon, name, description }) => {
+const Setting: React.FC<SettingProps> = ({ icon, name, description, onPress }) => {
  return (
-  <TouchableOpacity style={styles.settingContainer}>
+  <TouchableOpacity style={styles.settingContainer} onPress={onPress}>
     <View style={styles.iconContainer}>
       <FontAwesome name={icon}size={20} color="#000" />
     </View>

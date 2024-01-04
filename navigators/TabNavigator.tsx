@@ -1,15 +1,32 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Home from '../screens/Home';
 import Schedule from '../screens/Schedule';
 import Profile from '../screens/profile/Profile';
+import LoginScreen from '../screens/auth/Login';
+import SignUpScreen from '../screens/auth/Signup';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 interface TabNavigatorProps {
     username: string;
 }
+
+const UserStack = () => {
+  return (
+    <Stack.Navigator
+    screenOptions = {{
+      headerShown: false,
+    }}>
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Signup" component={SignUpScreen} />
+    </Stack.Navigator>
+  );
+};
 
 export default function TabNavigator({ username }: TabNavigatorProps) {
  return (
@@ -39,9 +56,10 @@ export default function TabNavigator({ username }: TabNavigatorProps) {
       }}
     />
     <Tab.Screen
-      name="Profile"
-      component={Profile}
+      name="User"
+      component={UserStack}
       options={{
+        headerShown: false,
         tabBarIcon: ({ color }) => (
           <Icon name="user" color={color} size={24} />
         ),

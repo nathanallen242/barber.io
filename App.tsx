@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { AuthContext, authContextDefaults } from './contexts/AuthContext';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import TabNavigator from './navigators/TabNavigator'; // Import the TabNavigator
 
 export default function App() {

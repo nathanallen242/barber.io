@@ -3,8 +3,13 @@ import { View, Text, StyleSheet } from 'react-native';
 import ProfileCard from '../../components/profile/ProfileCard';
 import Setting from '../../components/profile/Setting';
 import { AuthContext } from '../../contexts/AuthContext';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
-const Profile: React.FC = () => {
+interface ProfileProps {
+  navigation: NavigationProp<ParamListBase>;
+}
+
+const Profile: React.FC<ProfileProps> = ({ navigation }) => {
  const { isAuthenticated } = useContext(AuthContext);
 
  return (
@@ -23,7 +28,11 @@ const Profile: React.FC = () => {
       <Setting icon="sign-out"name="Logout" description="Log out of your account" />
      </>
     ) : (
-     <Setting icon="sign-in" name="Login" description="Log in to your account" />
+     <Setting 
+     icon="sign-in" 
+     name="Login" 
+     description="Log in to your account" 
+     onPress = {() => navigation.navigate('Login')} />
     )}
    </View>
    <View style={styles.moreContainer}>
