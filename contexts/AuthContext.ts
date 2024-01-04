@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { FIREBASE_AUTH, FIREBASE_DB } from '../config/FireBase';
+import { FIREBASE_DB } from '../config/FireBase';
+import { getAuth } from 'firebase/auth';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -43,9 +44,10 @@ interface AuthProviderProps {
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const auth = getAuth();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (firebaseUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         const dbRef = ref(FIREBASE_DB, `users/${firebaseUser.uid}`);
         const snapshot = await get(dbRef);
@@ -62,7 +64,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const userCredential = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const firebaseUser = userCredential.user;
     const userObject: User = {
       uid: firebaseUser.uid,
@@ -76,12 +78,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = async () => {
-    await signOut(FIREBASE_AUTH);
+    await signOut(auth);
     setUser(null);
   };
 
   const createUser = async (email: string, password: string) => {
-    const userCredential = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const firebaseUser = userCredential.user;
     const userObject: User = {
       uid: firebaseUser.uid,
@@ -95,14 +97,14 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const updatePassword = async (newPassword: string) => {
-    if (user && FIREBASE_AUTH.currentUser) {
-      await updateFirebasePassword(FIREBASE_AUTH.currentUser, newPassword);
+    if (user && auth.currentUser) {
+      await updateFirebasePassword(auth.currentUser, newPassword);
     }
   };
 
   const reauthenticate = async (credential: any) => {
-    if (user && FIREBASE_AUTH.currentUser) {
-      await reauthenticateWithCredential(FIREBASE_AUTH.currentUser, credential);
+    if (user && auth.currentUser) {
+      await reauthenticateWithCredential(auth.currentUser, credential);
     }
   };
 

@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@env/*": ["node_modules/react-native-dotenv/*"],
+      "@firebase/auth": ["node_modules/@firebase/auth/dist/auth/index.d.ts"]
+    },
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
