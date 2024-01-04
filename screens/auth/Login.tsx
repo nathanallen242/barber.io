@@ -13,8 +13,9 @@ const LoginScreen = ({ navigation }: { navigation: NavigationProp<ParamListBase>
  setIsLoading(true);
  try {
    await login(email, password);
-   navigation.navigate('Home');
+   navigation.navigate('Profile');
  } catch (error) {
+   console.log(error);
    Alert.alert("Authentication Error", "Invalid email and/or password.");
  } finally {
    setIsLoading(false);

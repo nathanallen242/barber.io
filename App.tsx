@@ -1,12 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { AuthContext, authContextDefaults } from './contexts/AuthContext';
+import AuthProvider from './contexts/AuthContext';
 import { StyleSheet, View } from 'react-native';
 import TabNavigator from './navigators/TabNavigator'; // Import the TabNavigator
 
 export default function App() {
  return (
-  <AuthContext.Provider value={authContextDefaults}>
+  <AuthProvider>
   <View style={styles.container}>
     <View style={styles.content}>
       <NavigationContainer>
@@ -15,7 +15,7 @@ export default function App() {
     </View>
     <StatusBar style="auto" />
   </View>
-  </AuthContext.Provider>
+  </AuthProvider>
  );
 }
 

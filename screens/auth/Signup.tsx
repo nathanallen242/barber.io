@@ -13,7 +13,7 @@ const SignUpScreen = ({ navigation }: { navigation: NavigationProp<ParamListBase
    setIsLoading(true);
    try {
      await createUser(email, password);
-     navigation.navigate('Login');
+     navigation.navigate('Profile');
    } catch (error) {
      console.log(error);
    } finally {

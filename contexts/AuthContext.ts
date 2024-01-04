@@ -20,7 +20,7 @@ export interface User {
 
 export interface AuthContextInterface {
   user: User | null;
-  isAuthenticated: boolean;
+  isAuthenticated: Boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   createUser: (email: string, password: string) => Promise<void>;
@@ -45,22 +45,23 @@ interface AuthProviderProps {
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const auth = getAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        const dbRef = ref(FIREBASE_DB, `users/${firebaseUser.uid}`);
-        const snapshot = await get(dbRef);
-        if (snapshot.exists()) {
-          setUser(snapshot.val() as User);
-        }
-      } else {
-        setUser(null);
-      }
-    });
-
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
+   const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+     if (firebaseUser) {
+       const snapshot = await get(ref(FIREBASE_DB, 'users/' + firebaseUser.uid));
+       if (snapshot.exists()) {
+         setUser(snapshot.val() as User);
+         setIsAuthenticated(true)
+       }
+     } else {
+       setUser(null);
+       setIsAuthenticated(false)
+     }
+   });
+   // Cleanup subscription on unmount
+   return () => unsubscribe();
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -69,12 +70,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const userObject: User = {
       uid: firebaseUser.uid,
       email: firebaseUser.email ?? '',
-      displayName: firebaseUser.displayName || undefined,
-      photoURL: firebaseUser.photoURL || undefined
+      displayName: firebaseUser.displayName ?? 'Guest',
+      photoURL: firebaseUser.photoURL ?? 'https://via.placeholder.com/150',
     };
     setUser(userObject);
-    const dbRef = ref(FIREBASE_DB, `users/${firebaseUser.uid}`);
-    set(dbRef, userObject);
+    const dbRef = await set(ref(FIREBASE_DB, 'users/' + firebaseUser.uid), userObject);
   };
 
   const logout = async () => {
@@ -88,12 +88,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const userObject: User = {
       uid: firebaseUser.uid,
       email: firebaseUser.email ?? '',
-      displayName: firebaseUser.displayName ?? undefined,
-      photoURL: firebaseUser.photoURL ?? undefined,
+      displayName: firebaseUser.displayName ?? 'Guest',
+      photoURL: firebaseUser.photoURL ?? 'https://via.placeholder.com/150',
     };
     setUser(userObject);
-    const dbRef = ref(FIREBASE_DB, `users/${firebaseUser.uid}`);
-    set(dbRef, userObject);
+    const dbRef = await set(ref(FIREBASE_DB, 'users/' + firebaseUser.uid), userObject);
   };
 
   const updatePassword = async (newPassword: string) => {

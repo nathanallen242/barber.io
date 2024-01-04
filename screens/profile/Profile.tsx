@@ -10,39 +10,51 @@ interface ProfileProps {
 }
 
 const Profile: React.FC<ProfileProps> = ({ navigation }) => {
- const { isAuthenticated } = useContext(AuthContext);
+ const { isAuthenticated, logout, user } = useContext(AuthContext);
 
- return (
- <>
-  <View style={styles.header}>
-   <Text style={styles.title}>Profile</Text>
-  </View>
-  <View style={styles.container}>
-   <ProfileCard name="example" email="example@email.com" />
-   <View style={styles.settingsContainer}>
-    {isAuthenticated ? (
-     <>
-      <Setting icon="user" name="Account" description="Change your account settings" />
-      <Setting icon="credit-card" name="Payment" description="Change your payment settings" />
-      <Setting icon="bell"name="Notifications" description="Manage your notification settings" />
-      <Setting icon="sign-out"name="Logout" description="Log out of your account" />
-     </>
-    ) : (
-     <Setting 
-     icon="sign-in" 
-     name="Login" 
-     description="Log in to your account" 
-     onPress = {() => navigation.navigate('Login')} />
-    )}
+ const handleLogout = async () => {
+  await logout();
+  navigation.navigate('Home');
+};
+
+return (
+  <>
+   <View style={styles.header}>
+    <Text style={styles.title}>Profile</Text>
    </View>
-   <View style={styles.moreContainer}>
-    <Text style={styles.moreText}>More</Text>
-    <Setting icon="info-circle" name="About Us" description="Learn more about the app" />
-    <Setting icon="life-ring" name="Help & Support" description="Get help with your account" />
+   <View style={styles.container}>
+    <ProfileCard name={user?.displayName ?? 'Guest'} email={user?.email ?? 'guest@guest.com'} />
+    <View style={styles.settingsContainer}>
+     {isAuthenticated ? (
+      <>
+       <Setting icon="user" name="Account" description="Change your account settings" />
+       <Setting icon="credit-card" name="Payment" description="Change your payment settings" />
+       <Setting icon="bell" name="Notifications" description="Manage your notification settings" />
+       <Setting icon="sign-out" name="Logout" description="Log out of your account" onPress={handleLogout} />
+      </>
+     ) : (
+      <>
+       <Setting
+        icon="user-plus"
+        name="Register"
+        description="Create a new account"
+        onPress={() => navigation.navigate('Signup')} />
+       <Setting 
+        icon="sign-in" 
+        name="Login" 
+        description="Log in to your account" 
+        onPress={() => navigation.navigate('Login')} />
+      </>
+     )}
+    </View>
+    <View style={styles.moreContainer}>
+     <Text style={styles.moreText}>More</Text>
+     <Setting icon="info-circle" name="About Us" description="Learn more about the app" />
+     <Setting icon="life-ring" name="Help & Support" description="Get help with your account" />
+    </View>
    </View>
-  </View>
- </>
- );
+  </>
+);
 };
 
 // Rest of the code...
