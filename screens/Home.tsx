@@ -102,10 +102,11 @@ const Home: React.FC<HomeProps> = ({ username, navigation }) => {
 };
 
 const styles = StyleSheet.create({
- profileImage: {
-  position: 'absolute',
-  bottom: 10,
- },
+  profileImage: {
+    width: 65,      // Set width
+    height: 65,     // Set height
+    borderRadius: 50,
+  },
  buttonContainer: {
   flexDirection: 'row',
   justifyContent: 'space-between',

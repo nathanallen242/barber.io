@@ -29,6 +29,7 @@ export interface AuthContextInterface {
   createUser: (email: string, password: string, role: string) => Promise<void>;
   updatePassword: (newPassword: string) => Promise<void>;
   reauthenticate: (credential: any) => Promise<void>;
+  updateUserProfile: (updatedUser: User) => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextInterface>({
@@ -38,7 +39,8 @@ export const AuthContext = createContext<AuthContextInterface>({
   logout: async () => {},
   createUser: async () => {},
   updatePassword: async () => {},
-  reauthenticate: async () => {}
+  reauthenticate: async () => {},
+  updateUserProfile: async () => {}
 });
 
 interface AuthProviderProps {
@@ -112,6 +114,13 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const updateUserProfile = async (updatedUser: User) => {
+    if (auth.currentUser) {
+      await set(ref(FIREBASE_DB, 'users/' + auth.currentUser.uid), updatedUser);
+      setUser(updatedUser);
+    }
+  };
+
   const contextValue: AuthContextInterface = {
     user,
     isAuthenticated: !!user,
@@ -119,7 +128,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     logout,
     createUser,
     updatePassword,
-    reauthenticate
+    reauthenticate,
+    updateUserProfile,
   };
 
   return React.createElement(AuthContext.Provider, { value: contextValue }, children);
