@@ -18,6 +18,7 @@ export interface User {
   photoURL?: string;
   role?: string;
   phoneNumber?: string;
+  averageRating?: number;
 }
 
 export interface AuthContextInterface {
@@ -96,6 +97,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       displayName: firebaseUser.displayName ?? 'Guest',
       photoURL: firebaseUser.photoURL ?? 'https://via.placeholder.com/150',
       role: role,
+      averageRating: 0,
       phoneNumber: firebaseUser.phoneNumber ?? ''
     };
     setUser(userObject);
