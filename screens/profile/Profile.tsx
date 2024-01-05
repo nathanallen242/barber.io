@@ -12,6 +12,32 @@ interface ProfileProps {
 const Profile: React.FC<ProfileProps> = ({ navigation }) => {
  const { isAuthenticated, logout, user } = useContext(AuthContext);
 
+ const handleClick = () => {
+  if (!isAuthenticated) {
+    Alert.alert(
+      'Please Sign In',
+      'You must be signed in to update your profile.',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Sign Up',
+          onPress: () => navigation.navigate('Signup'),
+        },
+        {
+          text: 'Log In',
+          onPress: () => navigation.navigate('Login'),
+        },
+      ],
+      { cancelable: true },
+    );
+  } else {
+    navigation.navigate('Update');
+  }
+ };
+
  const handleLogout = async () => {
   // render alert before logging out
   Alert.alert(
@@ -43,7 +69,9 @@ return (
     <ProfileCard 
     name={user?.displayName ?? 'Guest'} 
     email={user?.email ?? 'guest@guest.com'}
-    imageUrl={user?.photoURL} />
+    imageUrl={user?.photoURL}
+    onClick={handleClick}
+    />
     <View style={styles.settingsContainer}>
      {isAuthenticated ? (
       <>

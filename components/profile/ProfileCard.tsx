@@ -6,9 +6,10 @@ interface ProfileCardProps {
  name: string;
  email: string;
  imageUrl?: string;
+ onClick: () => void;
 }
 
-const ProfileCard: React.FC<ProfileCardProps> = ({ name, email, imageUrl }) => {
+const ProfileCard: React.FC<ProfileCardProps> = ({ name, email, imageUrl, onClick }) => {
  return (
   <View style={styles.cardContainer}>
     <View style={styles.parentContainer}>
@@ -23,7 +24,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ name, email, imageUrl }) => {
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.email}>{email}</Text>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onClick}>
         <FontAwesome name="pencil" size={20} color="#000" />
       </TouchableOpacity>
     </View>

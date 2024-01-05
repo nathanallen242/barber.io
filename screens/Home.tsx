@@ -37,7 +37,7 @@ const Home: React.FC<HomeProps> = ({ username, navigation }) => {
       {user?.photoURL ? (
           <Image source={{ uri: user.photoURL }} style={styles.profileImage} />
       ) : (
-          <FontAwesome name="user" size={30} color="#000" style={{marginTop: 15, marginLeft: 20}} />
+          <FontAwesome name="user" size={30} color="#000" style={{marginTop: 17, marginLeft: 22}} />
       )}
   </TouchableOpacity>
       </View>

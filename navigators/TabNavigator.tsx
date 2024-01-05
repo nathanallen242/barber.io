@@ -7,6 +7,7 @@ import Schedule from '../screens/Schedule';
 import Profile from '../screens/profile/Profile';
 import LoginScreen from '../screens/auth/Login';
 import SignUpScreen from '../screens/auth/Signup';
+import Update from '../screens/profile/Update';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -24,6 +25,7 @@ const UserStack = () => {
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignUpScreen} />
+      <Stack.Screen name="Update" component={Update} />
     </Stack.Navigator>
   );
 };
