@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import ProfileCard from '../../components/profile/ProfileCard';
 import Setting from '../../components/profile/Setting';
 import { AuthContext } from '../../contexts/AuthContext';
@@ -13,8 +13,25 @@ const Profile: React.FC<ProfileProps> = ({ navigation }) => {
  const { isAuthenticated, logout, user } = useContext(AuthContext);
 
  const handleLogout = async () => {
-  await logout();
-  navigation.navigate('Home');
+  // render alert before logging out
+  Alert.alert(
+   'Logout',
+   'Are you sure you want to logout?',
+   [
+    {
+     text: 'Cancel',
+     style: 'cancel',
+    },
+    {
+     text: 'OK',
+     onPress: async () => {
+      await logout();
+      navigation.navigate('Profile');
+     },
+    },
+   ],
+   { cancelable: false },
+  );
 };
 
 return (
@@ -23,7 +40,10 @@ return (
     <Text style={styles.title}>Profile</Text>
    </View>
    <View style={styles.container}>
-    <ProfileCard name={user?.displayName ?? 'Guest'} email={user?.email ?? 'guest@guest.com'} />
+    <ProfileCard 
+    name={user?.displayName ?? 'Guest'} 
+    email={user?.email ?? 'guest@guest.com'}
+    imageUrl={user?.photoURL} />
     <View style={styles.settingsContainer}>
      {isAuthenticated ? (
       <>

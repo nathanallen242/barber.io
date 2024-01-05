@@ -16,6 +16,8 @@ export interface User {
   email: string;
   displayName?: string;
   photoURL?: string;
+  role?: string;
+  phoneNumber?: string;
 }
 
 export interface AuthContextInterface {
@@ -23,7 +25,8 @@ export interface AuthContextInterface {
   isAuthenticated: Boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  createUser: (email: string, password: string) => Promise<void>;
+  // Updated to include the role parameter
+  createUser: (email: string, password: string, role: string) => Promise<void>;
   updatePassword: (newPassword: string) => Promise<void>;
   reauthenticate: (credential: any) => Promise<void>;
 }
@@ -82,7 +85,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUser(null);
   };
 
-  const createUser = async (email: string, password: string) => {
+  const createUser = async (email: string, password: string, role: string) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const firebaseUser = userCredential.user;
     const userObject: User = {
@@ -90,6 +93,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       email: firebaseUser.email ?? '',
       displayName: firebaseUser.displayName ?? 'Guest',
       photoURL: firebaseUser.photoURL ?? 'https://via.placeholder.com/150',
+      role: role,
+      phoneNumber: firebaseUser.phoneNumber ?? ''
     };
     setUser(userObject);
     const dbRef = await set(ref(FIREBASE_DB, 'users/' + firebaseUser.uid), userObject);

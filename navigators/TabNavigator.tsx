@@ -39,7 +39,7 @@ export default function TabNavigator({ username }: TabNavigatorProps) {
   >
     <Tab.Screen
       name="Home"
-      children={() => <Home username={username} />}
+      children={(props) => <Home {...props} username={username} />}
       options={{
         tabBarIcon: ({ color }) => (
           <Icon name="home" color={color} size={25} />

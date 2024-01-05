@@ -1,16 +1,19 @@
 import React, { useState, useEffect} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Image } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../components/profile/Card';
 import SearchBar from '../components/search/SearchBar';
+import { AuthContext } from '../contexts/AuthContext';
 
 interface HomeProps {
  username: string;
+ navigation: any;
 }
 
-const Home: React.FC<HomeProps> = ({ username }) => {
+const Home: React.FC<HomeProps> = ({ username, navigation }) => {
  const [loading, setLoading] = useState(true);
+ const { user } = React.useContext(AuthContext);
 
  useEffect(() => {
   // Simulate scroll & fetch (TODO)
@@ -24,10 +27,19 @@ const Home: React.FC<HomeProps> = ({ username }) => {
     <View style={styles.headerContainer}>
       <View style={styles.textContainer}>
         <Text style={styles.welcomeText}>Welcome back,</Text>
-        <Text style={styles.userName}>{username}</Text>
+        <Text style={styles.userName}>{user?.displayName ?? 'Guest'}</Text>
       </View>
       <View style={styles.profileContainer}>
-        <TouchableOpacity style={styles.profilePlaceholder} />
+        <TouchableOpacity 
+      style={styles.profilePlaceholder}
+      onPress={() => navigation.navigate('User', { screen: 'Profile' })}
+  >
+      {user?.photoURL ? (
+          <Image source={{ uri: user.photoURL }} style={styles.profileImage} />
+      ) : (
+          <FontAwesome name="user" size={30} color="#000" style={{marginTop: 15, marginLeft: 20}} />
+      )}
+  </TouchableOpacity>
       </View>
     </View>
 
@@ -90,6 +102,10 @@ const Home: React.FC<HomeProps> = ({ username }) => {
 };
 
 const styles = StyleSheet.create({
+ profileImage: {
+  position: 'absolute',
+  bottom: 10,
+ },
  buttonContainer: {
   flexDirection: 'row',
   justifyContent: 'space-between',
