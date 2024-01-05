@@ -8,6 +8,8 @@ import Profile from '../screens/profile/Profile';
 import LoginScreen from '../screens/auth/Login';
 import SignUpScreen from '../screens/auth/Signup';
 import Services from '../screens/appointment/Services';
+import Availability from '../screens/appointment/Availability';
+import BarberSchedule from '../screens/barber/BarberSchedule';
 import Barber from '../screens/appointment/Barber';
 import Update from '../screens/profile/Update';
 
@@ -24,10 +26,10 @@ const UserStack = () => {
     screenOptions = {{
       headerShown: false,
     }}>
-      <Stack.Screen name="Profile" component={Profile} />
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Signup" component={SignUpScreen} />
-      <Stack.Screen name="Update" component={Update} />
+      <Stack.Screen name="Profile" component={Profile} options={{ title: 'Profile' }} />
+      <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
+      <Stack.Screen name="Signup" component={SignUpScreen} options={{ title: 'Signup' }} />
+      <Stack.Screen name="Update" component={Update} options={{ title: 'Update' }} />
     </Stack.Navigator>
   );
 };
@@ -38,9 +40,11 @@ const ScheduleStack = () => {
     screenOptions = {{
       headerShown: false,
     }}>
-      <Stack.Screen name="MainSchedule" component={Schedule} />
-      <Stack.Screen name="Services" component={Services} />
-      <Stack.Screen name="Barber" component={Barber} />
+      <Stack.Screen name="MainSchedule" component={Schedule} options={{ title: 'MainSchedule' }} />
+      <Stack.Screen name="BarberSchedule" component={BarberSchedule} options={{ title: 'BarberSchedule' }} />
+      <Stack.Screen name="Services" component={Services} options={{ title: 'Services' }} />
+      <Stack.Screen name="Barber" component={Barber} options={{ title: 'Barber' }} />
+      <Stack.Screen name="Availability" component={Availability} options={{ title: 'Availability' }} />
     </Stack.Navigator>
   );
 };

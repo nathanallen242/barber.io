@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import StarRatingDisplay from 'react-native-star-rating-widget';
 
@@ -8,52 +8,53 @@ interface CardProps {
  jobTitle: string;
  date: string;
  duration: string;
- rating?: number;
+ rating: number;
+ image?: string;
  show?: boolean;
  onSelect?: () => void;
 }
 
-const Card: React.FC<CardProps> = ({ name, jobTitle, date, duration, rating, show = true, onSelect }) => {
+const Card: React.FC<CardProps> = ({ name, jobTitle, date, duration, rating, image, show = true, onSelect }) => {
  return (
- <TouchableOpacity style={styles.cardContainer}>
+ <TouchableOpacity style={styles.cardContainer} onPress={onSelect}>
  <View style={styles.parentContainer}>
   <View style={styles.leftContainer}>
-    <View style={styles.profilePlaceholder}></View>
+    <View style={styles.profilePlaceholder}>
+     {image && <Image source={{uri: image}} style={{width: 65, height: 65}} />}
+    </View>
   </View>
   <View style={styles.rightContainer}>
     <Text style={styles.name}>{name}</Text>
     <Text style={styles.jobTitle}>{jobTitle}</Text>
-    {rating &&
-    // TODO: Add onPress functionality - navigate to reviews screen 
-    <TouchableOpacity onPress={() => {}}>
+    {rating > 0 &&
+     <TouchableOpacity onPress={() => {}}>
       <StarRatingDisplay
-      rating={rating}
-      maxStars={5}
-      starSize={15}
-      color='#000'
-      style={{ alignSelf: 'flex-start', marginTop: 5 }}
-      onChange={() => {}}
-    />
-    </TouchableOpacity>}
+        rating={rating}
+        maxStars={5}
+        starSize={15}
+        color='#000'
+        style={{ alignSelf: 'flex-start', marginTop: 5 }}
+        onChange={() => {}}
+      />
+     </TouchableOpacity>}
   </View>
-  {show && <FontAwesome name="chevron-right" size={20} color="#000" onPress={onSelect} />}
+  {show && <FontAwesome name="chevron-right" size={20} color="#000" />}
  </View>
 
  <View style={styles.additionalContainer}>
   <View style={styles.dateContainer}>
     <FontAwesome name="calendar" size={15} color="#000" />
-    <Text style={styles.dateText}>{date}</Text>
+    <Text style={styles.dateText}>{String(date)}</Text>
   </View>
   <View style={styles.durationContainer}>
     <FontAwesome name="clock-o" size={15} color="#000" />
-    <Text style={styles.durationText}>{duration}</Text>
+    <Text style={styles.durationText}>{String(duration)}</Text>
   </View>
  </View>
  </TouchableOpacity>
  );
 };
 
-// Rest of the code...
 
 const styles = StyleSheet.create({
  cardContainer: {
