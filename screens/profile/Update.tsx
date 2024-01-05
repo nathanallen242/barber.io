@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, Image, SafeAreaView, TouchableOpacity, Alert, TextInput } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { AuthContext, User } from '../../contexts/AuthContext';
@@ -10,12 +10,6 @@ const Update: React.FC = () => {
     const [localPhotoURL, setLocalPhotoURL] = useState<string | undefined>(user?.photoURL);
     const [displayName, setDisplayName] = useState<string | undefined>(user?.displayName);
     const [phoneNumber, setPhoneNumber] = useState<string | undefined>(user?.phoneNumber);
-    const phoneInputRef = useRef<PhoneInput>(null);
-
-    const handlePhoneChange = (value: String) => {
-        const stringVal = value.toString();
-        setPhoneNumber(stringVal);
-    };
   
     const handleProfileImageUpdate = async () => {
       const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -78,17 +72,20 @@ const Update: React.FC = () => {
                   editable={false}
                   placeholderTextColor="gray"
                />
-           </View>
-           <View style={styles.dateContainer}>
-            <PhoneInput
-                    ref={phoneInputRef}
-                    initialCountry={'us'}
-                    initialValue="1234567890"
-                    textProps={{
-                        placeholder: 'Enter a phone number...'
-                    }}
-                    onChange={handlePhoneChange} //TODO: handle phone number change
-                />
+               <TextInput
+                  style={styles.input}
+                  placeholder="What's your phone number?"
+                  value={phoneNumber}
+                  onChangeText={(text) => setPhoneNumber(text)}
+               />
+               {/* <PhoneInput
+                ref={phoneInputRef}
+                initialCountry={'us'}
+                initialValue="1234567890"
+                textProps={{
+                    placeholder: 'Enter a phone number...'
+                }}
+            />  */}
            </View>
            <TouchableOpacity onPress={handleUpdate} style={styles.button}>
                <Text>Update</Text>
@@ -98,10 +95,6 @@ const Update: React.FC = () => {
   };
 
 const styles = StyleSheet.create({
-  dateContainer: {
-    alignSelf: 'flex-start',
-    marginLeft: 100,
-  },
   button: {
     backgroundColor: '#007BFF',
     padding: 10,
