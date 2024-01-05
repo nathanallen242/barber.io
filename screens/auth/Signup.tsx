@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, Text, TextInput, ActivityIndicator, SafeAreaView, StyleSheet, Alert } from 'react-native';
+import { TouchableOpacity, Text, TextInput, ActivityIndicator, SafeAreaView, StyleSheet, Alert, View } from 'react-native';
 import { AuthContext } from '../../contexts/AuthContext';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import RNPickerSelect from 'react-native-picker-select';
 
 const SignUpScreen = ({ navigation }: { navigation: NavigationProp<ParamListBase> }) => {
@@ -38,15 +40,20 @@ const SignUpScreen = ({ navigation }: { navigation: NavigationProp<ParamListBase
        onChangeText={setPassword}
        secureTextEntry
      />
-     <RNPickerSelect
-        onValueChange={(value) => setRole(value)}
-        items={[
+      <View style={styles.pickerContainer}>
+        <RNPickerSelect
+          onValueChange={(value) => setRole(value)}
+          items={[
             { label: 'Client', value: 'client' },
             { label: 'Barber', value: 'barber' },
-        ]}
-        style={pickerSelectStyles}
-        placeholder={{ label: "Select your role", value: null }}
-     />
+          ]}
+          style={pickerSelectStyles}
+          placeholder={{ label: "Select your role", value: null }}
+          // @ts-ignore
+          Icon={() => <FontAwesomeIcon icon={faChevronDown} size={24} color="gray" />}
+        />
+      </View>
+     
      {isLoading ? (
        <ActivityIndicator size="large" color="#0000ff" />
      ) : (
@@ -59,6 +66,11 @@ const SignUpScreen = ({ navigation }: { navigation: NavigationProp<ParamListBase
 };
 
 const styles = StyleSheet.create({
+ pickerContainer: {
+    width: '80%',
+    marginBottom: 10,
+    justifyContent: 'center',
+  },
  container: {
    flex: 1,
    justifyContent: 'center',
@@ -92,9 +104,13 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: 'gray',
     borderRadius: 4,
     color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
+    paddingRight: 45, // to ensure the text is never behind the icon
     width: '80%',
     marginBottom: 10,
+  },
+  iconContainer: {
+    top: 10,
+    right: 90, // Adjust this value as needed
   },
   inputAndroid: {
     fontSize: 16,

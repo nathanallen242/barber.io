@@ -75,7 +75,6 @@ return (
     <View style={styles.settingsContainer}>
      {isAuthenticated ? (
       <>
-       <Setting icon="user" name="Account" description="Change your account settings" />
        <Setting icon="credit-card" name="Payment" description="Change your payment settings" />
        <Setting icon="bell" name="Notifications" description="Manage your notification settings" />
        <Setting icon="sign-out" name="Logout" description="Log out of your account" onPress={handleLogout} />

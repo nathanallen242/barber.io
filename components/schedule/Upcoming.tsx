@@ -2,8 +2,10 @@ import React, { useState, useCallback, useRef } from 'react';
 import { FlatList, SafeAreaView, Text, StyleSheet } from 'react-native';
 import Card from '../profile/Card';
 import { useIsFocused } from '@react-navigation/native';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Upcoming: React.FC = () => {
+  const { user } = useAuth();
  const [appointments, setAppointments] = useState([
  { name: "John Doe", jobTitle: "Software Engineer", date: "Tuesday, 2 January", duration: "00:00 - 00:00", rating: 4.5 },
  { name: "Jane Smith", jobTitle: "Data Scientist", date: "Wednesday, 3 January", duration: "01:00 - 02:00", rating: 4.0 },
@@ -11,6 +13,13 @@ const Upcoming: React.FC = () => {
  const [page, setPage] = useState(1);
  const loading = useRef(false);
  const isFocused = useIsFocused();
+
+ let title;
+ if (user?.role === 'barber') {
+  title = 'Upcoming Clients';
+ } else {
+  title = 'Upcoming Appointments';
+ }
 
  const fetchMoreData = useCallback(async () => {
  if (!loading.current) {
@@ -23,7 +32,7 @@ const Upcoming: React.FC = () => {
 
  return (
  <SafeAreaView style={[styles.container, { opacity: isFocused ? 1: 0.5}]}>
-   <Text style={styles.title}>Upcoming Schedule</Text>
+   <Text style={styles.title}>{title}</Text>
    <FlatList
      data={appointments}
      renderItem={({ item }) => <Card {...item} />}
