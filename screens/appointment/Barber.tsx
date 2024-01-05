@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { SafeAreaView, ScrollView, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { AppointmentContext } from '../../contexts/AppointmentContext';
@@ -14,11 +14,11 @@ const Barber: React.FC<BarberProps> = ({ navigation }) => {
  const { saveAppointmentDetails } = useContext(AppointmentContext);
 
  const barbers = [
-  { name: 'Barber 1', jobTitle: 'Barber', date: 'Available', duration: '~60 mins', rating: 4.5 },
-  { name: 'Barber 2', jobTitle: 'Barber', date: 'Available', duration: '~90 mins', rating: 4.0 },
-  { name: 'Barber 3', jobTitle: 'Barber', date: 'Available', duration: '~120 mins', rating: 3.5 },
-  { name: 'Barber 4', jobTitle: 'Barber', date: 'Available', duration: '~150 mins', rating: 3.0 },
-  { name: 'Barber 5', jobTitle: 'Barber', date: 'Available', duration: '~180 mins', rating: 2.5 },
+ { name: 'Barber 1', jobTitle: 'Barber', date: '2022-01-01', duration: '60 mins', rating: 4.5 },
+ { name: 'Barber 2', jobTitle: 'Barber', date: '2022-01-02', duration: '90 mins', rating: 4.0 },
+ { name: 'Barber 3', jobTitle: 'Barber', date: '2022-01-03', duration: '120 mins', rating: 3.5 },
+ { name: 'Barber 4', jobTitle: 'Barber', date: '2022-01-04', duration: '150 mins', rating: 3.0 },
+ { name: 'Barber 5', jobTitle: 'Barber', date: '2022-01-05', duration: '180 mins', rating: 2.5 },
  ];
 
  const handleSelectBarber = (barber: any) => {
@@ -26,32 +26,42 @@ const Barber: React.FC<BarberProps> = ({ navigation }) => {
  saveAppointmentDetails({ employee_id: barber.barber_id });
  };
 
+ const handleNavigateToAvailability = () => {
+ if (selectedBarber) {
+    navigation.navigate('Schedule', { screen: 'Availability' });
+ } else {
+    Alert.alert('Please select a barber!');
+ }
+ };
+
  return (
  <SafeAreaView>
-  <View style={styles.headerContainer}>
-    <Text style={styles.header}>
-      Step 2: Choose a Barber
-    </Text>
+ <View style={styles.headerContainer}>
+   <Text style={styles.header}>
+     Step 2: Choose a Barber
+   </Text>
+   <TouchableOpacity onPress={handleNavigateToAvailability}>
     <FontAwesomeIcon 
-      icon={faChevronRight} 
-      size={30} 
-      color="grey" 
-      style={{ position: 'absolute', right: 30, top: 30 }}
+        icon={faChevronRight} 
+        size={30} 
+        color={selectedBarber ? "blue" : "grey"} 
+        style={{ position: 'absolute', right: 15, top: -10 }}
     />
-  </View>
-  <ScrollView contentContainerStyle={styles.scrollView}>
-    {barbers.map((barber, index) => (
-      <Card
-        key={index}
-        name={barber.name}
-        jobTitle={barber.jobTitle}
-        date={barber.date}
-        duration={barber.duration}
-        rating={barber.rating}
-        show={false}
-      />
-    ))}
-  </ScrollView>
+   </TouchableOpacity>
+ </View>
+ <ScrollView contentContainerStyle={styles.scrollView}>
+   {barbers.map((barber, index) => (
+     <Card
+       key={index}
+       name={barber.name}
+       jobTitle={barber.jobTitle}
+       date={barber.date}
+       duration={barber.duration}
+       rating={barber.rating}
+       onSelect={() => handleSelectBarber(barber)}
+     />
+   ))}
+ </ScrollView>
  </SafeAreaView>
  );
 };

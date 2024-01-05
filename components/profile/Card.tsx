@@ -10,9 +10,10 @@ interface CardProps {
  duration: string;
  rating?: number;
  show?: boolean;
+ onSelect?: () => void;
 }
 
-const Card: React.FC<CardProps> = ({ name, jobTitle, date, duration, rating, show = true }) => {
+const Card: React.FC<CardProps> = ({ name, jobTitle, date, duration, rating, show = true, onSelect }) => {
  return (
  <TouchableOpacity style={styles.cardContainer}>
  <View style={styles.parentContainer}>
@@ -35,7 +36,7 @@ const Card: React.FC<CardProps> = ({ name, jobTitle, date, duration, rating, sho
     />
     </TouchableOpacity>}
   </View>
-  {show && <FontAwesome name="chevron-right" size={20} color="#000" />}
+  {show && <FontAwesome name="chevron-right" size={20} color="#000" onPress={onSelect} />}
  </View>
 
  <View style={styles.additionalContainer}>
