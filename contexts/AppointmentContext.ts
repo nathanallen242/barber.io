@@ -20,6 +20,7 @@ export interface AppointmentContextInterface {
  saveAppointmentDetails: (appointment: Partial<Appointment>) => void;
  updateAppointment: (appointmentId: number, updatedAppointment: Appointment) => Promise<void>;
  removeAppointment: (appointmentId: number) => Promise<void>;
+ appointmentDetails?: Partial<Appointment>;
 }
 
 export const AppointmentContext = createContext<AppointmentContextInterface>({
@@ -28,6 +29,7 @@ export const AppointmentContext = createContext<AppointmentContextInterface>({
  saveAppointmentDetails: () => {},
  updateAppointment: async () => {},
  removeAppointment: async () => {},
+ appointmentDetails: {},
 });
 
 interface AppointmentProviderProps {
@@ -69,6 +71,7 @@ const AppointmentProvider: React.FC<AppointmentProviderProps> = ({ children }) =
   saveAppointmentDetails,
   updateAppointment,
   removeAppointment,
+  appointmentDetails,
  };
 
  return React.createElement(AppointmentContext.Provider, { value: contextValue }, children);

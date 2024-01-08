@@ -12,7 +12,12 @@ interface BarberProps {
  navigation: any;
 }
 
-interface BarberData {
+export interface DayAvailability {
+ from: string;
+ to: string;
+}
+
+export interface BarberData {
  averageRating: number;
  displayName: string;
  email: string;
@@ -20,6 +25,7 @@ interface BarberData {
  photoURL: string;
  role: string;
  uid: string;
+ availability: Record<string, DayAvailability>;
 }
 
 // Type guard to check if a User is a BarberData
@@ -54,42 +60,47 @@ const Barber: React.FC<BarberProps> = ({ navigation }) => {
 
  const handleNavigate = () => {
  if (selectedBarber) {
-    navigation.navigate('Schedule', { screen: 'Availability' });
+    navigation.navigate('Schedule', { screen: 'Availability', params: { barber: selectedBarber } });
  } else {
     Alert.alert('Please select a barber!');
  }
  };
 
  return (
- <SafeAreaView>
- <View style={styles.headerContainer}>
-   <Text style={styles.header}>
-     Step 2: Choose a Barber
-   </Text>
-   <TouchableOpacity onPress={handleNavigate}>
-    <FontAwesomeIcon 
-     icon={faChevronRight} 
-     size={30} 
-     color={selectedBarber ? "blue" : "grey"} 
-     style={{ position: 'absolute', right: 15, top: -10 }}
-    />
-   </TouchableOpacity>
- </View>
- <ScrollView contentContainerStyle={styles.scrollView}>
-   {barbers && barbers.map((barber, index) => (
-    <Card
-      key={index}
-      name={barber.displayName}
-      jobTitle={barber.role}
-      date={barber.email || ''}
-      duration={barber.phoneNumber || ''}
-      rating={barber.averageRating}
-      image={barber.photoURL}
-      onSelect={() => handleSelectBarber(barber)}
-    />
-   ))}
- </ScrollView>
- </SafeAreaView>
+  <SafeAreaView>
+    <View style={styles.headerContainer}>
+      <Text style={styles.header}>
+        Step 2: Choose a Barber
+      </Text>
+      <TouchableOpacity onPress={handleNavigate}>
+        <FontAwesomeIcon 
+          icon={faChevronRight} 
+          size={30} 
+          color={selectedBarber ? "blue" : "grey"} 
+          style={{ position: 'absolute', right: 15, top: -10 }}
+        />
+      </TouchableOpacity>
+    </View>
+    <ScrollView contentContainerStyle={styles.scrollView}>
+      {barbers && barbers.map((barber, index) => {
+        const duration = Object.entries(barber.availability)
+          .map(([day, availability]) => `${availability.from} - ${availability.to}`)
+          .join(', ');
+        return (
+          <Card
+            key={index}
+            name={barber.displayName}
+            jobTitle={barber.role}
+            date={barber.email || ''}
+            duration={duration}
+            rating={barber.averageRating}
+            image={barber.photoURL}
+            onSelect={() => handleSelectBarber(barber)}
+          />
+        );
+      })}
+    </ScrollView>
+  </SafeAreaView>
  );
 };
 

@@ -32,11 +32,11 @@ const Schedule: React.FC<ScheduleProps> = ({ navigation }) => {
        <Tab.Screen name="Upcoming Schedule" component={Upcoming} />
        <Tab.Screen name="Past Schedules" component={Past} />
      </Tab.Navigator>
-     <TouchableOpacity 
+     {user && (<TouchableOpacity 
        onPress={handlePress}
        style={{ position: 'absolute', bottom: 10, right: 10 }}>
        <FontAwesomeIcon icon={Icon} size={45} color="#808080" />
-     </TouchableOpacity>
+     </TouchableOpacity>)}
    </>
  );
 };

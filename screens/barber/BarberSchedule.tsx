@@ -43,23 +43,24 @@ const BarberSchedule: React.FC = () => {
   const dayOfWeek = selectedDay.getDay().toString();
 
   const onDayPress = (day: any) => {
-    setSelectedDay(new Date(day.timestamp));
-    setShow(Platform.OS !== 'ios');
+   if (day && day.timestamp) {
+     setSelectedDay(new Date(day.timestamp));
+     setShow(Platform.OS !== 'ios');
   
-    const newDayOfWeek = new Date(day.timestamp).getDay().toString();
-    if (!weekdayAvailability[newDayOfWeek].some(block => block.selected)) {
-      setWeekdayAvailability(prev => ({
-        ...prev,
-        [newDayOfWeek]: initializeTimeBlocks(),
-      }));
-    }
+     const newDayOfWeek = new Date(day.timestamp).getDay().toString();
+     if (!weekdayAvailability[newDayOfWeek].some(block => block.selected)) {
+       setWeekdayAvailability(prev => ({
+         ...prev,
+         [newDayOfWeek]: initializeTimeBlocks(),
+       }));
+     }
+   }
   };
   
-
   const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    const currentDate = selectedDate || new Date();
-    setShow(Platform.OS !== 'ios');
-    setSelectedDay(currentDate);
+   const currentDate = selectedDate || new Date();
+   setShow(Platform.OS !== 'ios');
+   setSelectedDay(currentDate);
   };
 
   const setBarberAvailability = useCallback(async (barberId: string, availability: WeekdayAvailability) => {
