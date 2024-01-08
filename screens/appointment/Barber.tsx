@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { AppointmentContext } from '../../contexts/AppointmentContext';
 import { User } from '../../contexts/AuthContext';
 import { FIREBASE_DB } from '../../config/FireBase';
-import { ref, onValue, get } from 'firebase/database';
+import { ref, get } from 'firebase/database';
 import Card from '../../components/profile/Card';
 
 interface BarberProps {

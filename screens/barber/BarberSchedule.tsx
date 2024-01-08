@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Text, Platform, SafeAreaView, StyleSheet, ScrollView, Alert, Button, TouchableOpacity, Touchable } from 'react-native';
+import { Text, Platform, SafeAreaView, StyleSheet, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import TimeBlocks from '../../components/schedule/TimeBlocks';
