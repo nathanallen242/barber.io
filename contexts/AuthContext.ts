@@ -89,19 +89,26 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const createUser = async (email: string, password: string, role: string) => {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const firebaseUser = userCredential.user;
-    const userObject: User = {
-      uid: firebaseUser.uid,
-      email: firebaseUser.email ?? '',
-      displayName: firebaseUser.displayName ?? 'Guest',
-      photoURL: firebaseUser.photoURL ?? 'https://via.placeholder.com/150',
-      role: role,
-      averageRating: 0,
-      phoneNumber: firebaseUser.phoneNumber ?? ''
-    };
-    setUser(userObject);
-    const dbRef = await set(ref(FIREBASE_DB, 'users/' + firebaseUser.uid), userObject);
+   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+   const firebaseUser = userCredential.user;
+   const userObject: User = {
+     uid: firebaseUser.uid,
+     email: firebaseUser.email ?? '',
+     displayName: firebaseUser.displayName ?? 'Guest',
+     photoURL: firebaseUser.photoURL ?? 'https://via.placeholder.com/150',
+     role: role,
+     averageRating: 0,
+     phoneNumber: firebaseUser.phoneNumber ?? ''
+   };
+   setUser(userObject);
+   const dbRef = await set(ref(FIREBASE_DB, 'users/' + firebaseUser.uid), userObject);
+  
+   // Create and set user to either employees or clients collection based on role
+   if (role === 'barber') {
+     await set(ref(FIREBASE_DB, 'employees/' + firebaseUser.uid), userObject);
+   } else {
+     await set(ref(FIREBASE_DB, 'clients/' + firebaseUser.uid), userObject);
+   }
   };
 
   const updatePassword = async (newPassword: string) => {
@@ -117,10 +124,17 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const updateUserProfile = async (updatedUser: User) => {
-    if (auth.currentUser) {
-      await set(ref(FIREBASE_DB, 'users/' + auth.currentUser.uid), updatedUser);
-      setUser(updatedUser);
+   if (auth.currentUser) {
+    await set(ref(FIREBASE_DB, 'users/' + auth.currentUser.uid), updatedUser);
+    setUser(updatedUser);
+  
+    // Update user in either employees or clients collection based on role
+    if (updatedUser.role === 'barber') {
+      await set(ref(FIREBASE_DB, 'employees/' + auth.currentUser.uid), updatedUser);
+    } else {
+      await set(ref(FIREBASE_DB, 'clients/' + auth.currentUser.uid), updatedUser);
     }
+   }
   };
 
   const contextValue: AuthContextInterface = {

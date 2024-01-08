@@ -33,18 +33,18 @@ const Barber: React.FC<BarberProps> = ({ navigation }) => {
  const { saveAppointmentDetails } = useContext(AppointmentContext);
     
  useEffect(() => {
-    get(ref(FIREBASE_DB, '/users')).then((snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        const barbersData = Object.values(data as Record<string, User>).filter(isBarberData);
-        setBarbers(barbersData);
-      } else {
-        console.log("No data available");
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
-   }, []);
+  get(ref(FIREBASE_DB, '/employees')).then((snapshot) => {
+   if (snapshot.exists()) {
+     const data = snapshot.val();
+     const barbersData = Object.values(data as Record<string, User>).filter(isBarberData);
+     setBarbers(barbersData);
+   } else {
+     console.log("No data available");
+   }
+  }).catch((error) => {
+   console.error(error);
+  });
+ }, []);
    
 
  const handleSelectBarber = (barber: BarberData) => {

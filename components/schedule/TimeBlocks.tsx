@@ -8,28 +8,28 @@ interface TimeBlockProps {
 }
 
 const TimeBlocks: React.FC<TimeBlockProps> = ({ selectedDay, availability, toggleTimeBlock }) => {
-  const dayOfWeek = selectedDay.getDay().toString();
+ const dayOfWeek = selectedDay.getDay().toString();
 
-  const convertToAMPM = (hour: number) => {
-    let ampm = hour >= 12 ? 'PM' : 'AM';
-    hour = hour % 12;
-    hour = hour ? hour : 12;
-    return `${hour}:00 ${ampm}`;
-  };
+ const convertToAMPM = (hour: number) => {
+   let ampm = hour >= 12 ? 'PM' : 'AM';
+   hour = hour % 12;
+   hour = hour ? hour : 12;
+   return `${hour}:00 ${ampm} `;
+ };
 
-  return (
-    <View>
-      {availability.map((block, index) => (
-        <TouchableOpacity
-          key={index}
-          onPress={() => toggleTimeBlock(dayOfWeek, block.hour)}
-          style={[styles.timeBlock, block.selected && styles.selectedTimeBlock]}
-        >
-          <Text style={styles.timeBlockText}>{convertToAMPM(block.hour)}</Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
+ return (
+   <View>
+     {availability.map((block, index) => (
+       <TouchableOpacity
+        key={index}
+        onPress={() => toggleTimeBlock(dayOfWeek, block.hour)}
+        style={[styles.timeBlock, block.selected && styles.selectedTimeBlock]}
+       >
+        <Text style={styles.timeBlockText}>{convertToAMPM(block.hour)}</Text>
+       </TouchableOpacity>
+     ))}
+   </View>
+ );
 };
 
 const styles = StyleSheet.create({
