@@ -1,19 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { SafeAreaView, Text, View, Image, StyleSheet, FlatList, TouchableOpacity, Animated, Easing, ScrollView } from 'react-native';
 import { AppointmentContext } from '../../contexts/AppointmentContext';
-import { ref, onValue } from 'firebase/database';
+import { ref, onValue, set } from 'firebase/database';
 import { FIREBASE_DB } from '../../config/FireBase';
 import { BarberData } from './Barber';
 import StarRatingDisplay from 'react-native-star-rating-widget';
+import Picker from 'react-native-picker-select';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const Availability: React.FC = () => {
   const { appointmentDetails } = useContext(AppointmentContext);
   const [barber, setBarber] = useState<BarberData | null>(null);
+
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
+  const [selectedTime, setSelectedTime] = useState<number | null>(null);
+
   const [opacity, setOpacity] = useState(new Animated.Value(0));
   const selectedBarber = appointmentDetails?.employee_id;
 
+  const [location, setLocation] = useState('USF Tampa Campus');
   const DAYS_MAP = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const [dropdown, setDropdown] = useState(false);
 
   useEffect(() => {
     if (selectedBarber) {
@@ -59,33 +66,33 @@ const Availability: React.FC = () => {
 
   
   const renderDayItem = ({ item: dayId }: { item: string }) => {
-    const dayOfWeek = ((new Date(dayId).getDay() + 6) % 7);
-    const dayNumber = new Date(dayId).getDate();
-    const dayAbbreviation = DAYS_MAP[dayOfWeek];
-    return (
+   const dayOfWeek = ((new Date(dayId).getDay() + 6) % 7);
+   const dayNumber = new Date(dayId).getDate();
+   const dayAbbreviation = DAYS_MAP[dayOfWeek];
+   return (
      <TouchableOpacity 
-       style={[styles.dayBlock, selectedDay === dayOfWeek.toString() && styles.selectedDay]} 
-       onPress={() => setSelectedDay(dayOfWeek.toString())}
+       style={[styles.dayBlock, selectedDay === dayOfWeek.toString() ? styles.selectedDay : {}]} 
+       onPress={() => setSelectedDay(dayOfWeek.toString() === selectedDay ? null : dayOfWeek.toString())}
      >
        <Text style={styles.dayNumber}>{dayNumber}</Text>
        <Text style={styles.dayAbbreviation}>{dayAbbreviation}</Text>
      </TouchableOpacity>
-    );
-   };
+   );
+  };
 
 
   const renderTimeBlocks = () => {
-    if (!selectedDay || !barber?.availability[selectedDay]) {
-      console.log("selectedDay or barber.availability[selectedDay] is not defined");
-      return null;
-    }
- 
-    const availability = barber.availability[selectedDay];
-    const fromHour = parseInt(availability.from.split(':')[0], 10);
-    const toHour = parseInt(availability.to.split(':')[0], 10);
- 
-    return (
-      <Animated.View style={{...styles.timeContainer, opacity}}>
+   if (!selectedDay || !barber?.availability[selectedDay]) {
+     console.log("selectedDay or barber.availability[selectedDay] is not defined");
+     return null;
+   }
+  
+   const availability = barber.availability[selectedDay];
+   const fromHour = parseInt(availability.from.split(':')[0], 10);
+   const toHour = parseInt(availability.to.split(':')[0], 10);
+  
+   return (
+     <Animated.View style={{...styles.timeContainer, opacity}}>
        <FlatList
          data={Array.from({ length: toHour - fromHour }, (_, i) => i + fromHour)}
          renderItem={({ item: hour }) => {
@@ -93,7 +100,8 @@ const Availability: React.FC = () => {
            const formattedHour = hour % 12 || 12;
            return (
              <TouchableOpacity 
-               style={[styles.timeBlock, selectedDay && selectedDay === hour.toString() ? styles.selectedTimeBlock : {}]}
+               style={[styles.timeBlock, selectedTime === hour ? styles.selectedTimeBlock : {}]}
+               onPress={() => setSelectedTime(hour === selectedTime ? null : hour)}
              >
                <Text>{formattedHour}:00 {period}</Text>
              </TouchableOpacity>
@@ -101,13 +109,13 @@ const Availability: React.FC = () => {
          }}
          keyExtractor={(item) => item.toString()}
        />
-      </Animated.View>
-      );
+     </Animated.View>
+   );
   };
 
   return (
-    <SafeAreaView style = {{flex: 1}}>
-      <ScrollView style = {{flex: 1}}>
+   <SafeAreaView style={{flex: 1}}>
+    <ScrollView style={{flex: 1}}>
       <View style={styles.container}>
         <Text style={styles.title}>Step 3: Book your Slot</Text>
         {barber && (
@@ -123,25 +131,59 @@ const Availability: React.FC = () => {
               onChange={() => {}}
             />
             <Text style={styles.dayHeader}>Day</Text>
-            <FlatList
-              data={getDays()}
-              horizontal
-              renderItem={renderDayItem}
-              keyExtractor={(item) => item}
-              style={styles.flatList}
-              showsHorizontalScrollIndicator={false}
-            />
+            <View style={{flexDirection: 'row'}}>
+              <FlatList
+                data={getDays()}
+                horizontal
+                renderItem={renderDayItem}
+                keyExtractor={(item) => item}
+                style={styles.flatList}
+                showsHorizontalScrollIndicator={false}
+              />
+            </View>
             <Text style={styles.availabilityHeader}>Availability</Text>
             {renderTimeBlocks()}
-          </>
+            <Text style={styles.availabilityHeader}>Location</Text>
+            <View style={styles.picker}>
+              <Picker
+              items={[
+                { label: "USF Tampa Campus", value: "USF Tampa Campus" },
+                { label: "USF St. Pete Campus", value: "USF St. Pete Campus" },
+                { label: "USF Sarasota Campus", value: "USF Sarasota Campus" },
+                { label: "Off-Campus", value: "Off-Campus" },
+              ]}
+              value={location}
+              onValueChange={(value) => {
+                setLocation(value);
+                setDropdown(!dropdown);
+              }}
+            />
+            <Icon name={dropdown ? "arrow-forward" : "arrow-drop-down"} size={20} style={{position: 'absolute', right: 4, bottom: 7}} color="gray" />
+          </View>
+        </>
         )}
       </View>
-      </ScrollView>
-    </SafeAreaView>
-   );   
+    </ScrollView>
+   </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
+  picker: {
+    backgroundColor: '#fff',
+    alignSelf: 'flex-start',
+    padding: 10,
+    marginLeft: 28,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    width: 150,
+    elevation: 2  // for Android shadow effect
+  },
   availabilityHeader: {
     fontSize: 23,
     fontWeight: 'bold',
@@ -168,6 +210,8 @@ const styles = StyleSheet.create({
     fontSize: 27,
     fontWeight: 'bold',
     marginTop: 25,
+    marginLeft: 25,
+    alignSelf: 'flex-start',
   },
   image: {
     width: 100,
@@ -176,7 +220,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   text: {
-    fontSize: 18,
+    fontSize: 20,
+    marginTop: 10,
+    fontWeight: 'bold',
   },
   dayBlock: {
     padding: 20,
@@ -212,6 +258,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   selectedTimeBlock: {
+    backgroundColor: '#ff0', // Change to desired highlight color
+  },
+  selectedDay: {
     backgroundColor: '#ff0', // Change to desired highlight color
   },
 });
