@@ -45,12 +45,12 @@ const AppointmentProvider: React.FC<AppointmentProviderProps> = ({ children }) =
  const [appointmentDetails, setAppointmentDetails] = useState<Partial<Appointment>>({});
 
  const saveAppointmentDetails = async (appointment: Partial<Appointment>, employee_id?: string) => {
-  if (employee_id) {
-  const barberData = (await get(ref(FIREBASE_DB, `/employees/${employee_id}`))).val() as BarberData;
-  setAppointmentDetails({ ...appointment, employee: barberData });
-  } else {
-  setAppointmentDetails(appointment);
-  }
+   if (employee_id) {
+     const barberData = (await get(ref(FIREBASE_DB, `/employees/`))).val() as BarberData;
+     setAppointmentDetails(prevState => ({ ...prevState, ...appointment, employee: barberData }));
+   } else {
+     setAppointmentDetails(prevState => ({ ...prevState, ...appointment }));
+   }
  };
 
  const addAppointment = async (appointment: Appointment) => {

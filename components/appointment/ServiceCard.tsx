@@ -2,34 +2,34 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { Service } from '../../screens/appointment/Services';
 
 interface ServiceCardProps {
- imageUrl?: string;
+ image: any;
  serviceName: string;
  timeDuration: number;
  price: number;
- service_id: string;
- onSelectService: (service: any) => void;
+ service: Service;
+ onSelectService: (service: Service) => void;
  isSelected: boolean;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ imageUrl, serviceName, timeDuration, price, service_id, onSelectService, isSelected }) => {
+const ServiceCard: React.FC<ServiceCardProps> = ({ image, serviceName, timeDuration, price, service, onSelectService, isSelected }) => {
  return (
-   <TouchableOpacity onPress={onSelectService} style={isSelected ? styles.selectedService : styles.unselectedService}>
-     {imageUrl ? (
-       <Image source={{ uri: imageUrl }} style={styles.image} />
+   <TouchableOpacity onPress={() => onSelectService(service)} style={isSelected ? styles.selectedService : styles.unselectedService}>
+     {image ? (
+       <Image source={image} style={styles.image} />
      ) : (
        <View style={styles.placeholder} />
      )}
      <Text style={styles.serviceName}>{serviceName}</Text>
      <Text style={styles.timeDuration}>
-      <FontAwesomeIcon icon={faClock} size={12} color="grey" /> {timeDuration} minutes
+       <FontAwesomeIcon icon={faClock} size={12} color="grey" /> {timeDuration} minutes
      </Text>
      <Text style={styles.price}>${price}</Text>
    </TouchableOpacity>
  );
 };
-
 const styles = StyleSheet.create({
  unselectedService: {
   borderRadius: 10,
