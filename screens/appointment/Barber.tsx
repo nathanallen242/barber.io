@@ -28,6 +28,17 @@ export interface BarberData {
  availability: Record<string, DayAvailability>;
 }
 
+export const defaultBarberData: BarberData = {
+ averageRating: 0,
+ displayName: '',
+ email: '',
+ phoneNumber: '',
+ photoURL: '',
+ role: '',
+ uid: '',
+ availability: {},
+};
+
 // Type guard to check if a User is a BarberData
 function isBarberData(user: User): user is BarberData {
     return user.role === 'barber';
@@ -53,10 +64,15 @@ const Barber: React.FC<BarberProps> = ({ navigation }) => {
  }, []);
    
 
- const handleSelectBarber = (barber: BarberData) => {
-  setSelectedBarber(barber);
-  saveAppointmentDetails({ employee_id: barber.uid });
-};
+ const handleSelectBarber = async (barber: BarberData) => {
+  const barberData = (await get(ref(FIREBASE_DB, `/employees/${barber.uid}`))).val() as BarberData;
+  if (barberData) {
+  setSelectedBarber(barberData);
+  saveAppointmentDetails({ employee_id: barberData.uid }, barberData.uid);
+  } else {
+  console.error(`No data available for employee_id: ${barber.uid}`);
+  }
+ };
 
  const handleNavigate = () => {
  if (selectedBarber) {

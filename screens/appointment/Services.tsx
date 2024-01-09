@@ -27,6 +27,7 @@ const Services: React.FC<ServicesProps> = ({ navigation }) => {
   } else {
   setSelectedService(service);
   saveAppointmentDetails({ service_id: service.service_id });
+  console.log(service.service_id)
   }
  };
 
@@ -55,48 +56,39 @@ const Services: React.FC<ServicesProps> = ({ navigation }) => {
       <View>
         <ServiceCard
           imageUrl="https://example.com/image1.jpg"
-          serviceName="Service 1"
+          serviceName="Full Haircut"
           service_id="1"
           timeDuration={60}
-          price={20}
+          price={25}
           onSelectService={handleSelectService}
           isSelected={selectedService?.service_id === "1"}
         />
         <ServiceCard
           imageUrl="https://example.com/image2.jpg"
-          serviceName="Service 2"
+          serviceName="Lineup Only"
           service_id="2"
-          timeDuration={90}
-          price={30}
+          timeDuration={60}
+          price={15}
           onSelectService={handleSelectService}
           isSelected={selectedService?.service_id === "2"}
         />
         <ServiceCard
           imageUrl="https://example.com/image3.jpg"
-          serviceName="Service 3"
+          serviceName="Beard Shave"
           service_id="3"
-          timeDuration={120}
-          price={40}
+          timeDuration={60}
+          price={10}
           onSelectService={handleSelectService}
           isSelected={selectedService?.service_id === "3"}
         />
         <ServiceCard
           imageUrl="https://example.com/image4.jpg"
-          serviceName="Service 4"
+          serviceName="Eyebrow Trim"
           service_id="4"
-          timeDuration={150}
-          price={50}
+          timeDuration={60}
+          price={10}
           onSelectService={handleSelectService}
           isSelected={selectedService?.service_id === "4"}
-        />
-        <ServiceCard
-          imageUrl="https://example.com/image5.jpg"
-          serviceName="Service 5"
-          service_id="5"
-          timeDuration={180}
-          price={60}
-          onSelectService={handleSelectService}
-          isSelected={selectedService?.service_id === "5"}
         />
       </View>
     </ScrollView>

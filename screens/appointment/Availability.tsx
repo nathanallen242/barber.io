@@ -1,15 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, Text, View, Image, StyleSheet, FlatList, TouchableOpacity, Animated, Easing, ScrollView } from 'react-native';
+import { SafeAreaView, Alert, Text, View, Image, StyleSheet, FlatList, TouchableOpacity, Animated, Easing, ScrollView } from 'react-native';
 import { AppointmentContext } from '../../contexts/AppointmentContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import { ref, onValue, set } from 'firebase/database';
 import { FIREBASE_DB } from '../../config/FireBase';
-import { BarberData } from './Barber';
+import { BarberData, defaultBarberData } from './Barber';
+import { Appointment } from '../../contexts/AppointmentContext';
 import StarRatingDisplay from 'react-native-star-rating-widget';
 import Picker from 'react-native-picker-select';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 const Availability: React.FC = () => {
-  const { appointmentDetails } = useContext(AppointmentContext);
+  const { user } = useContext(AuthContext);
+  const { appointmentDetails, saveAppointmentDetails, addAppointment } = useContext(AppointmentContext);
   const [barber, setBarber] = useState<BarberData | null>(null);
 
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
@@ -21,6 +26,49 @@ const Availability: React.FC = () => {
   const [location, setLocation] = useState('USF Tampa Campus');
   const DAYS_MAP = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const [dropdown, setDropdown] = useState(false);
+
+  const confirmAppointment = async () => {
+   Alert.alert(
+    "Confirm Appointment",
+    "Are you sure you want to confirm this appointment?",
+    [
+      {
+        text: "Cancel",
+        onPress: () => {},
+        style: "cancel"
+      },
+      { 
+        text: "OK", 
+        onPress: async () => {
+          const startTime = new Date();
+          startTime.setHours(selectedTime || 0);
+          const endTime = new Date(startTime);
+          endTime.setHours(startTime.getHours() + 1);
+          const dateCreated = new Date();
+
+          const appointment: Appointment = {
+           ...appointmentDetails,
+           appointment_id: Math.floor(Math.random() * 1000000), // Generate random id
+           date_created: dateCreated,
+           start_time: startTime,
+           end_time: endTime,
+           client_id: user?.uid || '',
+           status: 'confirmed',
+           employee_id: appointmentDetails?.employee_id || '',
+           employee: barber || defaultBarberData,
+           service_id: appointmentDetails?.service_id || null,
+           day_of_week: appointmentDetails?.day_of_week || '', // Provide a default value
+           date: appointmentDetails?.date || new Date(), // Provide a default value
+           location: appointmentDetails?.location || 'USF Tampa Campus', // Provide a default value
+          };
+          console.log(appointment);
+          // addAppointment(appointment);
+        }
+      }
+    ],
+    { cancelable: false }
+   );
+  };
 
   useEffect(() => {
     if (selectedBarber) {
@@ -101,7 +149,20 @@ const Availability: React.FC = () => {
            return (
              <TouchableOpacity 
                style={[styles.timeBlock, selectedTime === hour ? styles.selectedTimeBlock : {}]}
-               onPress={() => setSelectedTime(hour === selectedTime ? null : hour)}
+               onPress={() => {
+                setSelectedTime(hour === selectedTime ? null : hour);
+                const startTime = new Date();
+                startTime.setHours(hour);
+                const endTime = new Date(startTime);
+                endTime.setHours(startTime.getHours() + 1);
+                // console.log(selectedDay);
+                saveAppointmentDetails({
+                start_time: startTime,
+                end_time: endTime,
+                client_id: user?.uid,
+                day_of_week: selectedDay,
+                });
+               }}
              >
                <Text>{formattedHour}:00 {period}</Text>
              </TouchableOpacity>
@@ -118,6 +179,16 @@ const Availability: React.FC = () => {
     <ScrollView style={{flex: 1}}>
       <View style={styles.container}>
         <Text style={styles.title}>Step 3: Book your Slot</Text>
+        <TouchableOpacity 
+         onPress={confirmAppointment}
+         style={{ position: 'absolute', right: 15, top: 25 }}
+        >
+         <FontAwesomeIcon 
+          icon={faCheckCircle} 
+          size={30} 
+          color={selectedTime ? "blue" : "grey"} 
+         />
+        </TouchableOpacity>
         {barber && (
           <>
             <Image source={{ uri: barber.photoURL }} style={styles.image} />
@@ -139,6 +210,7 @@ const Availability: React.FC = () => {
                 keyExtractor={(item) => item}
                 style={styles.flatList}
                 showsHorizontalScrollIndicator={false}
+                nestedScrollEnabled
               />
             </View>
             <Text style={styles.availabilityHeader}>Availability</Text>
@@ -156,6 +228,7 @@ const Availability: React.FC = () => {
               onValueChange={(value) => {
                 setLocation(value);
                 setDropdown(!dropdown);
+                saveAppointmentDetails({ location: value });
               }}
             />
             <Icon name={dropdown ? "arrow-forward" : "arrow-drop-down"} size={20} style={{position: 'absolute', right: 4, bottom: 7}} color="gray" />
@@ -187,7 +260,7 @@ const styles = StyleSheet.create({
   availabilityHeader: {
     fontSize: 23,
     fontWeight: 'bold',
-    marginTop: 35,
+    marginTop: 25,
     marginLeft: 30,
     marginBottom: 20,
     alignSelf: 'flex-start'
@@ -200,7 +273,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start'
   },
   flatList: {
-    margin: 30,
+    margin: 15,
   },
   container: {
     justifyContent: 'center',

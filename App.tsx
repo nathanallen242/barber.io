@@ -5,6 +5,23 @@ import AppointmentProvider from './contexts/AppointmentContext';
 import { StyleSheet, View } from 'react-native';
 import TabNavigator from './navigators/TabNavigator'; // Import the TabNavigator
 
+if (__DEV__) {
+ const ignoreWarns = [
+   "VirtualizedLists should never be nested inside plain ScrollViews",
+   "Sending `onAnimatedValueUpdate` with no listeners registered"
+ ];
+
+ const errorWarn = global.console.error;
+ global.console.error = (...arg) => {
+   for (const error of ignoreWarns) {
+     if (arg[0].startsWith(error)) {
+       return;
+     }
+   }
+   errorWarn(...arg);
+ };
+}
+
 export default function App() {
  return (
   <AuthProvider>

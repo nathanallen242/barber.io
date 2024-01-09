@@ -1,23 +1,27 @@
 import React, { createContext, useState, ReactNode } from 'react';
-import { ref, set, remove } from 'firebase/database';
+import { ref, get, set, remove } from 'firebase/database';
 import { FIREBASE_DB } from '../config/FireBase';
+import { BarberData } from 'screens/appointment/Barber';
 
-interface Appointment {
+export interface Appointment {
  appointment_id: number;
  date_created: Date;
  client_id: string;
  employee_id: string;
+ employee: BarberData;
  service_id: string | null;
+ day_of_week: string;
+ date: Date;
  start_time: Date;
  end_time: Date;
- canceled: boolean;
- cancellation_reason?: string;
+ location: string;
+ status: string;
 }
 
 export interface AppointmentContextInterface {
  appointments: Appointment[];
  addAppointment: (appointment: Appointment) => void;
- saveAppointmentDetails: (appointment: Partial<Appointment>) => void;
+ saveAppointmentDetails: (appointment: Partial<Appointment>, employee_id?: string) => void;
  updateAppointment: (appointmentId: number, updatedAppointment: Appointment) => Promise<void>;
  removeAppointment: (appointmentId: number) => Promise<void>;
  appointmentDetails?: Partial<Appointment>;
@@ -40,8 +44,13 @@ const AppointmentProvider: React.FC<AppointmentProviderProps> = ({ children }) =
  const [appointments, setAppointments] = useState<Appointment[]>([]);
  const [appointmentDetails, setAppointmentDetails] = useState<Partial<Appointment>>({});
 
- const saveAppointmentDetails = (details: Partial<Appointment>) => {
-    setAppointmentDetails(details);
+ const saveAppointmentDetails = async (appointment: Partial<Appointment>, employee_id?: string) => {
+  if (employee_id) {
+  const barberData = (await get(ref(FIREBASE_DB, `/employees/${employee_id}`))).val() as BarberData;
+  setAppointmentDetails({ ...appointment, employee: barberData });
+  } else {
+  setAppointmentDetails(appointment);
+  }
  };
 
  const addAppointment = async (appointment: Appointment) => {
