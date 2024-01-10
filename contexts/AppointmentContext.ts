@@ -12,8 +12,8 @@ export interface Appointment {
  service_id: string | null;
  day_of_week: string;
  date: Date;
- start_time: Date;
- end_time: Date;
+ start_time: string;
+ end_time: string;
  location: string;
  status: string;
 }

@@ -17,5 +17,6 @@
     "target": "es2017"
   },
   "exclude": ["node_modules"],
+  "include": ["index.d.ts", "*"],
   "extends": "expo/tsconfig.base"
 }

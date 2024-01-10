@@ -29,44 +29,45 @@ const Availability: React.FC = () => {
 
   const confirmAppointment = async () => {
    Alert.alert(
-    "Confirm Appointment",
-    "Are you sure you want to confirm this appointment?",
-    [
-      {
-        text: "Cancel",
-        onPress: () => {},
-        style: "cancel"
-      },
-      { 
-        text: "OK", 
-        onPress: async () => {
-          const startTime = new Date();
-          startTime.setHours(selectedTime || 0);
-          const endTime = new Date(startTime);
-          endTime.setHours(startTime.getHours() + 1);
-          const dateCreated = new Date();
-
-          const appointment: Appointment = {
-           ...appointmentDetails,
-           appointment_id: Math.floor(Math.random() * 1000000), // Generate random id
-           date_created: dateCreated,
-           start_time: startTime,
-           end_time: endTime,
-           client_id: user?.uid || '',
-           status: 'confirmed',
-           employee_id: appointmentDetails?.employee_id || '',
-           employee: barber || defaultBarberData,
-           service_id: appointmentDetails?.service_id || null,
-           day_of_week: appointmentDetails?.day_of_week || '', // Provide a default value
-           date: appointmentDetails?.date || new Date(), // Provide a default value
-           location: appointmentDetails?.location || 'USF Tampa Campus', // Provide a default value
-          };
-          console.log(appointment);
-          // addAppointment(appointment);
-        }
-      }
-    ],
-    { cancelable: false }
+     "Confirm Appointment",
+     "Are you sure you want to confirm this appointment?",
+     [
+       {
+         text: "Cancel",
+         onPress: () => {},
+         style: "cancel"
+       },
+       { 
+         text: "OK", 
+         onPress: async () => {
+           const startTime = new Date();
+           startTime.setHours(selectedTime || 0);
+           const endTime = new Date(startTime);
+           endTime.setHours(startTime.getHours() + 1);
+           const dateCreated = new Date();
+  
+           const appointment: Appointment = {
+             ...appointmentDetails,
+             appointment_id: Math.floor(Math.random() * 1000000), // Generate random id
+             date_created: dateCreated,
+             start_time: `${startTime.getHours()}:${startTime.getMinutes()} ${startTime.getHours() >= 12 ? 'PM' : 'AM'}`,
+             end_time: `${endTime.getHours()}:${endTime.getMinutes()} ${endTime.getHours() >= 12 ? 'PM' : 'AM'}`,
+             client_id: user?.uid || '',
+             status: 'confirmed',
+             employee_id: appointmentDetails?.employee_id || '',
+             employee: barber || defaultBarberData,
+             service_id: appointmentDetails?.service_id || null,
+             day_of_week: appointmentDetails?.day_of_week || '', // Provide a default value
+             date: appointmentDetails?.date || new Date(),
+             location: appointmentDetails?.location || 'USF Tampa Campus', // Provide a default value
+           };
+          //  console.log(appointment);
+           addAppointment(appointment);
+           
+         }
+       }
+     ],
+     { cancelable: false }
    );
   };
 
@@ -148,21 +149,22 @@ const Availability: React.FC = () => {
            const formattedHour = hour % 12 || 12;
            return (
              <TouchableOpacity 
-               style={[styles.timeBlock, selectedTime === hour ? styles.selectedTimeBlock : {}]}
-               onPress={() => {
+              style={[styles.timeBlock, selectedTime === hour ? styles.selectedTimeBlock : {}]}
+              onPress={() => {
                 setSelectedTime(hour === selectedTime ? null : hour);
                 const startTime = new Date();
                 startTime.setHours(hour);
                 const endTime = new Date(startTime);
                 endTime.setHours(startTime.getHours() + 1);
-                // console.log(selectedDay);
+                const startTimeStr = `${startTime.getHours()}:00 ${startTime.getHours() >= 12 ? 'PM' : 'AM'}`;
+                const endTimeStr = `${endTime.getHours()}:00 ${endTime.getHours() >= 12 ? 'PM' : 'AM'}`;
                 saveAppointmentDetails({
-                start_time: startTime,
-                end_time: endTime,
-                client_id: user?.uid,
-                day_of_week: selectedDay,
+                  start_time: startTimeStr,
+                  end_time: endTimeStr,
+                  client_id: user?.uid,
+                  day_of_week: selectedDay,
                 });
-               }}
+              }}
              >
                <Text>{formattedHour}:00 {period}</Text>
              </TouchableOpacity>
