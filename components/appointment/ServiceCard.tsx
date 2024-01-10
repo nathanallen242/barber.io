@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Service } from '../../screens/appointment/Services';
 
 interface ServiceCardProps {
- image: any;
+ image?: any;
  serviceName: string;
  timeDuration: number;
  price: number;

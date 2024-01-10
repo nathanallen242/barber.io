@@ -112,6 +112,7 @@ const Barber: React.FC<BarberProps> = ({ navigation }) => {
             rating={barber.averageRating}
             image={barber.photoURL}
             onSelect={() => handleSelectBarber(barber)}
+            show={false}
           />
         );
       })}

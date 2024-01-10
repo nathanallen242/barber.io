@@ -41,17 +41,19 @@ const Card: React.FC<CardProps> = ({ name, jobTitle, date, duration, rating, ima
   {show && <FontAwesome name="chevron-right" size={20} color="#000" />}
  </View>
 
- <View style={styles.additionalContainer}>
-  <View style={styles.dateContainer}>
-    <FontAwesome name="calendar" size={15} color="#000" />
-    <Text style={styles.dateText}>{String(date)}</Text>
+ {show && (
+  <View style={styles.additionalContainer}>
+    <View style={styles.dateContainer}>
+      <FontAwesome name="calendar" size={15} color="#000" />
+      <Text style={styles.dateText}>{String(date)}</Text>
+    </View>
+    <View style={styles.durationContainer}>
+      <FontAwesome name="clock-o" size={15} color="#000" />
+      <Text style={styles.durationText}>{String(duration)}</Text>
+    </View>
   </View>
-  <View style={styles.durationContainer}>
-    <FontAwesome name="clock-o" size={15} color="#000" />
-    <Text style={styles.durationText}>{String(duration)}</Text>
-  </View>
- </View>
- </TouchableOpacity>
+ )}
+  </TouchableOpacity>
  );
 };
 

@@ -17,6 +17,10 @@
     "target": "es2017"
   },
   "exclude": ["node_modules"],
-  "include": ["index.d.ts", "*"],
+  "include": [
+    "assets/index.d.ts", 
+    "*",
+    "assets/*.ts",
+  ],
   "extends": "expo/tsconfig.base"
 }

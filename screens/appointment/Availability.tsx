@@ -12,7 +12,11 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
-const Availability: React.FC = () => {
+interface AvailabilityProps {
+  navigation: any;
+}
+
+const Availability: React.FC<AvailabilityProps> = ({ navigation }) => {
   const { user } = useContext(AuthContext);
   const { appointmentDetails, saveAppointmentDetails, addAppointment } = useContext(AppointmentContext);
   const [barber, setBarber] = useState<BarberData | null>(null);
@@ -63,7 +67,7 @@ const Availability: React.FC = () => {
            };
           //  console.log(appointment);
            addAppointment(appointment);
-           
+           navigation.navigate('Schedule', { screen: 'Event' });
          }
        }
      ],

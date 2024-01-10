@@ -9,6 +9,7 @@ import LoginScreen from '../screens/auth/Login';
 import SignUpScreen from '../screens/auth/Signup';
 import Services from '../screens/appointment/Services';
 import Availability from '../screens/appointment/Availability';
+import Event from '../screens/appointment/Event';
 import BarberSchedule from '../screens/barber/BarberSchedule';
 import Barber from '../screens/appointment/Barber';
 import Update from '../screens/profile/Update';
@@ -45,6 +46,7 @@ const ScheduleStack = () => {
       <Stack.Screen name="Services" component={Services} options={{ title: 'Services' }} />
       <Stack.Screen name="Barber" component={Barber} options={{ title: 'Barber' }} />
       <Stack.Screen name="Availability" component={Availability} options={{ title: 'Availability' }} />
+      <Stack.Screen name="Event" component={Event} options={{ title: 'Event' }} />
     </Stack.Navigator>
   );
 };

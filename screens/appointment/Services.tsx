@@ -6,10 +6,10 @@ import ServiceCard from '../../components/appointment/ServiceCard';
 import { AppointmentContext } from '../../contexts/AppointmentContext';
 import { ref, get } from 'firebase/database';
 import { FIREBASE_DB } from '../../config/FireBase';
-import haircut from '../../assets/full-haircut.png';
-import lineup from '../../assets/lineup.png';
-import beard from '../../assets/beard-trim.png';
-import eyebrow from '../../assets/eyebrow-trim.png';
+// import haircut from '../../assets/full-haircut.png';
+// import lineup from '../../assets/lineup.png';
+// import beard from '../../assets/beard-trim.png';
+// import eyebrow from '../../assets/eyebrow-trim.png';
 
 interface ServicesProps {
  navigation: any;
@@ -80,7 +80,7 @@ const Services: React.FC<ServicesProps> = ({ navigation }) => {
          {services.map((service) => (
            <ServiceCard
              key={service.service_id}
-             image={service.service_name === 'haircut' ? haircut : service.service_name === 'Lineup' ? lineup : service.service_name === 'beard shave' ? beard : eyebrow}
+             image={undefined} //TODO: add images that work with typescript
              serviceName={service.service_name}
              timeDuration={60}
              price={service.price}
