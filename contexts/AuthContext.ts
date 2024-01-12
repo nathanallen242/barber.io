@@ -71,16 +71,21 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const firebaseUser = userCredential.user;
-    const userObject: User = {
-      uid: firebaseUser.uid,
-      email: firebaseUser.email ?? '',
-      displayName: firebaseUser.displayName ?? 'Guest',
-      photoURL: firebaseUser.photoURL ?? 'https://via.placeholder.com/150',
-    };
-    setUser(userObject);
-    const dbRef = await set(ref(FIREBASE_DB, 'users/' + firebaseUser.uid), userObject);
+   const userCredential = await signInWithEmailAndPassword(auth, email, password);
+   const firebaseUser = userCredential.user;
+   const userObject: User = {
+     uid: firebaseUser.uid,
+     email: firebaseUser.email ?? '',
+     displayName: firebaseUser.displayName ?? 'Guest',
+     photoURL: firebaseUser.photoURL ?? 'https://via.placeholder.com/150',
+   };
+   setUser(userObject);
+   const dbRef = ref(FIREBASE_DB, 'users/' + firebaseUser.uid);
+   const snapshot = await get(dbRef);
+   if (snapshot.exists()) {
+     const userFromDb = snapshot.val() as User;
+     setUser({ ...userObject, role: userFromDb.role });
+   }
   };
 
   const logout = async () => {

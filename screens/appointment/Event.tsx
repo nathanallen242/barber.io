@@ -27,8 +27,21 @@ const Event: React.FC<EventProps> = ({ navigation }) => {
    startDate: new Date(`${appointmentDetails?.start_time}`),
    endDate: new Date(`${appointmentDetails?.end_time}`),
  };
+ 
+ const requestCalendarPermissions = async () => {
+   const { status } = await Calendar.requestCalendarPermissionsAsync();
+   if (status === 'granted') {
+     return true;
+   } else {
+     Alert.alert("Permission not granted", "You need to enable calendar permissions to use this feature.");
+     return false;
+   }
+ };
 
  const addEventToCalendar = async () => {
+    const hasPermission = await requestCalendarPermissions();
+    if (!hasPermission) return;
+
    const defaultCalendarSource = await Calendar.getDefaultCalendarAsync();
    const newCalendarID = await Calendar.createCalendarAsync({
      title: 'Expo Calendar',
@@ -48,12 +61,26 @@ const Event: React.FC<EventProps> = ({ navigation }) => {
  return (
    <SafeAreaView style={styles.container}>
      <Animated.View style={{ opacity: animation }}>
-       <FontAwesomeIcon icon={faCheckCircle} size={100} color="#00ff00" />
-       <Text>Appointment Successfully Booked</Text>
+       <FontAwesomeIcon icon={faCheckCircle} size={100} style={{alignSelf: 'center'}} color="#00ff00" />
+       <Text style={styles.appointment}>Appointment Successfully Booked!</Text>
      </Animated.View>
      <TouchableOpacity onPress={() => Alert.alert('Confirm', 'Do you want to add this to your calendar?', [{text: 'Yes', onPress: addEventToCalendar}, {text: 'No'}])}>
        <Animated.View style={{ opacity: animation }}>
-         <Text>Add to Calendar</Text>
+        <TouchableOpacity 
+         onPress={() => navigation.reset({
+          index: 0,
+          routes: [{ name: 'Schedule' }],
+         })}
+         style={{backgroundColor: '#007BFF', padding: 10, borderRadius: 5, alignItems: 'center', marginBottom: 10}}
+        >
+         <Text style={{color: '#FFFFFF'}}>View Appointments</Text>
+        </TouchableOpacity>
+         <TouchableOpacity 
+          onPress={() => Alert.alert('Confirm', 'Do you want to add this to your calendar?', [{text: 'Yes', onPress: addEventToCalendar}, {text: 'No'}])}
+          style={{backgroundColor: '#007BFF', padding: 10, borderRadius: 5, alignItems: 'center'}}
+         >
+          <Text style={{color: '#FFFFFF'}}>Add to Calendar</Text>
+         </TouchableOpacity>
        </Animated.View>
      </TouchableOpacity>
    </SafeAreaView>
@@ -62,6 +89,12 @@ const Event: React.FC<EventProps> = ({ navigation }) => {
 
 
 const styles = StyleSheet.create({
+ appointment: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    margin: 10,
+  },
  container: {
    flex: 1,
    justifyContent: 'center',

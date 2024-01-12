@@ -5,17 +5,15 @@ import { BarberData } from 'screens/appointment/Barber';
 
 export interface Appointment {
  appointment_id: number;
- date_created: Date;
- client_id: string;
+ client_id?: string;
  employee_id: string;
  employee: BarberData;
  service_id: string | null;
  day_of_week: string;
- date: Date;
- start_time: string;
- end_time: string;
+ date: string;
+ start_time?: string;
+ end_time?: string;
  location: string;
- status: string;
 }
 
 export interface AppointmentContextInterface {
@@ -46,7 +44,9 @@ const AppointmentProvider: React.FC<AppointmentProviderProps> = ({ children }) =
 
  const saveAppointmentDetails = async (appointment: Partial<Appointment>, employee_id?: string) => {
    if (employee_id) {
-     const barberData = (await get(ref(FIREBASE_DB, `/employees/`))).val() as BarberData;
+     const employeeRef = ref(FIREBASE_DB, `/employees/`);
+     const barberSnapshot = await get(employeeRef);
+     const barberData = barberSnapshot.val() as BarberData;
      setAppointmentDetails(prevState => ({ ...prevState, ...appointment, employee: barberData }));
    } else {
      setAppointmentDetails(prevState => ({ ...prevState, ...appointment }));

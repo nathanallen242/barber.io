@@ -11,6 +11,7 @@ import Picker from 'react-native-picker-select';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { fetchBookedAppointments } from '../../utils/timeUtils';
 
 interface AvailabilityProps {
   navigation: any;
@@ -26,6 +27,7 @@ const Availability: React.FC<AvailabilityProps> = ({ navigation }) => {
 
   const [opacity, setOpacity] = useState(new Animated.Value(0));
   const selectedBarber = appointmentDetails?.employee_id;
+  const [bookedHours, setBookedHours] = useState<string[]>([]);
 
   const [location, setLocation] = useState('USF Tampa Campus');
   const DAYS_MAP = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -44,28 +46,22 @@ const Availability: React.FC<AvailabilityProps> = ({ navigation }) => {
        { 
          text: "OK", 
          onPress: async () => {
-           const startTime = new Date();
-           startTime.setHours(selectedTime || 0);
-           const endTime = new Date(startTime);
-           endTime.setHours(startTime.getHours() + 1);
            const dateCreated = new Date();
   
            const appointment: Appointment = {
              ...appointmentDetails,
              appointment_id: Math.floor(Math.random() * 1000000), // Generate random id
-             date_created: dateCreated,
-             start_time: `${startTime.getHours()}:${startTime.getMinutes()} ${startTime.getHours() >= 12 ? 'PM' : 'AM'}`,
-             end_time: `${endTime.getHours()}:${endTime.getMinutes()} ${endTime.getHours() >= 12 ? 'PM' : 'AM'}`,
-             client_id: user?.uid || '',
-             status: 'confirmed',
+             start_time: appointmentDetails?.start_time,
+             end_time: appointmentDetails?.end_time,
              employee_id: appointmentDetails?.employee_id || '',
              employee: barber || defaultBarberData,
              service_id: appointmentDetails?.service_id || null,
-             day_of_week: appointmentDetails?.day_of_week || '', // Provide a default value
-             date: appointmentDetails?.date || new Date(),
-             location: appointmentDetails?.location || 'USF Tampa Campus', // Provide a default value
+             day_of_week: appointmentDetails?.day_of_week || '', 
+             date: appointmentDetails?.date || new Date().toDateString(),
+             location: appointmentDetails?.location || 'USF Tampa Campus',
            };
           //  console.log(appointment);
+           saveAppointmentDetails(appointment);
            addAppointment(appointment);
            navigation.navigate('Schedule', { screen: 'Event' });
          }
@@ -106,6 +102,17 @@ const Availability: React.FC<AvailabilityProps> = ({ navigation }) => {
   }, [selectedDay]);
 
 
+  
+  
+  useEffect(() => {
+    if (selectedBarber && selectedDay !== null) {
+      fetchBookedAppointments(selectedBarber).then(bookedAppointmentsMap => {
+        setBookedHours(bookedAppointmentsMap[selectedDay] || []);
+      });
+    }
+  }, [selectedBarber, selectedDay]);
+  
+
   const getDays = () => {
     const days = [];
     const today = new Date();
@@ -136,7 +143,6 @@ const Availability: React.FC<AvailabilityProps> = ({ navigation }) => {
 
   const renderTimeBlocks = () => {
    if (!selectedDay || !barber?.availability[selectedDay]) {
-     console.log("selectedDay or barber.availability[selectedDay] is not defined");
      return null;
    }
   
@@ -145,39 +151,45 @@ const Availability: React.FC<AvailabilityProps> = ({ navigation }) => {
    const toHour = parseInt(availability.to.split(':')[0], 10);
   
    return (
-     <Animated.View style={{...styles.timeContainer, opacity}}>
-       <FlatList
-         data={Array.from({ length: toHour - fromHour }, (_, i) => i + fromHour)}
-         renderItem={({ item: hour }) => {
-           const period = hour >= 12 ? 'PM' : 'AM';
-           const formattedHour = hour % 12 || 12;
-           return (
-             <TouchableOpacity 
-              style={[styles.timeBlock, selectedTime === hour ? styles.selectedTimeBlock : {}]}
+    <Animated.View style={{...styles.timeContainer, opacity}}>
+      <FlatList
+        data={Array.from({ length: toHour - fromHour }, (_, i) => i + fromHour)}
+        renderItem={({ item: hour }) => {
+          const period = hour >= 12 ? 'PM' : 'AM';
+          const formattedHour = hour % 12 || 12;
+          const timeString = `${formattedHour}:00 ${period}}`;
+          const isBooked = bookedHours.includes(timeString);
+          return (
+            <TouchableOpacity 
+              style={[styles.timeBlock, 
+                selectedTime === hour ? styles.selectedTimeBlock : {}, 
+                isBooked ? { backgroundColor: '#ccc' } : {}]}
               onPress={() => {
-                setSelectedTime(hour === selectedTime ? null : hour);
-                const startTime = new Date();
-                startTime.setHours(hour);
-                const endTime = new Date(startTime);
-                endTime.setHours(startTime.getHours() + 1);
-                const startTimeStr = `${startTime.getHours()}:00 ${startTime.getHours() >= 12 ? 'PM' : 'AM'}`;
-                const endTimeStr = `${endTime.getHours()}:00 ${endTime.getHours() >= 12 ? 'PM' : 'AM'}`;
-                saveAppointmentDetails({
-                  start_time: startTimeStr,
-                  end_time: endTimeStr,
-                  client_id: user?.uid,
-                  day_of_week: selectedDay,
-                });
+                if (!isBooked) {
+                 setSelectedTime(hour === selectedTime ? null : hour);
+                 const startTime = new Date();
+                 startTime.setHours(hour);
+                 const endTime = new Date(startTime);
+                 endTime.setHours(startTime.getHours() + 1);
+                 const startTimeStr = `${startTime.getHours()}:00 ${startTime.getHours() >= 12 ? 'PM' : 'AM'}`;
+                 const endTimeStr = `${endTime.getHours()}:00 ${endTime.getHours() >= 12 ? 'PM' : 'AM'}`;
+                 saveAppointmentDetails({
+                   start_time: startTimeStr,
+                   end_time: endTimeStr,
+                   client_id: user?.uid || 'guest',
+                   day_of_week: selectedDay,
+                 });
+                }
               }}
-             >
-               <Text>{formattedHour}:00 {period}</Text>
-             </TouchableOpacity>
-           );
-         }}
-         keyExtractor={(item) => item.toString()}
-       />
-     </Animated.View>
-   );
+            >
+              <Text>{formattedHour}:00 {period}</Text>
+            </TouchableOpacity>
+          );
+        }}
+        keyExtractor={(item) => item.toString()}
+      />
+    </Animated.View>
+  );
   };
 
   return (
