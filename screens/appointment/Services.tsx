@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import ServiceCard from '../../components/appointment/ServiceCard';
 import { AppointmentContext } from '../../contexts/AppointmentContext';
 import { ref, get } from 'firebase/database';
-import { FIREBASE_DB } from '../../config/FireBase';
+import { FIREBASE_DB } from '../../config/Firebase';
 // import haircut from '../../assets/full-haircut.png';
 // import lineup from '../../assets/lineup.png';
 // import beard from '../../assets/beard-trim.png';

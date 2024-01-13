@@ -4,7 +4,7 @@ import {
   // EXPO_CLIENT_ID_FIREBASE,
   // ANDROID_CLIENT_ID_FIREBASE,
   // IOS_CLIENT_ID_FIREBASE 
-} from '../config/FireBase';
+} from '../config/Firebase';
 // import * as Google from 'expo-auth-session/providers/google';
 // import { 
 //   getAuth,

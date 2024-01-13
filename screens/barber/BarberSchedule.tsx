@@ -4,7 +4,7 @@ import { Calendar } from 'react-native-calendars';
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import TimeBlocks from '../../components/schedule/TimeBlocks';
 import { ref, set, get } from 'firebase/database';
-import { FIREBASE_DB } from '../../config/FireBase';
+import { FIREBASE_DB } from '../../config/Firebase';
 import { AuthContext } from '../../contexts/AuthContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
 

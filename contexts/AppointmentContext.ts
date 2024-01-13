@@ -1,6 +1,6 @@
 import React, { createContext, useState, ReactNode } from 'react';
 import { ref, get, set, remove, push } from 'firebase/database';
-import { FIREBASE_DB } from '../config/FireBase';
+import { FIREBASE_DB } from '../config/Firebase';
 import { BarberData } from 'screens/appointment/Barber';
 
 export interface Appointment {

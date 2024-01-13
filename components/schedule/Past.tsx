@@ -5,7 +5,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { useAuth } from '../../contexts/AuthContext';
 import { Appointment } from '../../contexts/AppointmentContext';
 import { ref, get, query, orderByChild, equalTo } from 'firebase/database';
-import { FIREBASE_DB } from '../../config/FireBase';
+import { FIREBASE_DB } from '../../config/Firebase';
 
 const Past: React.FC = () => {
  const { user } = useAuth();

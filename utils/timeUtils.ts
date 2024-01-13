@@ -1,6 +1,6 @@
 import { parse, format } from 'date-fns';
 import { ref, onValue } from "@firebase/database";
-import { FIREBASE_DB } from "../config/FireBase";
+import { FIREBASE_DB } from "../config/Firebase";
 
 export const fetchBookedAppointments = (barberUID: string): Promise<Record<string, string[]>> => {
   const dbRef = ref(FIREBASE_DB, `/appointments`);

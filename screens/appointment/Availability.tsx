@@ -3,7 +3,7 @@ import { SafeAreaView, Alert, Text, View, Image, StyleSheet, FlatList, Touchable
 import { AppointmentContext } from '../../contexts/AppointmentContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import { ref, onValue, set } from 'firebase/database';
-import { FIREBASE_DB } from '../../config/FireBase';
+import { FIREBASE_DB } from '../../config/Firebase';
 import { BarberData, defaultBarberData } from './Barber';
 import { Appointment } from '../../contexts/AppointmentContext';
 import StarRatingDisplay from 'react-native-star-rating-widget';

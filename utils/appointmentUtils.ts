@@ -1,5 +1,5 @@
 import { ref, get, query, orderByChild, equalTo } from 'firebase/database';
-import { FIREBASE_DB } from '../config/FireBase';
+import { FIREBASE_DB } from '../config/Firebase';
 import { Appointment } from '../contexts/AppointmentContext';
 import { parseDateTime } from '../components/schedule/Upcoming';
 

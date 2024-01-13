@@ -34,9 +34,10 @@
     "expo": "~49.0.15",
     "expo-auth-session": "~5.0.2",
     "expo-calendar": "~11.3.2",
+    "expo-crypto": "~12.4.1",
     "expo-dev-client": "~2.4.12",
     "expo-image-picker": "~14.3.2",
-    "expo-module-scripts": "^3.1.0",
+    "expo-random": "~13.2.0",
     "expo-secure-store": "~12.3.1",
     "expo-status-bar": "~1.6.0",
     "expo-web-browser": "~12.3.2",
@@ -58,9 +59,7 @@
     "react-native-svg": "13.9.0",
     "react-native-tab-view": "^3.5.2",
     "styled-components": "^6.1.6",
-    "undefined": "expo-auth-session/providers/google",
-    "expo-crypto": "~12.4.1",
-    "expo-random": "~13.2.0"
+    "undefined": "expo-auth-session/providers/google"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

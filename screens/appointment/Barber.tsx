@@ -4,7 +4,7 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { AppointmentContext } from '../../contexts/AppointmentContext';
 import { User } from '../../contexts/AuthContext';
-import { FIREBASE_DB } from '../../config/FireBase';
+import { FIREBASE_DB } from '../../config/Firebase';
 import { ref, get } from 'firebase/database';
 import Card from '../../components/profile/Card';
 

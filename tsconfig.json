@@ -3,7 +3,8 @@
     "baseUrl": ".",
     "paths": {
       "@env/*": ["node_modules/react-native-dotenv/*"],
-      "@firebase/auth": ["node_modules/@firebase/auth/dist/auth/index.d.ts"]
+      "@firebase/auth": ["node_modules/@firebase/auth/dist/auth/index.d.ts"],
+      "*": ["barber.io/*"]
     },
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
