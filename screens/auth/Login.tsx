@@ -9,7 +9,7 @@ const LoginScreen = ({ navigation }: { navigation: NavigationProp<ParamListBase>
  const [email, setEmail] = useState('');
  const [password, setPassword] = useState('');
  const [isLoading, setIsLoading] = useState(false);
- const { login, handleLoginGoogle } = React.useContext(AuthContext);
+ const { login } = React.useContext(AuthContext);
 
  const handleLogin = async () => {
    setIsLoading(true);
@@ -47,8 +47,7 @@ const LoginScreen = ({ navigation }: { navigation: NavigationProp<ParamListBase>
        </TouchableOpacity>
      )}
      <View style={styles.socialButtonsContainer}>
-       <TouchableOpacity style={styles.socialButton}
-       onPress={handleLoginGoogle}>
+       <TouchableOpacity style={styles.socialButton}>
          <FontAwesomeIcon icon={faGoogle} size={30} color="#4285F4" />
        </TouchableOpacity>
        <TouchableOpacity style={styles.socialButton}>

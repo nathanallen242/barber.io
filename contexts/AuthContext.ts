@@ -1,17 +1,18 @@
 import React, { createContext, useState, useCallback, useEffect, useContext } from 'react';
 import { 
   FIREBASE_DB,
-  EXPO_CLIENT_ID_FIREBASE,
-  ANDROID_CLIENT_ID_FIREBASE,
-  IOS_CLIENT_ID_FIREBASE 
+  // EXPO_CLIENT_ID_FIREBASE,
+  // ANDROID_CLIENT_ID_FIREBASE,
+  // IOS_CLIENT_ID_FIREBASE 
 } from '../config/FireBase';
-import * as Google from 'expo-auth-session/providers/google';
-import { 
-  getAuth,
-  signInWithCredential,
-  GoogleAuthProvider,
-  OAuthCredential } from 'firebase/auth';
+// import * as Google from 'expo-auth-session/providers/google';
+// import { 
+//   getAuth,
+//   signInWithCredential,
+//   GoogleAuthProvider,
+//   OAuthCredential } from 'firebase/auth';
 import {
+  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
@@ -41,8 +42,8 @@ export interface AuthContextInterface {
   updatePassword: (newPassword: string) => Promise<void>;
   reauthenticate: (credential: any) => Promise<void>;
   updateUserProfile: (updatedUser: User) => Promise<void>
-  handleLoginGoogle: () => Promise<void>;
-  handleLogoutGoogle: () => void;
+  // handleLoginGoogle: () => Promise<void>;
+  // handleLogoutGoogle: () => void;
 }
 
 export const AuthContext = createContext<AuthContextInterface>({
@@ -54,8 +55,8 @@ export const AuthContext = createContext<AuthContextInterface>({
   updatePassword: async () => {},
   reauthenticate: async () => {},
   updateUserProfile: async () => {},
-  handleLoginGoogle: async () => {},
-  handleLogoutGoogle: async () => {}
+  // handleLoginGoogle: async () => {},
+  // handleLogoutGoogle: async () => {}
 });
 
 interface AuthProviderProps {
@@ -84,40 +85,40 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
    return () => unsubscribe();
   }, []);
 
-  // Function that logs into firebase using the credentials from an OAuth provider
-  const loginToFirebase = useCallback(async (credentials: OAuthCredential) => {
-    const signInResponse = await signInWithCredential(auth, credentials);
-    const token = await signInResponse.user.getIdToken();
-  }, []);
+  // // Function that logs into firebase using the credentials from an OAuth provider
+  // const loginToFirebase = useCallback(async (credentials: OAuthCredential) => {
+  //   const signInResponse = await signInWithCredential(auth, credentials);
+  //   const token = await signInResponse.user.getIdToken();
+  // }, []);
 
-  // Handles the logout using Google Provider
-  const handleLogoutGoogle = useCallback(() => {
-    auth.signOut();
-  }, []);
+  // // Handles the logout using Google Provider
+  // const handleLogoutGoogle = useCallback(() => {
+  //   auth.signOut();
+  // }, []);
 
-  // Google Auth
-  // Hook that gives us the function to authenticate our Google OAuth provider
-  const [, googleResponse, promptAsyncGoogle] = Google.useIdTokenAuthRequest({
-    selectAccount: true,
-    expoClientId: EXPO_CLIENT_ID_FIREBASE,
-    iosClientId: IOS_CLIENT_ID_FIREBASE,
-    androidClientId: ANDROID_CLIENT_ID_FIREBASE,
-  });
+  // // Google Auth
+  // // Hook that gives us the function to authenticate our Google OAuth provider
+  // const [, googleResponse, promptAsyncGoogle] = Google.useIdTokenAuthRequest({
+  //   selectAccount: true,
+  //   expoClientId: EXPO_CLIENT_ID_FIREBASE,
+  //   iosClientId: IOS_CLIENT_ID_FIREBASE,
+  //   androidClientId: ANDROID_CLIENT_ID_FIREBASE,
+  // });
 
-  // Handles the login via the Google Provider
-  const handleLoginGoogle = async () => {
-    await promptAsyncGoogle();
-  };
+  // // Handles the login via the Google Provider
+  // const handleLoginGoogle = async () => {
+  //   await promptAsyncGoogle();
+  // };
 
-  // Handles the login via the Google Provider
-  useEffect(() => {
-    if (googleResponse?.type === 'success') {
-      const credentials = GoogleAuthProvider.credential(
-        googleResponse.params.id_token
-      );
-      loginToFirebase(credentials);
-    }
-  }, [googleResponse]);
+  // // Handles the login via the Google Provider
+  // useEffect(() => {
+  //   if (googleResponse?.type === 'success') {
+  //     const credentials = GoogleAuthProvider.credential(
+  //       googleResponse.params.id_token
+  //     );
+  //     loginToFirebase(credentials);
+  //   }
+  // }, [googleResponse]);
 
   const login = async (email: string, password: string) => {
    const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -200,8 +201,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     updatePassword,
     reauthenticate,
     updateUserProfile,
-    handleLoginGoogle,
-    handleLogoutGoogle
+    // handleLoginGoogle,
+    // handleLogoutGoogle
   };
 
   return React.createElement(AuthContext.Provider, { value: contextValue }, children);
