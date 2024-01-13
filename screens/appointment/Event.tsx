@@ -39,24 +39,39 @@ const Event: React.FC<EventProps> = ({ navigation }) => {
  };
 
  const addEventToCalendar = async () => {
-    const hasPermission = await requestCalendarPermissions();
-    if (!hasPermission) return;
+  const hasPermission = await requestCalendarPermissions();
+  if (!hasPermission) return;
 
-   const defaultCalendarSource = await Calendar.getDefaultCalendarAsync();
-   const newCalendarID = await Calendar.createCalendarAsync({
-     title: 'Expo Calendar',
-     color: 'blue',
-     entityType: Calendar.EntityTypes.EVENT,
-     sourceId: defaultCalendarSource.id,
-     source: defaultCalendarSource.source,
-     name: 'internalCalendarName',
-     ownerAccount: 'personal',
-     accessLevel: Calendar.CalendarAccessLevel.OWNER,
-   });
+  try {
+    const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
+    let defaultCalendarSource;
+    if (calendars.length > 0) {
+      // Select an appropriate source - this is just an example
+      defaultCalendarSource = calendars.find(calendar => calendar.source && calendar.source.name === 'Default');
+    }
 
-   const eventId = await Calendar.createEventAsync(newCalendarID, eventDetails);
-   setEventIdInCalendar(eventId);
- };
+    if (!defaultCalendarSource) {
+      Alert.alert('No Calendar Sources Available', 'Please setup a calendar account.');
+      return;
+    }
+
+    const newCalendarID = await Calendar.createCalendarAsync({
+      title: 'Expo Calendar',
+      color: 'blue',
+      entityType: Calendar.EntityTypes.EVENT,
+      sourceId: defaultCalendarSource.source.id,
+      name: 'internalCalendarName',
+      ownerAccount: 'personal',
+      accessLevel: Calendar.CalendarAccessLevel.OWNER,
+    });
+
+    const eventId = await Calendar.createEventAsync(newCalendarID, eventDetails);
+    setEventIdInCalendar(eventId);
+  } catch (error) {
+    console.error(error);
+    Alert.alert('Error', 'Failed to add event to calendar.');
+  }
+};
 
  return (
    <SafeAreaView style={styles.container}>

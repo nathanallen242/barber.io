@@ -4,11 +4,11 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import StarRatingDisplay from 'react-native-star-rating-widget';
 
 interface CardProps {
- name: string;
- jobTitle: string;
- date: string;
+ name?: string;
+ jobTitle?: string;
+ date?: string;
  duration: string;
- rating: number;
+ rating?: number;
  image?: string;
  show?: boolean;
  onSelect?: () => void;
@@ -26,7 +26,7 @@ const Card: React.FC<CardProps> = ({ name, jobTitle, date, duration, rating, ima
   <View style={styles.rightContainer}>
     <Text style={styles.name}>{name}</Text>
     <Text style={styles.jobTitle}>{jobTitle}</Text>
-    {rating > 0 &&
+    {rating && rating > 0 &&
      <TouchableOpacity onPress={() => {}}>
       <StarRatingDisplay
         rating={rating}
@@ -84,10 +84,11 @@ const styles = StyleSheet.create({
    paddingLeft: 5,
  },
  profilePlaceholder: {
-   borderRadius: 50,
+   borderRadius: 55,
    width: 65,
    height: 65,
    backgroundColor: '#ccc',
+   overflow: 'hidden',
  },
  name: {
    fontWeight: 'bold',
@@ -110,23 +111,23 @@ const styles = StyleSheet.create({
  dateContainer: {
    marginBottom: 5,
    marginTop: 10,
-   flex: 0.6,
+   flex: 0.5,
    flexDirection: 'row',
    alignItems: 'flex-start',
  },
  durationContainer: {
    margin: 5,
-   flex: 0.4,
+   flex: 0.5,
    alignItems: 'center',
    flexDirection: 'row',
  },
  dateText: {
-   fontSize: 16,
+   fontSize: 15,
    color: "#000",
    marginLeft: 10,
  },
  durationText: {
-   fontSize: 16,
+   fontSize: 15,
    color: "#000",
    marginLeft: 10,
  },

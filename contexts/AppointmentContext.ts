@@ -1,10 +1,10 @@
 import React, { createContext, useState, ReactNode } from 'react';
-import { ref, get, set, remove } from 'firebase/database';
+import { ref, get, set, remove, push } from 'firebase/database';
 import { FIREBASE_DB } from '../config/FireBase';
 import { BarberData } from 'screens/appointment/Barber';
 
 export interface Appointment {
- appointment_id: number;
+ appointment_id: string;
  client_id?: string;
  employee_id: string;
  employee: BarberData;
@@ -20,8 +20,8 @@ export interface AppointmentContextInterface {
  appointments: Appointment[];
  addAppointment: (appointment: Appointment) => void;
  saveAppointmentDetails: (appointment: Partial<Appointment>, employee_id?: string) => void;
- updateAppointment: (appointmentId: number, updatedAppointment: Appointment) => Promise<void>;
- removeAppointment: (appointmentId: number) => Promise<void>;
+ updateAppointment: (appointmentId: string, updatedAppointment: Appointment) => Promise<void>;
+ removeAppointment: (appointmentId: string) => Promise<void>;
  appointmentDetails?: Partial<Appointment>;
 }
 
@@ -54,19 +54,26 @@ const AppointmentProvider: React.FC<AppointmentProviderProps> = ({ children }) =
  };
 
  const addAppointment = async (appointment: Appointment) => {
-  await set(ref(FIREBASE_DB, `appointments`), appointment);
+  const newAppointmentRef = push(ref(FIREBASE_DB, `appointments`));
+  if (newAppointmentRef.key !== null) {
+    appointment.appointment_id = newAppointmentRef.key; // Store the generated key as appointment_id
+  } else {
+    throw new Error("Key is null");
+  }
+  await set(newAppointmentRef, appointment);
   setAppointments(currentAppointments => [...currentAppointments, appointment]);
  };
  
- const updateAppointment = async (appointmentId: number, updatedAppointment: Appointment) => {
-  await set(ref(FIREBASE_DB, `appointments/`), updatedAppointment);
+ const updateAppointment = async (appointmentId: string, updatedAppointment: Appointment) => {
+  const appointmentRef = ref(FIREBASE_DB, `appointments/`);
+  await set(appointmentRef, updatedAppointment);
   const updatedAppointments = appointments.map(appointment => 
    appointment.appointment_id === appointmentId ? updatedAppointment : appointment
   );
   setAppointments(updatedAppointments);
  };
  
- const removeAppointment = async (appointmentId: number) => {
+ const removeAppointment = async (appointmentId: string) => {
   await remove(ref(FIREBASE_DB, `appointments/`));
   const updatedAppointments = appointments.filter(appointment => 
    appointment.appointment_id !== appointmentId

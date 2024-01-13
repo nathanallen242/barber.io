@@ -27,49 +27,48 @@ const Availability: React.FC<AvailabilityProps> = ({ navigation }) => {
 
   const [opacity, setOpacity] = useState(new Animated.Value(0));
   const selectedBarber = appointmentDetails?.employee_id;
-  const [bookedHours, setBookedHours] = useState<string[]>([]);
+  // const [bookedHours, setBookedHours] = useState<string[]>([]);
 
   const [location, setLocation] = useState('USF Tampa Campus');
   const DAYS_MAP = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const [dropdown, setDropdown] = useState(false);
 
   const confirmAppointment = async () => {
-   Alert.alert(
-     "Confirm Appointment",
-     "Are you sure you want to confirm this appointment?",
-     [
-       {
-         text: "Cancel",
-         onPress: () => {},
-         style: "cancel"
-       },
-       { 
-         text: "OK", 
-         onPress: async () => {
-           const dateCreated = new Date();
+    Alert.alert(
+      "Confirm Appointment",
+      "Are you sure you want to confirm this appointment?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => {},
+          style: "cancel"
+        },
+        { 
+          text: "OK", 
+          onPress: async () => {
+            // Omit the appointment_id here, it will be set in addAppointment
+            const appointment: Omit<Appointment, 'appointment_id'> = {
+              ...appointmentDetails,
+              start_time: appointmentDetails?.start_time,
+              end_time: appointmentDetails?.end_time,
+              employee_id: appointmentDetails?.employee_id || '',
+              employee: barber || defaultBarberData,
+              service_id: appointmentDetails?.service_id || null,
+              day_of_week: appointmentDetails?.day_of_week || '', 
+              date: appointmentDetails?.date || new Date().toDateString(),
+              location: appointmentDetails?.location || 'USF Tampa Campus',
+            };
   
-           const appointment: Appointment = {
-             ...appointmentDetails,
-             appointment_id: Math.floor(Math.random() * 1000000), // Generate random id
-             start_time: appointmentDetails?.start_time,
-             end_time: appointmentDetails?.end_time,
-             employee_id: appointmentDetails?.employee_id || '',
-             employee: barber || defaultBarberData,
-             service_id: appointmentDetails?.service_id || null,
-             day_of_week: appointmentDetails?.day_of_week || '', 
-             date: appointmentDetails?.date || new Date().toDateString(),
-             location: appointmentDetails?.location || 'USF Tampa Campus',
-           };
-          //  console.log(appointment);
-           saveAppointmentDetails(appointment);
-           addAppointment(appointment);
-           navigation.navigate('Schedule', { screen: 'Event' });
-         }
-       }
-     ],
-     { cancelable: false }
-   );
+            saveAppointmentDetails(appointment);
+            addAppointment(appointment as Appointment);
+            navigation.navigate('Schedule', { screen: 'Event' });
+          }
+        }
+      ],
+      { cancelable: false }
+    );
   };
+  
 
   useEffect(() => {
     if (selectedBarber) {
@@ -104,13 +103,13 @@ const Availability: React.FC<AvailabilityProps> = ({ navigation }) => {
 
   
   
-  useEffect(() => {
-    if (selectedBarber && selectedDay !== null) {
-      fetchBookedAppointments(selectedBarber).then(bookedAppointmentsMap => {
-        setBookedHours(bookedAppointmentsMap[selectedDay] || []);
-      });
-    }
-  }, [selectedBarber, selectedDay]);
+  // useEffect(() => {
+  //   if (selectedBarber && selectedDay !== null) {
+  //     fetchBookedAppointments(selectedBarber).then(bookedAppointmentsMap => {
+  //       setBookedHours(bookedAppointmentsMap[selectedDay] || []);
+  //     });
+  //   }
+  // }, [selectedBarber, selectedDay]);
   
 
   const getDays = () => {
@@ -158,14 +157,13 @@ const Availability: React.FC<AvailabilityProps> = ({ navigation }) => {
           const period = hour >= 12 ? 'PM' : 'AM';
           const formattedHour = hour % 12 || 12;
           const timeString = `${formattedHour}:00 ${period}}`;
-          const isBooked = bookedHours.includes(timeString);
+          // const isBooked = bookedHours.includes(timeString);
           return (
             <TouchableOpacity 
               style={[styles.timeBlock, 
-                selectedTime === hour ? styles.selectedTimeBlock : {}, 
-                isBooked ? { backgroundColor: '#ccc' } : {}]}
+                selectedTime === hour ? styles.selectedTimeBlock : {}]}
+                // isBooked ? { backgroundColor: '#ccc' } : {}
               onPress={() => {
-                if (!isBooked) {
                  setSelectedTime(hour === selectedTime ? null : hour);
                  const startTime = new Date();
                  startTime.setHours(hour);
@@ -179,7 +177,6 @@ const Availability: React.FC<AvailabilityProps> = ({ navigation }) => {
                    client_id: user?.uid || 'guest',
                    day_of_week: selectedDay,
                  });
-                }
               }}
             >
               <Text>{formattedHour}:00 {period}</Text>

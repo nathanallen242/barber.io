@@ -1,26 +1,59 @@
 import React, { useState, useEffect} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../components/profile/Card';
 import SearchBar from '../components/search/SearchBar';
 import { AuthContext } from '../contexts/AuthContext';
+import { Appointment } from '../contexts/AppointmentContext';
+import { fetchUpcomingAppointments, fetchPastAppointments } from '../utils/appointmentUtils';
 
 interface HomeProps {
  username: string;
  navigation: any;
 }
 
+
 const Home: React.FC<HomeProps> = ({ username, navigation }) => {
- const [loading, setLoading] = useState(true);
+ const [loading, setLoading] = useState<boolean>(true);
+ const [mostUpcomingAppointment, setMostUpcomingAppointment] = useState<Appointment | null>(null);
+ const [mostRecentAppointment, setMostRecentAppointment] = useState<Appointment | null>(null);
  const { user } = React.useContext(AuthContext);
 
  useEffect(() => {
-  // Simulate scroll & fetch (TODO)
-  setTimeout(() => {
-   setLoading(false);
-  }, 2000);
-  }, []);
+  if (user) {
+    const fetchAppointments = async () => {
+      try {
+        const upcomingAppointments = await fetchUpcomingAppointments(user);
+        // console.log('Upcoming Appointments:', upcomingAppointments);
+
+        const pastAppointments = await fetchPastAppointments(user);
+        // console.log('Past Appointments:', pastAppointments);
+
+        // Sort the appointments based on their dates
+        upcomingAppointments.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        pastAppointments.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+        // Get the most upcoming and most recent appointments
+        setMostUpcomingAppointment(upcomingAppointments[0] || null);
+        setMostRecentAppointment(pastAppointments[0] || null);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAppointments();
+  } else {
+    // Handle the case when user is not defined
+    setLoading(false);
+  }
+}, [user]);
+
+if (loading) {
+  return <ActivityIndicator size="large" color="#0000ff" />;
+}
 
  return (
   <SafeAreaView style={styles.container}>
@@ -42,14 +75,17 @@ const Home: React.FC<HomeProps> = ({ username, navigation }) => {
   </TouchableOpacity>
       </View>
     </View>
-
+    
+    {mostUpcomingAppointment && (
     <Card
-      name="John Doe"
-      jobTitle="Software Engineer"
-      date="Tuesday, 2 January"
-      duration="00:00 - 00:00"
-      rating={4.5}
+     name={mostUpcomingAppointment?.employee.displayName}
+     jobTitle={mostUpcomingAppointment?.employee.role}
+     date={mostUpcomingAppointment?.date}
+     duration={mostUpcomingAppointment?.start_time + ' - ' + mostUpcomingAppointment?.end_time}
+     rating={mostUpcomingAppointment?.employee.averageRating}
+     image={mostUpcomingAppointment?.employee.photoURL}
     />
+    )}
 
     <SearchBar />
     
@@ -77,14 +113,17 @@ const Home: React.FC<HomeProps> = ({ username, navigation }) => {
     
 
     <Text style={styles.title}>Most Recent Appointment</Text>
-
+    
+    {mostRecentAppointment && (
     <Card
-      name="John Doe"
-      jobTitle="Software Engineer"
-      date="Tuesday, 2 January"
-      duration="00:00 - 00:00"
-      rating={4.5}
+     name={mostRecentAppointment?.employee.displayName}
+     jobTitle={mostRecentAppointment?.employee.role}
+     date={mostRecentAppointment?.date}
+     duration={mostRecentAppointment?.start_time + ' - ' + mostRecentAppointment?.end_time}
+     rating={mostRecentAppointment?.employee.averageRating}
+     image={mostRecentAppointment?.employee.photoURL}
     />
+    )}
 
     {/* TODO: Add a button to book again and view reviews */}
     <View style={styles.buttonContainer}>

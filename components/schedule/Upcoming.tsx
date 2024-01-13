@@ -1,68 +1,120 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, SafeAreaView, Text, StyleSheet } from 'react-native';
 import Card from '../profile/Card';
 import { useIsFocused } from '@react-navigation/native';
 import { useAuth } from '../../contexts/AuthContext';
+import { Appointment } from '../../contexts/AppointmentContext';
+import { ref, get, query, orderByChild, equalTo } from 'firebase/database';
+import { FIREBASE_DB } from '../../config/FireBase';
+
+export function parseDateTime(dateStr: any, timeStr: any) {
+  // Example formats: dateStr = 'Fri Jan 12 2024', timeStr = '1:00 PM'
+
+  // Convert 12-hour format to 24-hour format
+  const [time, modifier] = timeStr.split(' ');
+  let [hours, minutes] = time.split(':');
+  if (hours === '12') {
+    hours = '00';
+  }
+  if (modifier === 'PM') {
+    hours = parseInt(hours, 10) + 12;
+  }
+
+  // Format the date string into a standard format (YYYY-MM-DD)
+  const formattedDateStr = new Date(dateStr).toISOString().split('T')[0];
+
+  // Combine date and time
+  return new Date(`${formattedDateStr} ${hours}:${minutes}`);
+}
 
 const Upcoming: React.FC = () => {
   const { user } = useAuth();
- const [appointments, setAppointments] = useState([
- { name: "John Doe", jobTitle: "Software Engineer", date: "Tuesday, 2 January", duration: "00:00 - 00:00", rating: 4.5 },
- { name: "Jane Smith", jobTitle: "Data Scientist", date: "Wednesday, 3 January", duration: "01:00 - 02:00", rating: 4.0 },
- ]);
- const [page, setPage] = useState(1);
- const loading = useRef(false);
- const isFocused = useIsFocused();
+  const [upcomingAppointments, setUpcomingAppointments] = useState<Appointment[]>([]);
+  const isFocused = useIsFocused();
 
- let title;
- if (user?.role === 'barber') {
-  title = 'Upcoming Clients';
- } else {
-  title = 'Upcoming Appointments';
- }
+  
+  let title;
+  if (user?.role === 'barber') {
+    title = 'Upcoming Clients';
+  } else {
+    title = 'Upcoming Appointments';
+  }
 
- const fetchMoreData = useCallback(async () => {
- if (!loading.current) {
-   loading.current = true;
-   // Fetch more data here...
-   setPage(prevPage => prevPage + 1);
-   loading.current = false;
- }
- }, []);
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      const appointmentsRef = ref(FIREBASE_DB, '/appointments');
+      if (user) {
+        const clientAppointmentsQuery = query(appointmentsRef, orderByChild('client_id'), equalTo(user.uid));
+        const employeeAppointmentsQuery = query(appointmentsRef, orderByChild('employee_id'), equalTo(user.uid));
 
- return (
- <SafeAreaView style={[styles.container, { opacity: isFocused ? 1: 0.5}]}>
-   <Text style={styles.title}>{title}</Text>
-   <FlatList
-     data={appointments}
-     renderItem={({ item }) => <Card {...item} />}
-     keyExtractor={item => item.name}
-     onEndReached={fetchMoreData}
-     onEndReachedThreshold={0.1}
-     contentContainerStyle={styles.scrollViewContainer}
-     style={{height: '85%'}}
-   />
- </SafeAreaView>
- );
+        // Fetch client appointments
+        const clientSnapshot = await get(clientAppointmentsQuery);
+        const clientAppointmentsData = clientSnapshot.val();
+
+        // Fetch employee appointments
+        const employeeSnapshot = await get(employeeAppointmentsQuery);
+        const employeeAppointmentsData = employeeSnapshot.val();
+      
+        // Combine and filter appointments
+        const combinedAppointmentsData = { ...clientAppointmentsData, ...employeeAppointmentsData };
+
+        
+        const now = new Date();
+        const userAppointments = Object.values(combinedAppointmentsData as Record<string, Appointment>)
+        .filter((appointment: Appointment) => {
+          const appointmentDateTime = parseDateTime(appointment.date, appointment.start_time);
+          // console.log(appointmentDateTime);
+          return appointmentDateTime > now;
+        });
+
+        setUpcomingAppointments(userAppointments);
+      }
+    };
+
+    if (user) {
+      fetchAppointments();
+    }
+  }, [isFocused, user]);
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>{title}</Text>
+      <FlatList
+        data={upcomingAppointments}
+        renderItem={({ item }) => (
+          <Card
+            name={item.employee.displayName}
+            jobTitle={item.employee.role}
+            date={item.date}
+            duration={item.start_time + ' - ' + item.end_time}
+            rating={item.employee.averageRating}
+            image={item.employee.photoURL}
+          />
+        )}
+        keyExtractor={item => item.appointment_id.toString()}
+        contentContainerStyle={styles.scrollViewContainer}
+      />
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
- container: {
-  flexDirection: 'column',
- },
- title: {
-  fontSize: 25,
-  fontWeight: 'bold',
-  marginTop: 20,
-  marginBottom: 10,
-  marginLeft: 20,
-  alignSelf: 'center',
- },
- scrollViewContainer: {
-  flexGrow: 1,
-  justifyContent: 'flex-start',
-  alignItems: 'center',
- },
-});
+  container: {
+   flexDirection: 'column',
+  },
+  title: {
+   fontSize: 25,
+   fontWeight: 'bold',
+   marginTop: 20,
+   marginBottom: 10,
+   marginLeft: 20,
+   alignSelf: 'center',
+  },
+  scrollViewContainer: {
+   flexGrow: 1,
+   justifyContent: 'flex-start',
+   alignItems: 'center',
+  },
+ });
 
 export default Upcoming;
