@@ -11,7 +11,10 @@ import {
   FIREBASE_STORAGE_BUCKET,
   FIREBASE_MESSAGING_SENDER_ID,
   FIREBASE_APP_ID,
-  FIREBASE_MEASUREMENT_ID
+  FIREBASE_MEASUREMENT_ID,
+  EXPO_CLIENT_ID,
+  ANDROID_CLIENT_ID,
+  IOS_CLIENT_ID,
 } from "@env";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -37,3 +40,6 @@ export const FIREBASE_AUTH = initializeAuth(FIREBASE_APP, {
   persistence: reactNativePersistence(AsyncStorage),
 });
 export const FIREBASE_DB = getDatabase(FIREBASE_APP);
+export const EXPO_CLIENT_ID_FIREBASE = EXPO_CLIENT_ID;
+export const ANDROID_CLIENT_ID_FIREBASE = ANDROID_CLIENT_ID;
+export const IOS_CLIENT_ID_FIREBASE = IOS_CLIENT_ID;
