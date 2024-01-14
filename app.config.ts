@@ -68,6 +68,13 @@ export default {
         {
           "calendarPermission": "The app needs to access your calendar."
         }
+      ],
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "merchant.com.barber-io",
+          "enableGooglePay": true
+        }
       ]
     ],
     "extra": {
