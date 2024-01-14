@@ -91,22 +91,22 @@ if (loading) {
     
       <View style={styles.navigationContainer}>
         <TouchableOpacity style={styles.componentContainer}>
-          <FontAwesome name="usd" size={24} color="#000" />
+          <FontAwesome name="usd" size={24} color="grey" />
           <Text style={styles.componentName}>Prices</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.componentContainer}>
-          <FontAwesome name="image" size={24} color="#000" />
+          <FontAwesome name="camera" size={24} color="grey" />
           <Text style={styles.componentName}>Gallery</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.componentContainer}>
-          <FontAwesome name="list-alt" size={24} color="#000" />
+          <FontAwesome name="list-alt" size={24} color="grey" />
           <Text style={styles.componentName}>Services</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.componentContainer}>
-          <FontAwesome name="phone" size={24} color="#000" />
+          <FontAwesome name="phone" size={24} color="grey" />
           <Text style={styles.componentName}>Contact</Text>
         </TouchableOpacity>
       </View>
@@ -273,7 +273,8 @@ const styles = StyleSheet.create({
   padding: 25,
  },
  componentName: {
-  fontSize: 18,
+  fontSize: 17,
+  fontWeight: 'bold',
   marginTop: 5,
  },
 });

@@ -26,6 +26,7 @@ const LoginScreen = ({ navigation }: { navigation: NavigationProp<ParamListBase>
 
  return (
    <SafeAreaView style={styles.container}>
+    {/* <Text style={styles.header}>Login</Text> */}
      <TextInput
        style={styles.input}
        placeholder="Email"
@@ -62,6 +63,12 @@ const LoginScreen = ({ navigation }: { navigation: NavigationProp<ParamListBase>
 };
 
 const styles = StyleSheet.create({
+ header: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 40,
+    justifyContent: 'flex-start'
+ },
  container: {
    flex: 1,
    justifyContent: 'center',
