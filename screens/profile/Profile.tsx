@@ -75,7 +75,12 @@ return (
     <View style={styles.settingsContainer}>
      {isAuthenticated ? (
       <>
-       <Setting icon="credit-card" name="Payment" description="Change your payment settings" />
+       <Setting 
+        icon="credit-card" 
+        name="Payments" 
+        description="Change your payment settings" 
+        onPress={() => navigation.navigate('Payments')} 
+       />
        <Setting icon="bell" name="Notifications" description="Manage your notification settings" />
        <Setting icon="sign-out" name="Logout" description="Log out of your account" onPress={handleLogout} />
       </>

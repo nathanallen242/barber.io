@@ -10,19 +10,22 @@ import { STRIPE_PUBLISHABLE_KEY } from '@env';
 if (__DEV__) {
   const ignoreWarns: string[] = [
     "VirtualizedLists should never be nested inside plain ScrollViews",
-    "Sending `onAnimatedValueUpdate` with no listeners registered"
+    "Sending `onAnimatedValueUpdate` with no listeners registered",
   ];
 
   const errorWarn: (...args: any[]) => void = global.console.error;
   global.console.error = (...args: any[]) => {
-    for (const error of ignoreWarns) {
-      if (args[0].startsWith(error)) {
-        return;
+    if (typeof args[0] === 'string') { // Ensure the first argument is a string
+      for (const error of ignoreWarns) {
+        if (args[0].startsWith(error)) {
+          return;
+        }
       }
     }
     errorWarn(...args);
   };
 }
+
 
 export default function App() {
  return (

@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Home from '../screens/Home';
 import Schedule from '../screens/Schedule';
 import Profile from '../screens/profile/Profile';
+import PaymentsScreen from '../screens/profile/Payments';
 import LoginScreen from '../screens/auth/Login';
 import SignUpScreen from '../screens/auth/Signup';
 import Services from '../screens/appointment/Services';
@@ -31,6 +32,7 @@ const UserStack = () => {
       <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
       <Stack.Screen name="Signup" component={SignUpScreen} options={{ title: 'Signup' }} />
       <Stack.Screen name="Update" component={Update} options={{ title: 'Update' }} />
+      <Stack.Screen name="Payments" component={PaymentsScreen} options={{ title: 'Payments' }} />
     </Stack.Navigator>
   );
 };

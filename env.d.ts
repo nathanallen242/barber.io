@@ -11,4 +11,5 @@ declare module '@env' {
  export const IOS_CLIENT_ID: string;
  export const STRIPE_PUBLISHABLE_KEY: string;
  export const STRIPE_SECRET_KEY: string;
+ export const SERVER_URL: string;
 }
