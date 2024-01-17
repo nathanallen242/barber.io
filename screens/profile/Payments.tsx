@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Button, Text, Alert, StyleSheet, SafeAreaView, Switch } from 'react-native';
-import { useStripe } from '@stripe/stripe-react-native';
+import { View, Button, Text, Alert, StyleSheet, SafeAreaView, Switch, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SensitiveInfo from 'react-native-sensitive-info';
 import { AuthContext } from '../../contexts/AuthContext';
@@ -14,29 +13,48 @@ interface PaymentsScreenProps {
 const PaymentsScreen: React.FC<PaymentsScreenProps> = ({ navigation }) => {
   const { user } = useContext(AuthContext);
   const [paymentMethod, setPaymentMethod] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(false);
 
   const handleSubmit = async () => {
+    setLoading(true);
     if (paymentMethod === 'in-person') {
       Alert.alert('Success', 'Your payment method has been saved.');
       return;
     }
+
+    setProgress(true);
   
     try {
-      const response = await axios.post(`${SERVER_URL}/create-setup-intent`, {
-        email: user?.email,
-      });
-  
+      const response = await axios.post(
+        `${SERVER_URL}/create-setup-intent`, 
+        JSON.stringify({ email: user?.uid }), 
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'bypass-tunnel-reminder': 'true',
+          }
+        }
+      );
+    
+      if (response.status !== 200) {
+        throw new Error('An error occurred while creating the setup intent.');
+      }
+    
       const { setupIntent, customer_id } = response.data;
-  
+    
       // Save setupIntent and customer_id to AsyncStorage
       await SensitiveInfo.setItem('setupIntent', setupIntent, {});
       await SensitiveInfo.setItem('customer_id', customer_id, {});
-  
+    
       Alert.alert('Success', 'Your payment method has been saved.');
     } catch (error) {
       console.error(error);
       Alert.alert('Error', 'An error occurred while saving your payment method.');
-    }
+    } finally {
+      setLoading(false);
+      setProgress(false);
+    }    
    };
 
    useEffect(() => {
@@ -87,7 +105,8 @@ const PaymentsScreen: React.FC<PaymentsScreenProps> = ({ navigation }) => {
          />
        </View>
      </View>
-     <Button title="Save" onPress={handleSubmit} />
+     {progress && <ActivityIndicator size="large" color="#0000ff"/>}
+     {!loading && <Button title="Save" onPress={handleSubmit} />}
    </SafeAreaView>
   );
 };
