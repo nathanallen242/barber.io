@@ -66,13 +66,13 @@ const Services: React.FC<ServicesProps> = ({ navigation }) => {
    <SafeAreaView>
      <Text style={styles.header}>
        Step 1: Choose a Service
-       <TouchableOpacity onPress={handleNavigate}>
-         <FontAwesomeIcon 
-           icon={faChevronRight} 
-           size={30} 
-           color={selectedService ? "blue" : "grey"} 
-           style={{ position: 'absolute', right: -115, top: -25 }}
-         />
+       <TouchableOpacity onPress={handleNavigate} style={{padding: 10}}>
+        <FontAwesomeIcon 
+          icon={faChevronRight} 
+          size={50} 
+          color={selectedService ? "blue" : "grey"} 
+          style={{ position: 'absolute', right: -115, top: -25 }}
+        />
        </TouchableOpacity>
      </Text>
      <ScrollView contentContainerStyle={styles.scrollView}>

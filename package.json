@@ -54,6 +54,7 @@
     "expo-web-browser": "~12.3.2",
     "firebase": "^10.7.1",
     "jest-expo": "~49.0.0",
+    "native-notify": "^3.2.5",
     "react": "18.2.0",
     "react-native": "0.72.6",
     "react-native-calendars": "^1.1303.0",
@@ -75,7 +76,9 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-viewpager": "^0.2.13",
     "styled-components": "^6.1.6",
-    "undefined": "expo-auth-session/providers/google"
+    "undefined": "expo-auth-session/providers/google",
+    "expo-device": "~5.4.0",
+    "expo-notifications": "~0.20.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

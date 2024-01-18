@@ -2,6 +2,12 @@ import React, { createContext, useState, ReactNode } from 'react';
 import { ref, get, set, remove, push } from 'firebase/database';
 import { FIREBASE_DB } from '../config/Firebase';
 import { BarberData } from '../screens/appointment/Barber';
+import
+  { 
+    NATIVE_ID,
+    NATIVE_TOKEN
+  } from '@env';
+import axios from 'axios';
 
 export interface Appointment {
  appointment_id: string;
@@ -62,6 +68,13 @@ const AppointmentProvider: React.FC<AppointmentProviderProps> = ({ children }) =
   }
   await set(newAppointmentRef, appointment);
   setAppointments(currentAppointments => [...currentAppointments, appointment]);
+  axios.post(`https://app.nativenotify.com/api/indie/notification`, {
+      subID: appointment.client_id,
+      appId: NATIVE_ID,
+      appToken: NATIVE_TOKEN,
+      title: 'Appointment Booked!',
+      message: `Your appointment with ${appointment.employee.displayName} has been booked for ${appointment.date} at ${appointment.start_time}`,
+ });
  };
  
  const updateAppointment = async (appointmentId: string, updatedAppointment: Appointment) => {

@@ -88,10 +88,10 @@ const Barber: React.FC<BarberProps> = ({ navigation }) => {
       <Text style={styles.header}>
         Step 2: Choose a Barber
       </Text>
-      <TouchableOpacity onPress={handleNavigate}>
+      <TouchableOpacity onPress={handleNavigate} style={{ padding: 10}}>
         <FontAwesomeIcon 
           icon={faChevronRight} 
-          size={30} 
+          size={50} 
           color={selectedBarber ? "blue" : "grey"} 
           style={{ position: 'absolute', right: 15, top: -10 }}
         />

@@ -4,6 +4,12 @@ import {
   EXPO_CLIENT_ID_FIREBASE
 } from '../config/Firebase';
 // import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { registerIndieID, unregisterIndieDevice } from 'native-notify';
+import
+  { 
+    NATIVE_ID,
+    NATIVE_TOKEN
+  } from '@env';
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -95,9 +101,14 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
      const userFromDb = snapshot.val() as User;
      setUser({ ...userObject, role: userFromDb.role });
    }
+
+   // Register device with IndieAuth
+   registerIndieID(firebaseUser.uid, NATIVE_ID, NATIVE_TOKEN);
   };
 
   const logout = async () => {
+    // Unregister device with IndieAuth
+    unregisterIndieDevice(user?.uid, NATIVE_ID, NATIVE_TOKEN);
     await signOut(auth);
     setUser(null);
   };

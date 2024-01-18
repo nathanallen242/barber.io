@@ -196,11 +196,11 @@ const Availability: React.FC<AvailabilityProps> = ({ navigation }) => {
         <Text style={styles.title}>Step 3: Book your Slot</Text>
         <TouchableOpacity 
          onPress={confirmAppointment}
-         style={{ position: 'absolute', right: 15, top: 25 }}
+         style={{ position: 'absolute', right: 15, top: 15 }}
         >
          <FontAwesomeIcon 
           icon={faCheckCircle} 
-          size={30} 
+          size={50} 
           color={selectedTime ? "blue" : "grey"} 
          />
         </TouchableOpacity>

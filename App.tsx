@@ -5,7 +5,8 @@ import AppointmentProvider from './contexts/AppointmentContext';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { StyleSheet, View } from 'react-native';
 import TabNavigator from './navigators/TabNavigator'; // Import the TabNavigator
-import { STRIPE_PUBLISHABLE_KEY } from '@env';
+import { STRIPE_PUBLISHABLE_KEY, NATIVE_ID, NATIVE_TOKEN } from '@env';
+import registerNNPushToken from 'native-notify';
 
 if (__DEV__) {
   const ignoreWarns: string[] = [
@@ -28,6 +29,8 @@ if (__DEV__) {
 
 
 export default function App() {
+ registerNNPushToken(NATIVE_ID, NATIVE_TOKEN);
+
  return (
   <AuthProvider>
     <StripeProvider

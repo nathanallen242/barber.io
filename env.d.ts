@@ -12,4 +12,6 @@ declare module '@env' {
  export const STRIPE_PUBLISHABLE_KEY: string;
  export const STRIPE_SECRET_KEY: string;
  export const SERVER_URL: string;
+ export const NATIVE_ID: any;
+ export const NATIVE_TOKEN: string;
 }
