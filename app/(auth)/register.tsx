@@ -1,11 +1,14 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
-import { Button } from '../../components/ui/Button';
-import { Input } from '../../components/ui/Input';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
 import { StatusBar } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { screenDimensions } from '../../utils/screenDimensions';
+import { screenDimensions } from '@/utils/screenDimensions';
+import { supabase } from '@/lib/supabase';
+import { useUserStore } from '@/store/userStore';
+import { router } from 'expo-router';
 const { screenWidth, screenHeight } = screenDimensions;
 
 interface FormData {
@@ -26,10 +29,9 @@ export default function Register() {
     password: '',
     confirmPassword: '',
   });
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<FormErrors>({});
-
-  const insets = useSafeAreaInsets(); // Get safe area insets
+  const insets = useSafeAreaInsets();
 
   const validateForm = () => {
     const newErrors: FormErrors = {};
@@ -57,12 +59,44 @@ export default function Register() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSignUp = () => {
-    if (validateForm()) {
-      // Sign up logic would go here
+  const handleSignUp = async () => {
+    if (!validateForm()) return;
+    setIsLoading(true);
+
+    const { data: { user, session }, error } = await supabase.auth.signUp({
+      email: formData.email,
+      password: formData.password,
+    });
+    setIsLoading(false);
+
+    if (error) {
+      Alert.alert(
+        "Registration Failed!",
+        error.message,
+        [{ text: "OK", onPress: () => console.log("Error acknowledged") }],
+        { cancelable: true }
+      );
+      return;
+    }
+
+    if (user && session) {
+      useUserStore.setState(({
+        user: user,
+        session: session
+      }));
+      Alert.alert(
+        "Registration Successful!",
+        "Welcome aboard!",
+        [{ text: "OK", onPress: () => {
+          console.log("Success acknowledged");
+          router.replace("/(home)/home")
+        } }],
+        { cancelable: true }
+      );
+
     }
   };
-
+  
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent backgroundColor="transparent" />
@@ -103,7 +137,10 @@ export default function Register() {
           placeholder="Confirm your password"
         />
 
-        <Button onPress={handleSignUp}>Sign up</Button>
+        <Button onPress={handleSignUp}>
+          {isLoading ? <ActivityIndicator color="#ffffff" /> : 'Sign up'}
+        </Button>
+
 
         <Text style={styles.orText}>Or continue with</Text>
 

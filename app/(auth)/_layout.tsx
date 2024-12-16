@@ -1,45 +1,41 @@
 import { Stack } from 'expo-router';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 
-export default function AuthLayout() {
+export default function Layout() {
+  const commonScreenOptions: NativeStackNavigationOptions = {
+    animation: 'fade_from_bottom',
+    presentation: 'modal',
+  };
+
+  const screens = [
+    {
+      name: 'landing',
+      options: {
+        animation: 'default' as const,
+        gestureEnabled: false,
+      },
+    },
+    { name: 'login', options: commonScreenOptions },
+    { name: 'register', options: commonScreenOptions },
+    { name: 'forgot-password', options: commonScreenOptions },
+  ];
+
   return (
     <Stack
       screenOptions={({ route }) => {
-        const isLanding = route.name === "landing";
+        const isLanding = route.name === 'landing';
         return {
           headerShown: false,
           contentStyle: { backgroundColor: 'white' },
-          animation: isLanding ? 'default' : 'fade_from_bottom',
+          animation: isLanding ? 'default' : 'fade',
           presentation: isLanding ? 'card' : 'modal',
           gestureEnabled: !isLanding,
         };
       }}
     >
-      {/* Landing Page */}
-      <Stack.Screen
-        name="landing"
-        options={{
-          animation: 'default',
-          gestureEnabled: false,
-        }}
-      />
-
-      {/* Login Screen */}
-      <Stack.Screen
-        name="login"
-        options={{
-          animation: 'fade_from_bottom',
-          presentation: 'modal',
-        }}
-      />
-
-      {/* Register Screen */}
-      <Stack.Screen
-        name="register"
-        options={{
-          animation: 'fade_from_bottom',
-          presentation: 'modal',
-        }}
-      />
+      {screens.map(({ name, options }) => (
+        <Stack.Screen key={name} name={name} options={options as NativeStackNavigationOptions} />
+      ))}
     </Stack>
   );
 }

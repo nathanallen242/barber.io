@@ -1,8 +1,7 @@
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { NavigationButton } from '../../components/ui/NavigationButton';
-import { screenDimensions } from '../../utils/screenDimensions';
-
+import { NavigationButton } from '@/components/ui/NavigationButton';
+import { screenDimensions } from '@/utils/screenDimensions';
 const { screenWidth, screenHeight } = screenDimensions;
 
 export default function Landing() {

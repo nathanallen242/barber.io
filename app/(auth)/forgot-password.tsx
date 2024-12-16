@@ -5,7 +5,7 @@ import { StatusBar } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TextInput } from 'react-native';
 import { OtpInput } from "react-native-otp-entry";
-import { screenDimensions } from '../../utils/screenDimensions';
+import { screenDimensions } from '@/utils/screenDimensions';
 const { screenWidth, screenHeight } = screenDimensions;
 
 // Number of digits in verification code

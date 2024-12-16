@@ -2,9 +2,9 @@
   "expo": {
     "name": "barber.io",
     "slug": "barber-io",
+    "scheme": "com.supabase",
     "version": "1.0.0",
     "orientation": "portrait",
-    "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -12,7 +12,8 @@
     },
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true

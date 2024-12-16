@@ -1,6 +1,5 @@
 import { StyleSheet, TextInput, View, Text, Dimensions } from 'react-native';
 import { useState } from 'react';
-
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 interface InputProps {

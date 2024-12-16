@@ -1,12 +1,15 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
-import { Button } from '../../components/ui/Button';
-import { Input } from '../../components/ui/Input';
-import { screenDimensions } from '../../utils/screenDimensions';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { screenDimensions } from '@/utils/screenDimensions';
 import { StatusBar } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { supabase } from '@/lib/supabase';
+import { useUserStore } from '@/store/userStore';
+const { screenWidth, screenHeight } = screenDimensions;
 
 interface FormData {
   email: string;
@@ -18,8 +21,6 @@ interface FormErrors {
   password?: string;
 }
 
-const { screenWidth, screenHeight } = screenDimensions;
-
 export default function Login() {
   const [formData, setFormData] = useState<FormData>({
     email: '',
@@ -27,6 +28,7 @@ export default function Login() {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const insets = useSafeAreaInsets();
 
   const validateForm = () => {
@@ -46,14 +48,51 @@ export default function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleLogin = () => {
-    if (validateForm()) {
-      // Login logic would go here
+  const handleLogin = async () => {
+    if (!validateForm()) return;
+    setIsLoading(true);
+
+    try {
+      const { data: { user, session }, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+      setIsLoading(false);
+
+      if (error) {
+        Alert.alert("Login Failed!", error.message); return;
+      }
+
+      if (user && session) {
+        useUserStore.setState(({
+          user: user,
+          session: session
+        }));
+        Alert.alert(
+          "Login Successful!",
+          "Welcome aboard!",
+          [{ text: "OK", onPress: () => {
+            console.log("Success acknowledged");
+            router.replace("/(home)/home")
+          } }],
+          { cancelable: true }
+        );
+  
+      }
+    }
+    catch {
+      setIsLoading(false);
+      Alert.alert(
+        "Login Error",
+        "An unexpected error occurred",
+        [{ text: "OK", onPress: () => console.log("Catch error acknowledged") }],
+        { cancelable: true }
+      );
     }
   };
 
   const handleForgotPassword = () => {
-    router.push('/(auth)/forgot_password');
+    router.push('/(auth)/forgot-password');
   };
 
   return (
@@ -95,7 +134,9 @@ export default function Login() {
           <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
         </TouchableOpacity>
 
-        <Button onPress={handleLogin}>Sign in</Button>
+        <Button onPress={handleLogin}>
+          {isLoading ? <ActivityIndicator color="#ffffff" /> : 'Login'}
+        </Button>
 
         <Text style={styles.orText}>Or continue with</Text>
 
