@@ -1,146 +1,120 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState } from 'react';
+import { View, StatusBar, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { StatusBar } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { screenDimensions } from '@/utils/screenDimensions';
 import { supabase } from '@/lib/supabase';
 import { useUserStore } from '@/store/userStore';
 import { router } from 'expo-router';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+
 const { screenWidth, screenHeight } = screenDimensions;
-
-interface FormData {
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-interface FormErrors {
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-}
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .email('Email is invalid')
+    .required('Email is required'),
+  password: Yup.string()
+    .min(6, 'Password must be at least 6 characters')
+    .required('Password is required'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('password'), ''], 'Passwords do not match')
+    .required('Confirm Password is required'),
+});
 
 export default function Register() {
-  const [formData, setFormData] = useState<FormData>({
-    email: '',
-    password: '',
-    confirmPassword: '',
-  });
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errors, setErrors] = useState<FormErrors>({});
   const insets = useSafeAreaInsets();
-
-  const validateForm = () => {
-    const newErrors: FormErrors = {};
-
-    // Email validation
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
-    }
-
-    // Password validation
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
-
-    // Confirm password validation
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSignUp = async () => {
-    if (!validateForm()) return;
-    setIsLoading(true);
-
-    const { data: { user, session }, error } = await supabase.auth.signUp({
-      email: formData.email,
-      password: formData.password,
-    });
-    setIsLoading(false);
-
-    if (error) {
-      Alert.alert(
-        "Registration Failed!",
-        error.message,
-        [{ text: "OK", onPress: () => console.log("Error acknowledged") }],
-        { cancelable: true }
-      );
-      return;
-    }
-
-    if (user && session) {
-      useUserStore.setState(({
-        user: user,
-        session: session
-      }));
-      Alert.alert(
-        "Registration Successful!",
-        "Welcome aboard!",
-        [{ text: "OK", onPress: () => {
-          console.log("Success acknowledged");
-          router.replace("/(home)/home")
-        } }],
-        { cancelable: true }
-      );
-
-    }
-  };
   
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent backgroundColor="transparent" />
-      {/* Content Adjusted for Safe Area */}
       <View
         style={{
           ...styles.content,
-          paddingTop: insets.top + 20, // Add safe area padding + extra space
+          paddingTop: insets.top + 20,
           paddingBottom: insets.bottom,
         }}
       >
         <Text style={styles.title}>Register</Text>
         <Text style={styles.subtitle}>Welcome to our platform!</Text>
 
-        <Input
-          label="Email"
-          value={formData.email}
-          onChangeText={(text) => setFormData({ ...formData, email: text })}
-          error={errors.email}
-          placeholder="Enter your email"
-        />
+        <Formik
+          initialValues={{ email: '', password: '', confirmPassword: '' }}
+          validationSchema={validationSchema}
+          onSubmit={async (values, { setSubmitting }) => {
+            try {
+              const { data: { user, session }, error } = await supabase.auth.signUp({
+                email: values.email,
+                password: values.password,
+              });
 
-        <Input
-          label="Password"
-          value={formData.password}
-          onChangeText={(text) => setFormData({ ...formData, password: text })}
-          error={errors.password}
-          secureTextEntry
-          placeholder="Enter your password"
-        />
+              setSubmitting(false);
 
-        <Input
-          label="Confirm Password"
-          value={formData.confirmPassword}
-          onChangeText={(text) => setFormData({ ...formData, confirmPassword: text })}
-          error={errors.confirmPassword}
-          secureTextEntry
-          placeholder="Confirm your password"
-        />
+              if (error) {
+                Alert.alert(
+                  "Registration Failed!",
+                  error.message,
+                  [{ text: "OK" }],
+                  { cancelable: true }
+                );
+                return;
+              }
 
-        <Button onPress={handleSignUp}>
-          {isLoading ? <ActivityIndicator color="#ffffff" /> : 'Sign up'}
-        </Button>
+              if (user && session) {
+                useUserStore.setState({ user, session });
+                Alert.alert(
+                  "Registration Successful!",
+                  "Welcome aboard!",
+                  [{ text: "OK", onPress: () => router.replace("/(home)/home") }],
+                  { cancelable: true }
+                );
+              }
 
+            } catch (err: any) {
+              setSubmitting(false);
+              Alert.alert(
+                "Registration Failed!",
+                err.message || 'Something went wrong.',
+                [{ text: "OK" }],
+                { cancelable: true }
+              );
+            }
+          }}
+        >
+          {({ handleChange, handleSubmit, values, errors, touched, isSubmitting }) => (
+            <>
+              <Input
+                label="Email"
+                value={values.email}
+                onChangeText={handleChange('email')}
+                error={touched.email ? errors.email : undefined}
+                placeholder="Enter your email"
+              />
+
+              <Input
+                label="Password"
+                value={values.password}
+                onChangeText={handleChange('password')}
+                error={touched.password ? errors.password : undefined}
+                secureTextEntry
+                placeholder="Enter your password"
+              />
+
+              <Input
+                label="Confirm Password"
+                value={values.confirmPassword}
+                onChangeText={handleChange('confirmPassword')}
+                error={touched.confirmPassword ? errors.confirmPassword : undefined}
+                secureTextEntry
+                placeholder="Confirm your password"
+              />
+
+              <Button onPress={handleSubmit}>
+                {isSubmitting ? <ActivityIndicator color="#ffffff" /> : 'Sign up'}
+              </Button>
+            </>
+          )}
+        </Formik>
 
         <Text style={styles.orText}>Or continue with</Text>
 
@@ -167,11 +141,11 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: screenWidth * 0.06, // 6% horizontal padding
+    paddingHorizontal: screenWidth * 0.06,
     justifyContent: 'center',
   },
   title: {
-    fontSize: Math.min(screenWidth * 0.08, 32), // Responsive font size with max limit
+    fontSize: Math.min(screenWidth * 0.08, 32),
     fontWeight: 'bold',
     marginBottom: screenHeight * 0.01,
   },

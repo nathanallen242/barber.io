@@ -77,4 +77,4 @@ AppState.addEventListener('change', (state) => {
   }
 })
 
-export { supabase };
+export { supabase, LargeSecureStore };

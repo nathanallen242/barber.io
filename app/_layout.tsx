@@ -1,70 +1,84 @@
 import { Stack } from "expo-router";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { 
   Poppins_300Light, 
   Poppins_400Regular, 
   Poppins_500Medium, 
+  Poppins_600SemiBold,
   Poppins_700Bold, 
   useFonts 
 } from '@expo-google-fonts/poppins';
 import * as SplashScreen from 'expo-splash-screen';
 import { Asset } from 'expo-asset';
-import { useEffect, useState } from 'react';
-import * as Font from 'expo-font';
+import { useEffect, useState, useCallback } from 'react';
+import { View } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
+
 const assets = [
-  require('../assets/icons/apple-icon.png'),
-  require('../assets/icons/facebook-icon.png'),
-  require('../assets/icons/google-icon.png'),
-  require('../assets/images/illustration.png')
+  require('@/assets/icons/apple-icon.png'),
+  require('@/assets/icons/facebook-icon.png'),
+  require('@/assets/icons/google-icon.png'),
+  require('@/assets/images/illustration.png'),
+  require('@/assets/images/pfp.png')
 ];
 
 export default function RootLayout() {
+  const [appIsReady, setAppIsReady] = useState(false);
   const [assetsLoaded, setAssetsLoaded] = useState(false);
   const [fontsLoaded, error] = useFonts({
     Poppins_300Light,
     Poppins_400Regular,
     Poppins_500Medium,
+    Poppins_600SemiBold,
     Poppins_700Bold
   });
-
+  
   useEffect(() => {
-    async function loadAssets() {
+    async function prepare() {
       try {
         await Promise.all([
           ...assets.map(asset => Asset.loadAsync(asset)),
-          Font.loadAsync({
-            Poppins_300Light,
-            Poppins_400Regular,
-            Poppins_500Medium,
-            Poppins_700Bold
-          })
         ]);
         setAssetsLoaded(true);
       } catch (e) {
         console.error('Asset loading error', e);
       }
     }
-    loadAssets();
+    prepare();
   }, []);
 
   useEffect(() => {
     if ((fontsLoaded && assetsLoaded) || error) {
-      SplashScreen.hideAsync();
+      setAppIsReady(true);
     }
   }, [fontsLoaded, assetsLoaded, error]);
 
+  const onLayoutRootView = useCallback(() => {
+    if (appIsReady) {
+      SplashScreen.hide();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
+  }
+
   return (
-    <Stack
-      screenOptions={{
-        headerStyle: { backgroundColor: '#fff' },
-        headerTintColor: 'transparent',
-      }}
-    >
-      <Stack.Screen name="index" />
-      <Stack.Screen name="+not-found" />
-      <Stack.Screen name="(auth)" />
-      <Stack.Screen name="(home)" />
-    </Stack>
+    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Stack
+          screenOptions={{
+            headerStyle: { backgroundColor: '#fff' },
+            headerTintColor: 'transparent',
+          }}
+        >
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="(home)" options={{ headerShown: false }} />
+        </Stack>
+      </GestureHandlerRootView>
+    </View>
   );
 }

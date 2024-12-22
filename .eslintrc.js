@@ -9,7 +9,7 @@ module.exports = {
   plugins: [
     'import',
   ],
-  ignorePatterns: ["/dist/*"],
+  ignorePatterns: ["/dist/*", "app/*", "components/*"],
   settings: {
     'import/resolver': {
       typescript: {

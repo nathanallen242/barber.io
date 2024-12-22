@@ -17,21 +17,17 @@ export default function Index() {
       if (isMounted) {
         setSession(session);
         setSessionStore(session);
-        console.log("Session:", session);
 
         if (session?.user) {
           setUser(session.user);
-          console.log("User:", session.user);
         } else {
           setUser(null);
-          console.log("No user found in session.");
         }
       }
     };
 
     supabase.auth.getSession().then(({ data: { session }, error }) => {
       if (error) {
-        console.error("Error fetching session:", error);
         handleSession(null);
         return;
       }
@@ -61,8 +57,8 @@ export default function Index() {
   }
 
   if (session) {
-    return <Redirect href="/(home)/home" />;
+    return <Redirect href="/(home)" />;
   } else {
-    return <Redirect href="/(auth)/landing" />;
+    return <Redirect href="/(auth)/onboarding" />;
   }
 }

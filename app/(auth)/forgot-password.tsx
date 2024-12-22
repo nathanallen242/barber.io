@@ -1,9 +1,16 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  Image, 
+  TouchableOpacity, 
+  KeyboardAvoidingView, 
+  Platform, 
+  ScrollView,
+  TextInput,
+  StatusBar } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useState } from 'react';
-import { StatusBar } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { TextInput } from 'react-native';
 import { OtpInput } from "react-native-otp-entry";
 import { screenDimensions } from '@/utils/screenDimensions';
 const { screenWidth, screenHeight } = screenDimensions;

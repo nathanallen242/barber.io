@@ -40,7 +40,7 @@ export function Button({
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#7A94FE',
+    backgroundColor: 'red',
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,

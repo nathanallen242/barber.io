@@ -4,7 +4,7 @@
     "strict": true,
     "jsx": "react-native",
     "moduleResolution": "node",
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./*"
@@ -15,6 +15,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "images.d.ts"
   ]
 }

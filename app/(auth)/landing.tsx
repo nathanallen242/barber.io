@@ -55,11 +55,9 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   titleContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
     alignItems: 'center',
-    zIndex: 2,
+    flex: 1,
+    marginTop: 50,
   },
   logo: {
     fontSize: screenDimensions.min(0.06, 24),
