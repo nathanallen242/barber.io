@@ -18,7 +18,7 @@ export default function AppointmentsLayout() {
   };
 
   const navigateHome = () => {
-    router.push('/(home)');
+    router.push('/(home)/home');
   };
 
   return (
