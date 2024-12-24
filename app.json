@@ -6,6 +6,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
+    "developmentMode": true,
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
@@ -19,7 +20,7 @@
         {
           "image": "./assets/images/splash.png",
           "dark": {
-            "image": "./assets/images/splash-dark.png",
+            "image": "./assets/images/splash-dark.png"
           },
           "imageWidth": 200
         }

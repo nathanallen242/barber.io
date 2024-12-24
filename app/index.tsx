@@ -57,7 +57,7 @@ export default function Index() {
   }
 
   if (session) {
-    return <Redirect href="/(home)/home" />;
+    return <Redirect href="/(home)/home"/>;
   } else {
     return <Redirect href="/(auth)/onboarding" />;
   }

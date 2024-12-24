@@ -10,7 +10,7 @@ import {
     FlatList 
   } from "react-native";
   import { useState, useEffect } from "react";
-  import { Ionicons } from '@expo/vector-icons';
+  import Ionicons from '@expo/vector-icons/Ionicons';
   import filter from 'lodash.filter';
   
   const API_URL = "https://randomuser.me/api/?results=20"; // Adjusted to fetch 20 barbers

@@ -1,7 +1,7 @@
 import { useRef, useMemo } from 'react';
 import { View, StyleSheet, Dimensions, Text, TouchableOpacity } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { screenDimensions } from '@/utils/screenDimensions';
 const { screenHeight } = screenDimensions;

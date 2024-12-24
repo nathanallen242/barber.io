@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Session } from '@supabase/supabase-js';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { UserProfile, Notification } from '@/types/models';
-import { LargeSecureStore } from '@/lib/supabase';
 
 type UserStore = {
   session: Session | null;
@@ -12,6 +12,32 @@ type UserStore = {
   setUser: (user: UserProfile | null) => void;
   setNotifications: (notifications: Notification[] | null) => void;
   clearUser: () => void;
+};
+
+export const asyncStorage = {
+  getItem: async (key: string) => {
+    try {
+      const storedValue = await AsyncStorage.getItem(key);
+      return storedValue ? JSON.parse(storedValue) : null;
+    } catch (error) {
+      console.error("Error getting item from AsyncStorage:", error);
+      return null;
+    }
+  },
+  setItem: async (key: string, value: any) => {
+    try {
+      await AsyncStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+      console.error("Error setting item in AsyncStorage:", error);
+    }
+  },
+  removeItem: async (key: string) => {
+    try {
+      await AsyncStorage.removeItem(key);
+    } catch (error) {
+      console.error("Error removing item from AsyncStorage:", error);
+    }
+  },
 };
 
 export const useUserStore = create<UserStore>()(
@@ -32,6 +58,7 @@ export const useUserStore = create<UserStore>()(
       return {
         user: null,
         session: null,
+        notifications: null,
         setUser: (user) => {
           updateAuthState(user, get().session, get().notifications);
         },
@@ -48,7 +75,7 @@ export const useUserStore = create<UserStore>()(
     },
     {
       name: 'auth-storage',
-      storage: LargeSecureStore,
+      storage: asyncStorage,
       partialize: (state) => ({
         user: state.user,
         session: state.session,

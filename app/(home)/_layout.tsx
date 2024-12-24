@@ -30,7 +30,7 @@ export default function HomeLayout() {
       }}>
       
       <Drawer.Screen
-          name="index"
+          name="home"
           options={{
             drawerIcon: ({ size, color }) => (
               <Ionicons name="home-outline" size={size} color={color} />

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { PublicUser, Availability, Service } from '@/types/models';
-import { LargeSecureStore } from '@/lib/supabase';
+import { asyncStorage } from '@/store/userStore';
 
 type BookingStore = {
   selectedService: Service | null;
@@ -35,7 +35,7 @@ export const useBookingStore = create<BookingStore>()(
     }),
     {
       name: 'booking-storage',
-      storage: LargeSecureStore,
+      storage: asyncStorage,
       partialize: (state) => ({
         service: state.selectedService,
         barber: state.selectedBarber,

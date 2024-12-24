@@ -62,7 +62,7 @@ export default function Login() {
                 Alert.alert(
                   "Login Successful!",
                   "Welcome aboard!",
-                  [{ text: "OK", onPress: () => router.replace("/(home)/home") }],
+                  [{ text: "OK", onPress: () => router.replace("/") }],
                   { cancelable: true }
                 );
               }

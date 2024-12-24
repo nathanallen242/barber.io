@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import { useLocalSearchParams, useFocusEffect } from 'expo-router';
 import filter from 'lodash.filter';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const API_ENDPOINT = "https://randomuser.me/api/?results=30";
 /* TODO: Overwrite with supabase db view query*/

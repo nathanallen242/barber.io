@@ -15,7 +15,7 @@ export default function NotFoundScreen() {
       />
       <Text style={styles.title}>Page Not Found</Text>
       <Text style={styles.message}>Sorry, the page you are looking for does not exist.</Text>
-      <TouchableOpacity style={styles.button} onPress={() => router.replace('/(home)')}>
+      <TouchableOpacity style={styles.button} onPress={() => router.replace('/(home)/home')}>
         <Text style={styles.buttonText}>Go Home</Text>
       </TouchableOpacity>
       </View>

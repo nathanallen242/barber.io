@@ -65,7 +65,7 @@ export default function Register() {
                 Alert.alert(
                   "Registration Successful!",
                   "Welcome aboard!",
-                  [{ text: "OK", onPress: () => router.replace("/(home)/home") }],
+                  [{ text: "OK", onPress: () => router.replace("/") }],
                   { cancelable: true }
                 );
               }
