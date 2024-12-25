@@ -20,14 +20,21 @@ export default function AnnouncementSection() {
       image: require('@/assets/ads/portfolio.jpg'),
     },
     {
-      title: 'Health Tips',
+      title: 'Self Care Tips',
+      image: require('@/assets/ads/portfolio.jpg'),
+    },
+    {
+      title: 'How to Fade 101',
       image: require('@/assets/ads/portfolio.jpg'),
     },
   ];
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.sectionTitle}>Announcements</Text>
+    <View>
+      <View style={styles.textBlock}>
+        <Text style={styles.sectionTitle}>Announcements</Text>
+        <Text style={styles.viewAll}>View All</Text>
+      </View>
       <Carousel
         showsControls={false}
         height={screenDimensions.screenHeight * 0.28}
@@ -46,17 +53,25 @@ export default function AnnouncementSection() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 16,
-  },
   sectionTitle: {
     fontSize: 20,
     fontFamily: 'Poppins_300Light',
-    marginBottom: 20,
+    marginLeft: 15,
   },
   slide: {
-    // Styles for each slide
     justifyContent: 'center',
     alignItems: 'center',
   },
+  textBlock: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingRight: 15,
+    marginBottom: 20,
+  },
+  viewAll: {
+    fontFamily: 'Poppins_300Light',
+    fontSize: 18,
+    color: 'skyblue',
+  }
 });

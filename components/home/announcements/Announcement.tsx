@@ -19,7 +19,7 @@ export default function Announcement({ title, image }: AnnouncementProps) {
 
 const styles = StyleSheet.create({
   adContainer: {
-    width: 300,
+    width: 350,
     height: 200,
     marginHorizontal: 10,
     borderRadius: 10,

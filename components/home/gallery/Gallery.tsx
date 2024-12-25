@@ -12,7 +12,7 @@ interface ServiceData {
   };
 }
 
-export default function ServiceCard({ service }: ServiceData) {
+export default function GalleryCard({ service }: ServiceData) {
   return (
     <TouchableOpacity onPress={() => { /* TODO: Handle press to dynamic screen for service ID */}}>
       <View style={styles.cardContainer}>
@@ -20,12 +20,10 @@ export default function ServiceCard({ service }: ServiceData) {
           source={typeof service.image === 'string' ? { uri: service.image } : service.image}
           style={styles.image} 
         />
-        <Text style={styles.title}>{service.name}</Text>
-        <View style={styles.timeContainer}>
-          <Ionicons name="time-outline" style={{ marginTop: 5, marginLeft: 5}}/>
-          <Text style={styles.description}>{service.description}</Text>
+        <View style={styles.overlay}>
+          <Text style={styles.barberName}>{service.name}</Text>
+          <Text style={styles.date}>{service.description}</Text>
         </View>
-        <Text style={styles.price}>${service.price}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -33,23 +31,17 @@ export default function ServiceCard({ service }: ServiceData) {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    width: 140,
-    marginRight: 16,
-    borderRadius: 10,
+    width: 150,
     overflow: 'hidden',
     backgroundColor: '#F5F5F5',
+    borderWidth: 0.5,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
-  timeContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
   image: {
     width: '100%',
-    height: 100,
+    height: 135,
   },
   title: {
     fontSize: 16,
@@ -59,19 +51,23 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     marginTop: 8,
   },
-  description: {
-    fontSize: 12,
-    color: '#8A8A8A',
-    fontFamily: 'Poppins_300Light',
-    marginHorizontal: 4,
-    marginTop: 4,
+  overlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 10,
+    backgroundColor: 'rgba(0,0,0,0.6)',
   },
-  price: {
+  barberName: {
+    color: 'white',
     fontSize: 16,
-    fontFamily: 'Poppins_700Bold',
-    color: '#000',
-    marginHorizontal: 8,
-    marginTop: 8,
-    marginBottom: 8,
+    fontFamily: 'Poppins_500Medium',
   },
+  date: {
+    color: '#E0E0E0',
+    fontSize: 12,
+    fontFamily: 'Poppins_300Light',
+    marginTop: 4,
+  }
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import Action from '@/components/home/action/Action'
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 
@@ -32,11 +32,14 @@ const ActionSection: React.FC = () => {
   ];
 
   return (
-    <View style={styles.sectionContainer}>
-      {actions.map((action, index) => (
-        <Action key={index} {...action} onPress={() => { /* Handle press */ console.log(`${action.title} pressed`); }} />
-      ))}
-    </View>
+    <>
+      <Text style={styles.title}>Quick Actions</Text>
+      <View style={styles.sectionContainer}>
+        {actions.map((action, index) => (
+          <Action key={index} {...action} onPress={() => { /* Handle press */ console.log(`${action.title} pressed`); }} />
+        ))}
+      </View>
+    </>
   );
 };
 
@@ -45,8 +48,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    padding: 16,
+    padding: 10,
   },
+  title: {
+    fontFamily: 'Poppins_300Light',
+    fontSize: 20,
+    marginLeft: 20,
+    marginBottom: 10
+  }
 });
 
 export default ActionSection;

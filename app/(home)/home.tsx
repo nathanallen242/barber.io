@@ -4,7 +4,7 @@ import { ScrollView as IOSScrollView } from 'react-native-virtualized-view';
 import { useRouter } from 'expo-router';
 import AnnouncementsSection from '@/components/home/announcements/AnnouncementSection';
 import AppointmentsSection from '@/components/home/appointments/AppointmentSection';
-import ServicesSection from '@/components/home/services/ServicesSection';
+import GallerySection from '@/components/home/gallery/GallerySection';
 import ActionSection from '@/components/home/action/ActionSection';
 import SearchButton from '@/components/ui/SearchButton';
 import { screenDimensions } from '@/utils/screenDimensions';
@@ -43,10 +43,16 @@ export default function Home() {
       <View style={styles.sectionContainer}>
         <Text style={styles.title}>Welcome back, <Text style={{ color: '#7A94FE', fontFamily: 'Poppins_600SemiBold'}}>Nathan</Text></Text>
       </View>
+      
 
       {/* Searchbar Section */}
       <View style={styles.sectionContainer}>
         <SearchButton />
+      </View>
+
+      {/* Announcements Section */}
+      <View style={styles.sectionContainer}>
+        <AnnouncementsSection />
       </View>
 
       {/* Action Section */}
@@ -59,14 +65,9 @@ export default function Home() {
         <AppointmentsSection />
       </View>
 
-      {/* Announcements Section */}
+      {/* Gallery Section */}
       <View style={styles.sectionContainer}>
-        <AnnouncementsSection />
-      </View>
-
-      {/* Services Section */}
-      <View style={styles.sectionContainer}>
-        <ServicesSection />
+        <GallerySection />
       </View>
       </IOSScrollView>
     </View>
