@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import Action from '@/components/home/action/Action'
+import { useThemeStore } from '@/store/themeStore';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 
 const ActionSection: React.FC = () => {
+  const { colors } = useThemeStore();
   const actions = [
     {
       icon: <MaterialIcons name="schedule" size={24} color="#537580" />,
@@ -33,7 +35,7 @@ const ActionSection: React.FC = () => {
 
   return (
     <>
-      <Text style={styles.title}>Quick Actions</Text>
+      <Text style={[styles.title, { color: colors.text }]}>Quick Actions</Text>
       <View style={styles.sectionContainer}>
         {actions.map((action, index) => (
           <Action key={index} {...action} onPress={() => { /* Handle press */ console.log(`${action.title} pressed`); }} />

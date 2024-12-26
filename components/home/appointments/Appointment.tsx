@@ -315,7 +315,7 @@ export default function Appointment({ appointment, onEdit, onCancel }: Appointme
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: '#e7f3fa',
     borderRadius: 20,
     padding: 16,
     marginHorizontal: 16,

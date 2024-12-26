@@ -13,6 +13,7 @@
       ],
       "@/components/*": ["./components/*"],
       "@/types/*":["./types/*"],
+      "@/theme/*":["./theme/*"],
     }
   },
   "include": [

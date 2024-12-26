@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Session } from '@supabase/supabase-js';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { UserProfile, Notification } from '@/types/models';
+import { UserProfile, Notification } from '../types/models';
 
 type UserStore = {
   session: Session | null;

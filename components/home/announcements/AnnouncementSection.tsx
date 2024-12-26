@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import Advertisement from '@/components/home/announcements/Announcement';
 import { screenDimensions } from '@/utils/screenDimensions';
+import { useThemeStore } from '@/store/themeStore';
 import Carousel from 'pinar';
 
 interface AnnouncementData {
@@ -29,10 +30,12 @@ export default function AnnouncementSection() {
     },
   ];
 
+  const { colors } = useThemeStore();
+
   return (
     <View>
       <View style={styles.textBlock}>
-        <Text style={styles.sectionTitle}>Announcements</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Announcements</Text>
         <Text style={styles.viewAll}>View All</Text>
       </View>
       <Carousel

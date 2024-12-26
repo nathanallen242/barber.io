@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import GalleryCard from '@/components/home/gallery/Gallery';
+import { useThemeStore } from '@/store/themeStore';
 import { Service } from '@/types/models';
 
 interface ServiceWithImage extends Service {
@@ -51,10 +52,12 @@ export default function GallerySection() {
     },
   ];
 
+  const { colors } = useThemeStore();
+
   return (
     <View style={styles.container}>
       <View style={styles.textBlock}>
-        <Text style={styles.header}>Gallery</Text>
+        <Text style={[styles.header, { color: colors.text }]}>Gallery</Text>
         <Text style={styles.viewAll}>View All</Text>
       </View>
       <FlatList
@@ -71,7 +74,7 @@ export default function GallerySection() {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 20,
+    marginVertical: 20,
   },
   header: {
     fontSize: 20,

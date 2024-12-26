@@ -4,10 +4,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { supabase } from "@/lib/supabase";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
+import { useThemeStore } from "@/store/themeStore";
 import { useUserStore } from "@/store/userStore";
 
 export default function CustomDrawerContent(props: any) {
     const router = useRouter();
+    const { colors } = useThemeStore();
     const insets = useSafeAreaInsets();
     const { user, clearUser } = useUserStore();
     const defaultPhoto = require('@/assets/images/pfp.png');
@@ -34,19 +36,19 @@ export default function CustomDrawerContent(props: any) {
             style={styles.profileImage}
             resizeMode="cover"
             />
-            <Text style={styles.profileName}>{user?.forename || defaultName}</Text>
+            <Text style={[styles.profileName, { color: colors.text }]}>{user?.forename || defaultName}</Text>
         </View>
 
-        <View style={styles.divider} />
+        <View style={[styles.divider, { backgroundColor: colors.border }]} />
         <DrawerItemList 
         {...props}
         />
         <DrawerItem 
         label={'Logout'} 
         onPress={handleLogOut} 
-        labelStyle={styles.label}
-        icon={({ size, color }) => (
-            <Ionicons name="log-out-outline" size={size} color={color} />
+        labelStyle={[styles.label, { color: colors.text }]}
+        icon={({ size }) => (
+            <Ionicons name="log-out-outline" size={size} color={colors.icon} />
         )}
         />
     </DrawerContentScrollView>
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
         width: 140,
         height: 140,
         borderRadius: 70,
-        marginBottom: 35,
+        marginBottom: 30,
         borderWidth: 2,
         borderColor: '#ccc',
         shadowColor: '#000',
@@ -80,14 +82,11 @@ const styles = StyleSheet.create({
     },
     profileName: {
         fontSize: 25,
-        marginBottom: 20,
-        fontWeight: '200',
-        color: '#333',
+        fontWeight: '200'
     },
     divider: {
         height: 1,
-        backgroundColor: '#e0e0e0',
         marginHorizontal: 20,
-        marginBottom: 10,
+        marginBottom: 15,
     },
 });

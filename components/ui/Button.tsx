@@ -1,4 +1,5 @@
 import { Text, TouchableOpacity, StyleSheet, StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { useThemeStore } from '@/store/themeStore';
 import type { ReactNode } from 'react';
 
 interface ButtonProps {
@@ -16,11 +17,12 @@ export function Button({
   style,
   textStyle,
 }: ButtonProps): JSX.Element {
+  const { colors } = useThemeStore();
   return (
     <TouchableOpacity 
       style={[
         styles.button, 
-        variant === 'secondary' && styles.buttonSecondary,
+        variant === 'secondary' && [styles.buttonSecondary, { backgroundColor: colors.background, borderColor: colors.border }],
         style
       ]}
       onPress={onPress}
@@ -28,7 +30,7 @@ export function Button({
       <Text 
         style={[
           styles.text, 
-          variant === 'secondary' && styles.textSecondary,
+          variant === 'secondary' && [styles.textSecondary, { color: colors.secondary }],
           textStyle
         ]}
       >
@@ -40,7 +42,6 @@ export function Button({
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: 'red',
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
@@ -49,9 +50,7 @@ const styles = StyleSheet.create({
     marginVertical: 6,
   },
   buttonSecondary: {
-    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#7A94FE',
   },
   text: {
     color: '#FFFFFF',

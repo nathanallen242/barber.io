@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import Appointment from '@/components/home/appointments/Appointment';
+import { useThemeStore } from '@/store/themeStore';
 import { Appointment as AppointmentInterface } from '@/types/models';
 
 export default function AppointmentsSection() {
@@ -32,14 +33,18 @@ export default function AppointmentsSection() {
     console.log(`Cancel appointment: ${id}`);
   };
 
+  const { colors } = useThemeStore();
+
   return (
     <View>
       <View style={styles.textBlock}>
-        <Text style={styles.header}>Upcoming Appointments</Text>
+        <Text style={[styles.header, { color: colors.text }]}>Upcoming Appointments</Text>
         <Text style={styles.viewAll}>View All</Text>
       </View>
       <FlatList
+        horizontal
         data={appointments}
+        showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <Appointment 

@@ -8,9 +8,11 @@ import GallerySection from '@/components/home/gallery/GallerySection';
 import ActionSection from '@/components/home/action/ActionSection';
 import SearchButton from '@/components/ui/SearchButton';
 import { screenDimensions } from '@/utils/screenDimensions';
+import { useThemeStore } from '@/store/themeStore';
 
 export default function Home() {
   const [refreshing, setRefreshing] = useState(Boolean);
+  const { colors, sharedColors } = useThemeStore();
   const router = useRouter();
 
   const handleRefresh = () => {
@@ -21,7 +23,7 @@ export default function Home() {
   };
 
   return (
-    <View style={[styles.container]}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {refreshing && (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size='large' color="#7A94FE" />
@@ -41,7 +43,7 @@ export default function Home() {
     >
       {/* Greeting Section - TODO: Load in authenticated user's forename */}
       <View style={styles.sectionContainer}>
-        <Text style={styles.title}>Welcome back, <Text style={{ color: '#7A94FE', fontFamily: 'Poppins_600SemiBold'}}>Nathan</Text></Text>
+        <Text style={[styles.title, { color: colors.text }]}>Welcome back, <Text style={{ color: '#7A94FE', fontFamily: 'Poppins_600SemiBold'}}>Nathan</Text></Text>
       </View>
       
 
@@ -77,7 +79,6 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
   },
   sectionContainer: {
     marginTop: screenDimensions.screenHeight * 0.0125,

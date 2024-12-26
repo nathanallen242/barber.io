@@ -2,6 +2,7 @@ import { StyleSheet, SafeAreaView, TextInput, ActivityIndicator, View, Text, Ima
 import { useState, useEffect, useRef, useCallback } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import { useLocalSearchParams, useFocusEffect } from 'expo-router';
+import { useThemeStore } from "@/store/themeStore";
 import filter from 'lodash.filter';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -19,8 +20,9 @@ export default function SearchPage() {
 
   const searchInputRef = useRef<TextInput>(null);
   const { fromSearchButton } = useLocalSearchParams();
-  
 
+  const { colors } = useThemeStore();
+  
   const fetchData = async () => {
     try {
       const response = await fetch(API_ENDPOINT);
@@ -64,7 +66,7 @@ export default function SearchPage() {
 
   if (isLoading) {
     return (
-      <View style={styles.centerContainer}>
+      <View style={[styles.centerContainer, { backgroundColor: colors.background }]}>
         <ActivityIndicator size="large" color="#5500dc" />
       </View>
     );
@@ -72,24 +74,24 @@ export default function SearchPage() {
 
   if (error) {
     return (
-      <View style={styles.centerContainer}>
+      <View style={[styles.centerContainer, { backgroundColor: colors.background }]}>
         <Text>Error in fetching data... Please check your internet connection!</Text>
       </View>
     );
   }
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: 'white' }}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.background }}>
       <View style={{margin: 25}}>
-        <View style={styles.searchContainer}>
-            <Ionicons name="search" size={20} color="#999" style={styles.searchIcon} />
+        <View style={[styles.searchContainer, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <Ionicons name="search" size={20} color={colors.subtext} style={styles.searchIcon} />
             <TextInput
             ref={searchInputRef}
             placeholder="Search for barbers in our database..."
-            placeholderTextColor="#888"
-            selectionColor={'black'}
+            placeholderTextColor={colors.subtext}
+            selectionColor={colors.text}
             clearButtonMode="while-editing"
-            style={styles.searchBox}
+            style={[styles.searchBox, { color: colors.text }]}
             autoCapitalize="none"
             autoCorrect={false}
             value={query}
@@ -101,17 +103,22 @@ export default function SearchPage() {
             keyExtractor={(item: any) => item.login.username}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
-            <TouchableOpacity style={styles.itemContainer}>
+              <TouchableOpacity style={[styles.itemContainer, { backgroundColor: colors.card, borderColor: colors.border }]}>
                 <Image 
                 source={{ uri: item.picture.thumbnail }} 
                 style={styles.thumbnail}
                 />
                 <View>
-                <Text style={styles.textName}>{item.name.first} {item.name.last}</Text>
-                <Text style={styles.textEmail}>{item.email}</Text>
-                </View>
+                <Text style={[styles.textName, { color: colors.text }]}>{item.name.first} {item.name.last}</Text>
+                <Text style={[styles.textEmail, { color: colors.subtext }]}>{item.email}</Text>
+              </View>
             </TouchableOpacity>
             )}
+            ListEmptyComponent={
+              <View style={styles.centerContainer}>
+                <Text style={{ color: colors.subtext }}>No results found.</Text>
+              </View>
+            }
         />
         </View>
     </SafeAreaView>
@@ -134,7 +141,6 @@ const styles = StyleSheet.create({
   searchContainer: {
     position: 'relative',
     marginBottom: 20,
-    backgroundColor: '#f0f0f0',
     borderRadius: 8,
     padding: 12,
     flexDirection: 'row',
@@ -147,7 +153,6 @@ const styles = StyleSheet.create({
   searchBox: {
     flex: 1,
     fontSize: 16,
-    color: '#333',
   },
   itemContainer: {
     flexDirection: 'row',
@@ -168,6 +173,5 @@ const styles = StyleSheet.create({
   textEmail: {
     fontSize: 14,
     marginLeft: 10,
-    color: "grey",
   },
 });

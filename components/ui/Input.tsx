@@ -1,5 +1,6 @@
 import { StyleSheet, TextInput, View, Text, Dimensions } from 'react-native';
 import { useState } from 'react';
+import { useThemeStore } from '@/store/themeStore';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 interface InputProps {
@@ -20,6 +21,7 @@ export function Input({
   placeholder,
 }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
+  const { colors } = useThemeStore();
 
   return (
     <View style={styles.container}>
@@ -30,14 +32,14 @@ export function Input({
         secureTextEntry={secureTextEntry}
         placeholder={placeholder}
         style={[
-          styles.input,
-          isFocused && styles.inputFocused,
-          error && styles.inputError
+          [styles.input, { borderColor: colors.border}],
+          isFocused && [styles.inputFocused, { borderColor: colors.border}],
+          error && [styles.inputError, { borderColor: colors.border}]
         ]}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       />
-      {error && <Text style={styles.errorText}>{error}</Text>}
+      {error && <Text style={[styles.errorText, { color: colors.error }]}>{error}</Text>}
     </View>
   );
 }
@@ -54,7 +56,6 @@ const styles = StyleSheet.create({
   input: {
     height: screenHeight * 0.06,
     borderWidth: 1,
-    borderColor: '#E5E5E5',
     borderRadius: 8,
     paddingHorizontal: screenWidth * 0.04,
     fontSize: Math.min(screenWidth * 0.04, 16),
@@ -68,7 +69,6 @@ const styles = StyleSheet.create({
     borderColor: '#FF3B30',
   },
   errorText: {
-    color: '#FF3B30',
     fontSize: 12,
     marginTop: 4,
   },

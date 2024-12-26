@@ -8,10 +8,11 @@ import {
   Poppins_700Bold, 
   useFonts 
 } from '@expo-google-fonts/poppins';
+import { useThemeStore } from "@/store/themeStore";
 import * as SplashScreen from 'expo-splash-screen';
 import { Asset } from 'expo-asset';
 import { useEffect, useState, useCallback } from 'react';
-import { View } from 'react-native';
+import { View, StatusBar } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -24,6 +25,7 @@ const assets = [
 ];
 
 export default function RootLayout() {
+  const { mode, colors } = useThemeStore();
   const [appIsReady, setAppIsReady] = useState(false);
   const [assetsLoaded, setAssetsLoaded] = useState(false);
   const [fontsLoaded, error] = useFonts({
@@ -65,11 +67,15 @@ export default function RootLayout() {
   }
 
   return (
-    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+    <View style={{ flex: 1, backgroundColor: colors.background }} onLayout={onLayoutRootView}>
+      <StatusBar
+        barStyle={mode === 'dark' ? 'light-content' : 'dark-content'}
+        backgroundColor={colors.background}
+      />
       <GestureHandlerRootView style={{ flex: 1 }}>
         <Stack
           screenOptions={{
-            headerStyle: { backgroundColor: '#fff' },
+            headerStyle: { backgroundColor: colors.background },
             headerTintColor: 'transparent',
           }}
         >
