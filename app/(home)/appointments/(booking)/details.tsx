@@ -69,7 +69,7 @@ export default function DetailsSelection() {
           <CalendarStrip
             scrollable
             style={[styles.calendar, { backgroundColor: colors.border }]}
-            calendarHeaderStyle={[{ color: colors.text, fontFamily: typography.fonts.regular, fontSize: typography.sizes.lg }]}
+            calendarHeaderStyle={{ color: colors.text, fontFamily: typography.fonts.regular, fontSize: typography.sizes.lg }}
             dateNumberStyle={[styles.dateNumber, { color: colors.text }]}
             dateNameStyle={[styles.dateName, { color: colors.subtext }]}
             highlightDateNumberStyle={[styles.highlightDateNumber, { color: 'white' }]}
@@ -155,8 +155,8 @@ export default function DetailsSelection() {
             <View style={{ marginTop: 15, alignItems: 'center', flex: 1}}>
                 <TouchableOpacity 
                 style={[styles.confirmButton, { backgroundColor: colors.primary }]} 
-                onPress={() => console.log('Appointment confirmation button clicked!')}>
-                    <Text style={styles.confirmButtonText}>Confirm & Pay</Text>
+                onPress={() => console.log('Appointment confirmation button clicked! Proceed to Payment Page')}>
+                    <Text style={styles.confirmButtonText}>Confirm</Text>
                 </TouchableOpacity>
             </View>
           </View>
