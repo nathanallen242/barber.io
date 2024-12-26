@@ -19,7 +19,9 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ style }) => {
 
   const toggleTheme = useCallback(() => {
     const nextMode = mode === 'light' ? 'dark' : 'light';
+    console.log('Current mode:', mode)
     setThemeMode(nextMode);
+    console.log('Next mode:', nextMode)
   }, [mode, setThemeMode]);
 
   const getIconName = useCallback((): IoniconName => {

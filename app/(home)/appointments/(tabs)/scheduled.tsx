@@ -1,8 +1,11 @@
 import { StyleSheet, Text, ScrollView, ActivityIndicator, View } from "react-native";
+import { useThemeStore } from '@/store/themeStore';
 import { useState } from "react";
 
 export default function ScheduledAppts() {
   const [refreshing, setRefreshing] = useState(Boolean);
+  const { colors } = useThemeStore();
+
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -12,7 +15,7 @@ export default function ScheduledAppts() {
   };
 
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, { backgroundColor: colors.background }]}>
       {refreshing && (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#7A94FE" />
@@ -26,7 +29,7 @@ export default function ScheduledAppts() {
           }
         }}
         scrollEventThrottle={16}>
-        <Text style={styles.title}>No scheduled appointments.</Text>
+        <Text style={[styles.title, { color: colors.text }]}>No scheduled appointments.</Text>
       </ScrollView>
     </View>
   );

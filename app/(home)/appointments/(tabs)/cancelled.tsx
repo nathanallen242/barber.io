@@ -1,8 +1,10 @@
 import { StyleSheet, Text, ScrollView, ActivityIndicator, View } from "react-native";
+import { useThemeStore } from '@/store/themeStore';
 import { useState } from "react";
 
 export default function CancelledAppts() {
   const [refreshing, setRefreshing] = useState(Boolean);
+  const { colors, typography } = useThemeStore();
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -12,7 +14,7 @@ export default function CancelledAppts() {
   };
 
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, { backgroundColor: colors.background }]}>
       {refreshing && (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#7A94FE" />
@@ -26,7 +28,7 @@ export default function CancelledAppts() {
           }
         }}
         scrollEventThrottle={16}>
-        <Text style={styles.title}>No cancelled appointments.</Text>
+        <Text style={[styles.title, { color: colors.text }]}>No cancelled appointments.</Text>
       </ScrollView>
     </View>
   );

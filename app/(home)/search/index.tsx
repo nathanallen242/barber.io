@@ -21,7 +21,7 @@ export default function SearchPage() {
   const searchInputRef = useRef<TextInput>(null);
   const { fromSearchButton } = useLocalSearchParams();
 
-  const { colors } = useThemeStore();
+  const { colors, typography } = useThemeStore();
   
   const fetchData = async () => {
     try {
@@ -83,15 +83,15 @@ export default function SearchPage() {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background }}>
       <View style={{margin: 25}}>
-        <View style={[styles.searchContainer, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <Ionicons name="search" size={20} color={colors.subtext} style={styles.searchIcon} />
+        <View style={[styles.searchContainer, { backgroundColor: colors.border, borderColor: colors.border }]}>
+            <Ionicons name="search" size={20} color={colors.icon} style={styles.searchIcon} />
             <TextInput
             ref={searchInputRef}
             placeholder="Search for barbers in our database..."
-            placeholderTextColor={colors.subtext}
+            placeholderTextColor={colors.text}
             selectionColor={colors.text}
             clearButtonMode="while-editing"
-            style={[styles.searchBox, { color: colors.text }]}
+            style={[styles.searchBox, { color: colors.text, fontFamily: typography.fonts.light }]}
             autoCapitalize="none"
             autoCorrect={false}
             value={query}
@@ -109,14 +109,18 @@ export default function SearchPage() {
                 style={styles.thumbnail}
                 />
                 <View>
-                <Text style={[styles.textName, { color: colors.text }]}>{item.name.first} {item.name.last}</Text>
-                <Text style={[styles.textEmail, { color: colors.subtext }]}>{item.email}</Text>
+                <Text style={[styles.textName, { color: colors.text, fontFamily: typography.fonts.light }]}>{item.name.first} {item.name.last}</Text>
+                <Text style={[styles.textEmail, { color: colors.text }]}>{item.email}</Text>
               </View>
             </TouchableOpacity>
             )}
             ListEmptyComponent={
               <View style={styles.centerContainer}>
-                <Text style={{ color: colors.subtext }}>No results found.</Text>
+                <Text style={{ 
+                  color: colors.text, 
+                  fontFamily: typography.fonts.medium, 
+                  fontSize: typography.sizes.lg, 
+                  }}>No results found.</Text>
               </View>
             }
         />
@@ -130,7 +134,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
     marginHorizontal: 20,
   },
   centerContainer: {
@@ -158,6 +161,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 10,
     marginTop: 10,
+    borderRadius: 10,
     alignItems: 'center',
   },
   thumbnail: {

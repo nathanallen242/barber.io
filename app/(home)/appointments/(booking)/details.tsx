@@ -1,61 +1,57 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { useBookingStore } from '@/store/bookingStore';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { useThemeStore } from '@/store/themeStore';
+import { Ionicons } from '@expo/vector-icons';
+import CalendarStrip from 'react-native-calendar-strip';
+import { Moment } from 'moment';
 
 interface TimeSlot {
     time: string;
     available: boolean;
 }
 
-interface Day {
-    day: number;
-    dayOfWeek: string;
-}
+type TimePeriod = 'Morning' | 'Afternoon' | 'Night';
 
-const days: Day[] = [
-    { day: 17, dayOfWeek: 'Sun' },
-    { day: 18, dayOfWeek: 'Mon' },
-    { day: 19, dayOfWeek: 'Tue' },
-    { day: 20, dayOfWeek: 'Wed' },
-    { day: 21, dayOfWeek: 'Thu' },
-];
-
-const timeSlots: TimeSlot[] = [
-    { time: '10:00 am', available: true },
-    { time: '11:00 am', available: false },
-    { time: '01:30 pm', available: true },
-    { time: '03:00 pm', available: true },
-    { time: '07:00 pm', available: true },
-    { time: '05:00 pm', available: false },
-];
+const timeSlots: Record<TimePeriod, TimeSlot[]> = {
+    Morning: [
+      { time: '08:00', available: true },
+      { time: '08:30', available: true },
+      { time: '09:00', available: false },
+      { time: '09:30', available: true },
+    ],
+    Afternoon: [
+      { time: '12:00', available: true },
+      { time: '12:30', available: false },
+      { time: '13:00', available: true },
+      { time: '13:30', available: true },
+    ],
+    Night: [
+      { time: '16:00', available: true },
+      { time: '16:30', available: false },
+      { time: '17:00', available: true },
+      { time: '17:30', available: true },
+    ],
+  };
 
 export default function DetailsSelection() {
-    const { selectedBarber } = useBookingStore();
-    const [selectedDay, setSelectedDay] = useState<number | null>(20);
+    const { colors, typography } = useThemeStore();
+    const [selectedDate, setSelectedDate] = useState<Moment>();
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
+    const [selectedPeriod, setSelectedPeriod] = useState<TimePeriod>('Morning');
 
-    const handleDayPress = (day: number) => {
-        setSelectedDay(day);
-    };
-
-    const handleTimePress = (time: string) => {
-        setSelectedTime(time);
-    };
-
-    const handleConfirmPress = () => {
-        if (selectedDay && selectedTime) {
-            // Logic to confirm and pay, e.g. navigate or call api
-            console.log(`Booking Confirmed for Day: ${selectedDay}, Time: ${selectedTime}`);
-        } else {
-            console.log('Please select a day and time.');
-        }
-    };
+    const handleDateSelected = (momentDate: Moment) => {
+        setSelectedDate(momentDate);
+        setSelectedTime(null);
+    }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Select date & time:</Text>
-            <View style={styles.header}>
-                {true && ( // Display image if available
+        <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
+            <Text style={[styles.title, { 
+                color: colors.text, 
+                fontFamily: typography.fonts.regular,
+                fontSize: typography.sizes.xxl }]}>Select your preferred availability.</Text>
+             <View style={styles.header}>
+                 {true && (
                     <Image
                     source={require('@/assets/images/pfp.png')}
                         style={styles.profileImage}
@@ -65,62 +61,139 @@ export default function DetailsSelection() {
 
                         {true && (
             <View style={styles.barberInfo}>
-                <Text style={styles.barberName}>Nathan Allen</Text>
-                <Text style={styles.barberSpecialty}>Barber</Text>
+                <Text style={[styles.barberName, { color: colors.text }]}>Nathan Allen</Text>
+                <Text style={[styles.barberSpecialty, { color: colors.subtext }]}>Barber</Text>
             </View>
             )}
 
-            <View style={styles.daySelection}>
-                <Text style={styles.dayLabel}>Day</Text>
-                <View style={styles.daysContainer}>
-                    {days.map((day) => (
-                        <TouchableOpacity
-                            key={day.day}
-                            style={[styles.dayButton, selectedDay === day.day && styles.selectedDayButton]}
-                            onPress={() => handleDayPress(day.day)}
-                        >
-                            <Text style={styles.dayNumber}>{day.day}</Text>
-                            <Text style={styles.dayOfWeek}>{day.dayOfWeek}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-            </View>
+          <CalendarStrip
+            scrollable
+            style={[styles.calendar, { backgroundColor: colors.border }]}
+            calendarHeaderStyle={[{ color: colors.text, fontFamily: typography.fonts.regular, fontSize: typography.sizes.lg }]}
+            dateNumberStyle={[styles.dateNumber, { color: colors.text }]}
+            dateNameStyle={[styles.dateName, { color: colors.subtext }]}
+            highlightDateNumberStyle={[styles.highlightDateNumber, { color: 'white' }]}
+            highlightDateNameStyle={[styles.highlightDateName, { color: 'white' }]}
+            disabledDateNameStyle={{ color: colors.subtext }}
+            disabledDateNumberStyle={{ color: colors.subtext }}
+            iconContainer={{ flex: 0.1 }}
+            selectedDate={selectedDate}
+            onDateSelected={handleDateSelected}
+            minDate={new Date()}
+            maxDate={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)}
+            useIsoWeekday={false}
+          />
+    
+          {/* Time Period Selector */}
+          <View style={[
+                styles.periodContainer, 
+                { backgroundColor: colors.border }
+            ]}>
+            {(['Morning', 'Afternoon', 'Night'] as TimePeriod[]).map((period) => (
+              <TouchableOpacity
+                key={period}
+                style={[
+                  styles.periodButton,
+                  selectedPeriod === period && [
+                    styles.selectedPeriodButton,
+                    { backgroundColor: colors.card }
+                ],
+                  { backgroundColor: colors.border }
+                ]}
+                onPress={() => setSelectedPeriod(period)}
+              >
+                <Ionicons 
+                  name={period === 'Morning' ? 'sunny' : period === 'Afternoon' ? 'partly-sunny' : 'moon'} 
+                  size={16} 
+                  color={selectedPeriod === period ? 'white' : 'black'} 
+                />
+                <Text style={[
+                  styles.periodText,
+                  { color: selectedPeriod === period ? 'white' : 'black' }
+                ]}>{period}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+    
+          {/* Time Slots Grid */}
+          <View style={styles.timeSlotsGrid}>
+            {timeSlots[selectedPeriod].map((slot, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.timeSlot,
+                  { 
+                    backgroundColor: colors.card,
+                    borderColor: colors.border 
+                  },
+                  selectedTime === slot.time && [
+                    styles.selectedTimeSlot,
+                    { 
+                        backgroundColor: colors.primary,
+                        borderColor: colors.primary 
+                    }
+                  ],
+                  !slot.available && [
+                    styles.unavailableTimeSlot,
+                    { 
+                        backgroundColor: 'lightgrey',
+                        borderColor: 'grey'
+                    }
+                  ]
+                ]}
+                onPress={() => slot.available && setSelectedTime(slot.time)}
+                disabled={!slot.available}
+              >
+                <Text style={[
+                  styles.timeText,
+                  { color: slot.available ? colors.text : colors.subtext }
+                ]}>{slot.time}</Text>
+              </TouchableOpacity>
+            ))}
 
-            <View style={styles.availability}>
-                <Text style={styles.availabilityLabel}>Availability</Text>
-                <View style={styles.timeSlotsContainer}>
-                    {timeSlots.map((slot) => (
-                        <TouchableOpacity
-                            key={slot.time}
-                            style={[
-                                styles.timeSlot,
-                                !slot.available && styles.timeSlotUnavailable,
-                                selectedTime === slot.time && styles.selectedTimeSlot
-                            ]}
-                            onPress={() => slot.available && handleTimePress(slot.time)}
-                            disabled={!slot.available}
-                        >
-                            <Text style={[styles.timeText, !slot.available && styles.unavailableText]}>{slot.time}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
+            {/* Appointment Confirmation */}
+            <View style={{ marginTop: 15, alignItems: 'center', flex: 1}}>
+                <TouchableOpacity 
+                style={[styles.confirmButton, { backgroundColor: colors.primary }]} 
+                onPress={() => console.log('Appointment confirmation button clicked!')}>
+                    <Text style={styles.confirmButtonText}>Confirm & Pay</Text>
+                </TouchableOpacity>
             </View>
-
-            <TouchableOpacity style={styles.confirmButton} onPress={handleConfirmPress}>
-                <Text style={styles.confirmButtonText}>Confirm & Pay</Text>
-            </TouchableOpacity>
-        </View>
-    );
+          </View>
+        </ScrollView>
+      );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: 'white'
+    },
+    calendar: {
+        height: 100,
+        paddingTop: 20,
+        paddingBottom: 10,
+        backgroundColor: 'white',
+        borderRadius: 12,
+        marginBottom: 20,
+    },
+    dateNumber: {
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    dateName: {
+        fontSize: 12,
+    },
+    highlightDateNumber: {
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    highlightDateName: {
+        fontSize: 12,
+        fontWeight: '600',
     },
     header: {
-        alignItems: 'center', // Center content horizontally
+        alignItems: 'center',
         marginVertical: 15,
     },
     title: {
@@ -148,70 +221,66 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins_500Regular',
         color: 'gray',
     },
-    daySelection: {
-        marginBottom: 20,
-    },
-    dayLabel: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    daysContainer: {
+    periodContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginBottom: 20,
+        padding: 4,
+        backgroundColor: '#F5F6FA',
+        borderRadius: 25,
     },
-    dayButton: {
-        borderWidth: 1,
-        borderColor: 'gray',
-        padding: 10,
-        borderRadius: 8,
+    periodButton: {
+        flexDirection: 'row',
         alignItems: 'center',
-        width: 50,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 20,
+        gap: 8,
     },
-    selectedDayButton: {
-        backgroundColor: '#ddd',
+    selectedPeriodButton: {
+        backgroundColor: 'white',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
     },
-    dayNumber: {
-        fontSize: 16,
+    periodText: {
+        fontSize: 14,
+        fontFamily: 'Poppins_500Regular',
     },
-    dayOfWeek: {
-        fontSize: 12,
-        color: 'gray',
-    },
-    availability: {
-        marginBottom: 30,
-    },
-    availabilityLabel: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    timeSlotsContainer: {
+    timeSlotsGrid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        gap: 10,
     },
     timeSlot: {
+        width: '48%',
+        padding: 15,
+        borderRadius: 12,
+        alignItems: 'center',
+        backgroundColor: 'white',
         borderWidth: 1,
-        borderColor: 'gray',
-        padding: 10,
-        borderRadius: 8,
-        marginRight: 10,
-        marginBottom: 10,
+        borderColor: '#F5F6FA',
     },
     selectedTimeSlot: {
-        backgroundColor: '#ddd',
+        backgroundColor: '#4460F7',
+        borderColor: '#4460F7',
     },
-    timeSlotUnavailable: {
-        opacity: 0.5,
+    unavailableTimeSlot: {
+        backgroundColor: '#F5F6FA',
+        borderColor: '#F5F6FA',
     },
     timeText: {
         fontSize: 16,
-    },
-    unavailableText: {
-        color: 'gray'
+        fontFamily: 'Poppins_500Regular',
+        color: '#1A1D1F',
     },
     confirmButton: {
-        backgroundColor: '#7A94FE', // Example color
         padding: 15,
         borderRadius: 8,
         alignItems: 'center',

@@ -1,6 +1,7 @@
 import { useRef, useMemo } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useThemeStore } from '@/store/themeStore';
 import Ionicons from '@expo/vector-icons/Ionicons';
 // import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
@@ -10,6 +11,7 @@ const { screenHeight } = screenDimensions;
 
 export default function NotificationDetails() {
   const router = useRouter();
+  const { colors, typography } = useThemeStore();
   const { id } = useLocalSearchParams();
 
   const sheetRef = useRef<BottomSheet>(null);
@@ -19,21 +21,34 @@ export default function NotificationDetails() {
     <View style={{ flex: 1 }}>
       <BottomSheet
         ref={sheetRef}
+        backgroundComponent={() => (
+          <View
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              backgroundColor: colors.card,
+              borderTopLeftRadius: 14,
+              borderTopRightRadius: 14,
+            }}
+          />
+        )}
         index={1}
         snapPoints={snapPoints}
         enableDynamicSizing={false}
         backdropComponent={() => (
             <View style={styles.backdrop} />
           )}
+        handleIndicatorStyle={{ backgroundColor: colors.text }}
+        
       >
-        <BottomSheetScrollView contentContainerStyle={styles.notificationContainer}>
+        <BottomSheetScrollView 
+        contentContainerStyle={[styles.notificationContainer]}>
           <TouchableOpacity 
             style={styles.closeButton} 
             onPress={() => router.back()}
           >
-            <Ionicons name="close" size={24} color="black" />
+            <Ionicons name="close" size={typography.sizes.xxl} color={colors.icon} />
           </TouchableOpacity>
-          <Text style={styles.title}>Notification Details</Text>
+          <Text style={[styles.title, { fontFamily: typography.fonts.medium, color: colors.text }]}>Notification Details</Text>
           <Text style={styles.date}>ID: {id}</Text>
           <Text style={styles.content}>This is where the notification content will appear.</Text>
         </BottomSheetScrollView>
@@ -46,7 +61,6 @@ const styles = StyleSheet.create({
   notificationContainer: {
     paddingVertical: 20,
     paddingHorizontal: 16,
-    backgroundColor: 'white',
     minHeight: screenHeight * 0.5
   },
   closeButton: {
@@ -57,7 +71,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
     marginBottom: 10,
     marginTop: 40
   },

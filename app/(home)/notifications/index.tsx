@@ -4,12 +4,14 @@ import Notification from '@/components/notifs/Notification';
 import { screenDimensions } from '@/utils/screenDimensions';
 import { useRouter } from 'expo-router';
 import { useUserStore } from '@/store/userStore';
+import { useThemeStore } from '@/store/themeStore';
 
 export default function Notifications() {
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(Boolean);
   const notifications = useUserStore((state) => state.notifications) || [];
   const setNotifications = useUserStore((state) => state.setNotifications);
+  const { colors, typography } = useThemeStore();
 
   const handleDismiss = (id: string) => {
     setNotifications(notifications.filter((notification) => notification.id !== id));
@@ -75,7 +77,7 @@ export default function Notifications() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
         {refreshing && (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size='large' color="#7A94FE" />

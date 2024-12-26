@@ -5,7 +5,7 @@ import { useThemeStore } from '@/store/themeStore';
 import { useRouter } from 'expo-router';
 
 export default function SearchLayout() {
-  const { sharedColors, mode, colors } = useThemeStore();
+  const { colors, typography } = useThemeStore();
   const router = useRouter();
   return (
     <Stack
@@ -13,7 +13,7 @@ export default function SearchLayout() {
         title: 'Notifications',
         headerLeft: () => (
           <TouchableOpacity onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color={sharedColors.white} />
+            <Ionicons name="arrow-back" size={24} color={colors.icon} />
           </TouchableOpacity>
         )
     }}
@@ -21,9 +21,9 @@ export default function SearchLayout() {
       <Stack.Screen name="index" options={{
         title: "Search",
         headerTitleStyle: {
-            fontFamily: 'Poppins_300Light',
-            fontSize: 18,
-            color: sharedColors.white
+            fontFamily: typography.fonts.light,
+            fontSize: typography.sizes.lg,
+            color: colors.text
           },
         headerStyle: {
           backgroundColor: colors.background

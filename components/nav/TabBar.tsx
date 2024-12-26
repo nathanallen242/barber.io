@@ -1,26 +1,27 @@
 import { View, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useLinkBuilder, useTheme } from '@react-navigation/native';
+import { useThemeStore } from '@/store/themeStore';
 import { Text, PlatformPressable } from '@react-navigation/elements';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 
 export default function TabBar({ state, descriptors, navigation } : BottomTabBarProps) {
-  const { colors } = useTheme();
+  const { colors } = useThemeStore();
   const { buildHref } = useLinkBuilder();
   const icons = {
     scheduled: (props: any) => (
-      <FontAwesome name="calendar-plus-o" size={24} {...props} />
+      <FontAwesome name="calendar-plus-o" size={24} color={colors.icon} {...props} />
     ),
     completed: (props: any) => (
-      <FontAwesome name="calendar-check-o" size={24} {...props} />
+      <FontAwesome name="calendar-check-o" size={24} color={colors.icon} {...props} />
     ),
     cancelled: (props: any) => (
-      <FontAwesome name="calendar-times-o" size={24} {...props} />
+      <FontAwesome name="calendar-times-o" size={24} color={colors.icon} {...props} />
     ),
   };
 
   return (
-    <View style={styles.tabBar}>
+    <View style={[styles.tabBar, { backgroundColor: colors.border }]}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -65,9 +66,18 @@ export default function TabBar({ state, descriptors, navigation } : BottomTabBar
             {icons[route.name as keyof typeof icons]({
                 color: isFocused ? colors.primary : colors.text
             })}
-            <Text style={{ color: isFocused ? colors.primary : colors.text }}>
-              {label}
-            </Text>
+            {typeof label === 'string' ? (
+              <Text style={{ color: isFocused ? colors.subtext : colors.text }}>
+                {label}
+              </Text>
+            ) : (
+              label({ 
+                focused: isFocused, 
+                color: isFocused ? colors.primary : colors.text, 
+                position: 'below-icon',
+                children: route.name
+              })
+            )}
           </PlatformPressable>
         );
       })}

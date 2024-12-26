@@ -1,3 +1,5 @@
+import { Typography } from "@/theme/typography.types";
+
 export type ThemeMode = 'light' | 'dark';
 
 export interface ThemeColors {
@@ -22,6 +24,7 @@ export interface SharedColors {
 
 export interface Theme {
   mode: ThemeMode;
+  typography: Typography;
   colors: ThemeColors;
   sharedColors: SharedColors;
 }

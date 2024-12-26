@@ -1,23 +1,25 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useThemeStore } from '@/store/themeStore';
+import services from '@/types/services';
 import Offering from '@/components/booking/Offering';
 
-const services = [
-  { id: '1', name: 'Basic Haircut', price: 20, description: 'A simple haircut to maintain your current style.' },
-  { id: '2', name: 'Premium Haircut', price: 30, description: 'A detailed haircut with styling and finishing touches.' },
-  { id: '3', name: 'Beard Trim', price: 15, description: 'Professional beard shaping and trimming.' },
-  { id: '4', name: 'Hair Coloring', price: 50, description: 'Full or partial hair coloring with quality products.' },
-  { id: '5', name: 'Shampoo & Style', price: 25, description: 'Relaxing shampoo followed by a stylish blow-dry.' },
-];
-
-
 export default function ServiceSelection() {
-  const [selectedService, setSelectedService] = useState<string | null>(null);
+  const [selectedServices, setSelectedServices] = useState(new Set());
+  const { colors, typography } = useThemeStore();
   const router = useRouter();
 
   const handlePress = (id: string) => {
-    setSelectedService(id === selectedService ? null : id);
+    setSelectedServices(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
   };
 
   const handleLongPress = (id: string) => {
@@ -25,24 +27,37 @@ export default function ServiceSelection() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Now, choose one that fits your needs:</Text>
-      <View style={styles.listContainer}>
-        {services.map((service) => (
-          <TouchableOpacity
-            key={service.id}
-            onPress={() => handlePress(service.id)}
-            onLongPress={() => handleLongPress(service.id)}
-          >
-            <Offering
-              id={service.id}
-              name={service.name}
-              price={service.price}
-            />
-          </TouchableOpacity>
-        ))}
+    <ScrollView style={{ backgroundColor: colors.background }}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <Text style={[
+          styles.title, 
+          { 
+          color: colors.text, 
+          fontFamily: typography.fonts.regular,
+          fontSize: typography.sizes.xxl,
+          }]}>Choose a service that fits your needs.</Text>
+        <View style={styles.listContainer}>
+          {services.map((service) => (
+            <TouchableOpacity
+              key={service.id}
+              onPress={() => handlePress(service.id)}
+              onLongPress={() => handleLongPress(service.id)}
+            >
+              <Offering
+                id={service.id}
+                name={service.name}
+                price={service.price}
+                duration={service.duration}
+                rating={service.rating}
+                ratingCount={service.ratingCount}
+                imageSource={service.image}
+                isSelected={selectedServices.has(service.id)}
+              />
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -52,11 +67,9 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    fontSize: 24,
-    fontFamily: 'Poppins_400Regular',
     textAlign: 'center',
-    marginVertical: 50,
-    color: '#333',
+    marginTop: 15,
+    marginBottom: 25,
   },
   listContainer: {
     flexGrow: 1,

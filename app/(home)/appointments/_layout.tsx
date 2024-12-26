@@ -1,10 +1,12 @@
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { TouchableOpacity } from 'react-native';
+import { useThemeStore } from '@/store/themeStore';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function AppointmentsLayout() {
   const router = useRouter();
   const segments = useSegments();
+  const { colors, typography } = useThemeStore();
 
   const isAppointmentScreen = (): boolean => {
     const appointmentRoutes = [
@@ -28,9 +30,17 @@ export default function AppointmentsLayout() {
           <TouchableOpacity
             onPress={isAppointmentScreen() ? navigateHome : () => router.back()}
           >
-            <Ionicons name="arrow-back" size={20} color="black" />
+            <Ionicons name="arrow-back" size={20} color={colors.icon} />
           </TouchableOpacity>
         ),
+        headerTitleStyle: {
+          fontFamily: typography.fonts.light,
+          fontSize: typography.sizes.lg,
+          color: colors.text
+        },
+        headerStyle: {
+          backgroundColor: colors.background
+        },
       }}
     >
       {/* Main Appointments Screens */}
@@ -38,15 +48,11 @@ export default function AppointmentsLayout() {
         name="(tabs)"
         options={{
           headerTitle: 'Your Appointments',
-          headerTitleStyle: {
-            fontFamily: 'Poppins_300Light',
-            fontSize: 17,
-          },
           headerRight: () => (
             <TouchableOpacity
-              onPress={() => router.push('/(home)/appointments/(booking)/category')}
+              onPress={() => router.push('/(home)/appointments/(booking)/services')}
             >
-              <Ionicons name="add" size={20} color="black" />
+              <Ionicons name="add" size={20} color={colors.icon} />
             </TouchableOpacity>
           ),
         }}
@@ -55,10 +61,6 @@ export default function AppointmentsLayout() {
         name="(booking)"
         options={{
           headerTitle: 'Book an Appointment',
-          headerTitleStyle: {
-            fontFamily: 'Poppins_300Light',
-            fontSize: 17,
-          }
         }}
       />
       <Stack.Screen

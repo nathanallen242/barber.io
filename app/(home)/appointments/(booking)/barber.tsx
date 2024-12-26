@@ -11,6 +11,7 @@ import {
   } from "react-native";
   import { useState, useEffect } from "react";
   import Ionicons from '@expo/vector-icons/Ionicons';
+  import { useThemeStore } from "@/store/themeStore";
   import filter from 'lodash.filter';
   
   const API_URL = "https://randomuser.me/api/?results=20"; // Adjusted to fetch 20 barbers
@@ -24,6 +25,7 @@ import {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [query, setQuery] = useState("");
+    const { colors, typography } = useThemeStore();
   
     useEffect(() => {
       const fetchBarbers = async () => {
@@ -77,7 +79,7 @@ import {
   
     if (isLoading) {
       return (
-        <View style={styles.centerContainer}>
+        <View style={[styles.centerContainer, { backgroundColor: colors.background }]}>
           <ActivityIndicator size="large" color="#5500dc" />
         </View>
       );
@@ -85,7 +87,7 @@ import {
   
     if (error) {
       return (
-        <View style={styles.centerContainer}>
+        <View style={[styles.centerContainer, { backgroundColor: colors.background }]}>
           <Text style={styles.errorText}>
             Error fetching barbers. Please check your internet connection!
           </Text>
@@ -94,21 +96,29 @@ import {
     }
   
     return (
-      <SafeAreaView style={styles.safeArea}>
+      <View style={[styles.safeArea, { backgroundColor: colors.background }]}>
+        <Text style={[
+        styles.title, 
+        { 
+        color: colors.text, 
+        fontFamily: typography.fonts.regular,
+        fontSize: typography.sizes.xxl,
+        }]}>Select a barber near you.</Text>
         <View style={styles.container}>
+        
           {/* Search Bar */}
-          <View style={styles.searchContainer}>
-            <Ionicons name="search" size={20} color="#999" style={styles.searchIcon} />
+          <View style={[styles.searchContainer]}>
+            <Ionicons name="search" size={20} color={colors.icon} style={styles.searchIcon} />
             <TextInput
-              placeholder="Search for barbers..."
-              placeholderTextColor="#888"
-              selectionColor={'black'}
-              clearButtonMode="always"
-              style={styles.searchBox}
-              autoCapitalize="none"
-              autoCorrect={false}
-              value={query}
-              onChangeText={handleSearch}
+            placeholder="Search for barbers in our database..."
+            placeholderTextColor={colors.text}
+            selectionColor={colors.text}
+            clearButtonMode="while-editing"
+            style={[styles.searchBox, { color: colors.text, fontFamily: typography.fonts.light, backgroundColor: colors.border, borderColor: colors.border }]}
+            autoCapitalize="none"
+            autoCorrect={false}
+            value={query}
+            onChangeText={handleSearch}
             />
           </View>
   
@@ -120,7 +130,7 @@ import {
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={[
-                  styles.barberItem,
+                  [styles.barberItem, { backgroundColor: colors.border }],
                   selectedBarberId === item.login.uuid && styles.barberItemSelected,
                 ]}
                 onPress={() => handleBarberPress(item)}
@@ -133,8 +143,8 @@ import {
   
                 {/* Barber Information */}
                 <View style={styles.barberInfo}>
-                  <Text style={styles.barberName}>{`${item.name.first} ${item.name.last}`}</Text>
-                  <Text style={styles.barberEmail}>{item.email}</Text>
+                  <Text style={[styles.barberName, { color: colors.text }]}>{`${item.name.first} ${item.name.last}`}</Text>
+                  <Text style={[styles.barberEmail, { color: colors.subtext }]}>{item.email}</Text>
                 </View>
   
                 {/* Selection Indicator */}
@@ -150,7 +160,7 @@ import {
             }
           />
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
   
@@ -162,6 +172,10 @@ import {
     container: {
       flex: 1,
       margin: 25,
+    },
+    title: {
+      textAlign: 'center',
+      marginTop: 30
     },
     centerContainer: {
       flex: 1,
@@ -181,7 +195,6 @@ import {
     searchContainer: {
       position: 'relative',
       marginBottom: 20,
-      backgroundColor: 'white',
     },
     searchIcon: {
       position: 'absolute',

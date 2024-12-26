@@ -21,7 +21,7 @@ export const lightColors: ThemeColors = {
     primary: '#ADD8E6',      // Light Blue
     secondary: '#87CEFA',    // Sky Blue
     background: '#1E1E1E',   // Dark Gray
-    card: '#F0F8FF',         // Alice Blue
+    card: '#2f3d4a',         // Dark Blue Grey-ish shade
     text: '#FFFFFF',         // White
     subtext: '#B0B0B0',      // Light Gray
     border: '#3C3C3C',       // Medium Dark Gray

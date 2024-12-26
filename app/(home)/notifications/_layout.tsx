@@ -1,10 +1,12 @@
 import { Stack, useRouter } from 'expo-router';
 import { TouchableOpacity, Alert } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useThemeStore } from '@/store/themeStore';
 import { useUserStore } from '@/store/userStore';
 
 export default function NotificationsLayout() {
   const router = useRouter();
+  const { colors, typography } = useThemeStore();
   const setNotifications = useUserStore((state) => state.setNotifications);
   
   return (
@@ -12,12 +14,16 @@ export default function NotificationsLayout() {
       screenOptions={{
         title: 'Notifications',
         headerTitleStyle: {
-          fontFamily: 'Poppins_300Light',
-          fontSize: 17,
+          fontFamily: typography.fonts.light,
+          fontSize: typography.sizes.md,
+          color: colors.text
+        },
+        headerStyle: {
+          backgroundColor: colors.background,
         },
         headerLeft: () => (
           <TouchableOpacity onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="black" />
+            <Ionicons name="arrow-back" size={24} color={colors.icon} />
           </TouchableOpacity>
         ),
         headerRight: () => (
@@ -33,7 +39,7 @@ export default function NotificationsLayout() {
               );
             }}
           >
-            <Ionicons name="remove-circle-sharp" size={24} color="black" />
+            <Ionicons name="remove-circle-sharp" size={24} color={colors.icon} />
           </TouchableOpacity>
         )        
       }}

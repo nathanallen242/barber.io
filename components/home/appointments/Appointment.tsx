@@ -258,6 +258,7 @@
 // });
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useThemeStore } from '@/store/themeStore';
 import { Appointment as AppointmentInterface } from '@/types/models';
 
 interface AppointmentProps {
@@ -272,9 +273,10 @@ export default function Appointment({ appointment, onEdit, onCancel }: Appointme
   const day = dateObj.getDate();
   const month = dateObj.toLocaleString('default', { month: 'short' });
   const time = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  const { colors } = useThemeStore();
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: colors.secondary }]}>
       <View style={styles.topContainer}>
         <Image
           source={require('@/assets/images/pfp.png')}
@@ -315,7 +317,6 @@ export default function Appointment({ appointment, onEdit, onCancel }: Appointme
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#e7f3fa',
     borderRadius: 20,
     padding: 16,
     marginHorizontal: 16,

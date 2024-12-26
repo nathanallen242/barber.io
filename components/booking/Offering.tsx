@@ -1,26 +1,53 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
+import { useThemeStore } from '@/store/themeStore';
 import { Ionicons } from '@expo/vector-icons';
 
 interface OfferingProps {
   id: string;
   name: string;
   price: number;
+  duration: number;
+  rating: number;
+  ratingCount: string;
   imageSource?: any;
+  isSelected: boolean;
 }
 
-const Offering: React.FC<OfferingProps> = ({ id, name, price, imageSource }) => {
+const Offering: React.FC<OfferingProps> = ({ id, name, price, imageSource, isSelected, duration, rating, ratingCount }) => {
+  const { colors, typography } = useThemeStore();
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image 
-          source={imageSource || require('@/assets/images/illustration.png')}
-          style={styles.image}
-        />
-      </View>
-      <View style={styles.textContainer}>
-        <Text style={styles.serviceName}>{name}</Text>
-        <Text style={styles.price}>${price}</Text>
+    <View style={[
+      [styles.container, { backgroundColor: colors.border }], 
+      isSelected && styles.selectedContainer
+    ]}>
+      <Image 
+        source={require('@/assets/images/pfp.png')}
+        style={styles.image}
+      />
+      <View style={styles.contentContainer}>
+        <Text style={[styles.serviceName,
+          { 
+          fontFamily: typography.fonts.medium, 
+          color: colors.text }]}>{name}</Text>
+        
+        <View style={styles.ratingContainer}>
+          <Ionicons name="star" size={16} color="#FFD700" />
+          <Text style={[styles.rating, { color: colors.text }]}>{rating}</Text>
+          <Text style={[styles.ratingCount, { color: colors.subtext }]}>({ratingCount})</Text>
+          <Text style={[styles.duration, { color: colors.subtext }]}>{duration} min</Text>
+        </View>
+
+        <View style={styles.priceContainer}>
+          <Text style={[styles.price, { color: colors.text }]}>${price}</Text>
+          <View style={[styles.selectButton, { backgroundColor: colors.secondary }]}>
+            <Ionicons 
+              name={isSelected ? "remove" : "add"} 
+              size={24} 
+              color={colors.icon}
+            />
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -31,39 +58,70 @@ export default Offering;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
     borderRadius: 12,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'white',
     marginBottom: 16,
+    padding: 12,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
-  imageContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: 12,
-    overflow: 'hidden',
-    marginRight: 12,
+  selectedContainer: {
+    borderColor: '#6B4EFF',
+    borderWidth: 1,
   },
   image: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
+    width: 100,
+    height: 100,
+    borderRadius: 8,
   },
-  textContainer: {
+  contentContainer: {
     flex: 1,
+    marginLeft: 12,
+    justifyContent: 'space-between',
   },
   serviceName: {
-    fontFamily: 'Poppins_600SemiBold',
     fontSize: 16,
+    fontFamily: 'Poppins_600SemiBold',
     marginBottom: 4,
-    color: '#333',
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  rating: {
+    marginLeft: 4,
+    marginRight: 2,
+    fontFamily: 'Poppins_400Regular',
+  },
+  ratingCount: {
+    color: '#666',
+    marginRight: 8,
+    fontFamily: 'Poppins_300Light',
+  },
+  duration: {
+    color: '#666',
+    fontFamily: 'Poppins_300Light',
+  },
+  priceContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   price: {
-    fontFamily: 'Poppins_300Light',
-    fontSize: 14,
-    color: '#666',
+    fontSize: 20,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#6B4EFF',
   },
-  iconContainer: {
-    marginLeft: 12,
-  },
+  selectButton: {
+    backgroundColor: '#6B4EFF',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
