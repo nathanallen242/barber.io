@@ -2,23 +2,23 @@ import { User } from '@supabase/supabase-js'
 
 export interface PublicUser {
     id: string
-    forename?: string | null
-    surname?: string | null
-    birth_date?: string | null
-    country?: string | null
-    phone_number?: string | null
-    profile_picture?: string | null
+    forename?: string
+    surname?: string
+    birth_date?: string
+    country?: string
+    phone_number?: string
+    profile_picture?: string
     job_role?: string
 }
 
 export interface Appointment {
     id: string
-    barber_id?: string
-    client_id?: string
+    barber_id: string
+    client_id: string
     service_id: string
     appointment_date: string
-    price?: number | null
-    status?: number
+    price?: number
+    status: number
 }
 
 export interface Availability {
@@ -34,13 +34,13 @@ export interface Service {
     id: string
     category?: string
     description?: string
-    name?: string
-    price?: number
+    name: string
+    price: number
 }
 
 export interface Notification {
     id: string
-    body: string
+    body?: string
     created_at: string
     delivery_method: string
     is_read: boolean

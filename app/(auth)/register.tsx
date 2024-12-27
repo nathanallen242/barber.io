@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/Input';
 import { screenDimensions } from '@/utils/screenDimensions';
 import { supabase } from '@/lib/supabase';
 import { useUserStore } from '@/store/userStore';
+import { UserProfile } from '@/types/models';
 import { router } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -20,7 +21,16 @@ const validationSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), ''], 'Passwords do not match')
     .required('Confirm Password is required'),
+  forename: Yup.string()
+    .required('First name is required'),
+  surname: Yup.string()
+    .required('First name is required')
 });
+
+enum Role {
+  Client = "client",
+  Barber = "barber"
+}
 
 export default function Register() {
   const insets = useSafeAreaInsets();
@@ -39,13 +49,19 @@ export default function Register() {
         <Text style={styles.subtitle}>Welcome to our platform!</Text>
 
         <Formik
-          initialValues={{ email: '', password: '', confirmPassword: '' }}
+          initialValues={{ forename: '', surname: '', email: '', password: '', confirmPassword: '' }}
           validationSchema={validationSchema}
           onSubmit={async (values, { setSubmitting }) => {
             try {
               const { data: { user, session }, error } = await supabase.auth.signUp({
                 email: values.email,
                 password: values.password,
+                options: {
+                  data: {
+                    "forename": values.forename,
+                    "surname": values.surname
+                  }
+                }
               });
 
               setSubmitting(false);
@@ -61,7 +77,13 @@ export default function Register() {
               }
 
               if (user && session) {
-                useUserStore.setState({ user, session });
+                const userProfile: UserProfile = {
+                  ...user,
+                  forename: user.user_metadata.forename,
+                  surname: user.user_metadata.surname,
+                  job_role: Role.Client
+                };
+                useUserStore.setState({ user: userProfile, session });
                 Alert.alert(
                   "Registration Successful!",
                   "Welcome aboard!",
@@ -83,6 +105,20 @@ export default function Register() {
         >
           {({ handleChange, handleSubmit, values, errors, touched, isSubmitting }) => (
             <>
+            <Input
+                label="First Name"
+                value={values.forename}
+                onChangeText={handleChange('forename')}
+                error={touched.forename ? errors.forename : undefined}
+                placeholder="Enter your first name"
+              />
+              <Input
+                label="Last Name"
+                value={values.surname}
+                onChangeText={handleChange('surname')}
+                error={touched.surname ? errors.surname : undefined}
+                placeholder="Enter your last name"
+              />
               <Input
                 label="Email"
                 value={values.email}

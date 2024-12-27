@@ -2,15 +2,14 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Session } from '@supabase/supabase-js';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { UserProfile, Notification } from '../types/models';
+import { UserProfile } from '../types/models';
 
 type UserStore = {
   session: Session | null;
   user: UserProfile | null;
-  notifications: Notification[] | null;
   setSession: (session: Session | null) => void;
-  setUser: (user: UserProfile | null) => void;
-  setNotifications: (notifications: Notification[] | null) => void;
+  // setUser: (user: UserProfile | null) => void;
+  setUser: (user: Partial<UserProfile> | null) => void;
   clearUser: () => void;
 };
 
@@ -46,30 +45,29 @@ export const useUserStore = create<UserStore>()(
       const updateAuthState = (
       user: UserProfile | null,
       session: Session | null,
-      notifications: Notification[] | null,
       ) => {
         set({
           user,
-          session,
-          notifications,
+          session
         });
       };
 
       return {
         user: null,
         session: null,
-        notifications: null,
-        setUser: (user) => {
-          updateAuthState(user, get().session, get().notifications);
+        setUser: (newUserData) => {
+          const currentUser = get().user;
+          const updatedUser = newUserData ? {
+            ...currentUser,
+            ...newUserData
+          } : null;
+          updateAuthState(updatedUser as UserProfile | null, get().session);
         },
         setSession: (session) => {
-          updateAuthState(get().user, session, get().notifications);
-        },
-        setNotifications: (notifications) => {
-          updateAuthState(get().user, get().session, notifications)
+          updateAuthState(get().user, session);
         },
         clearUser: () => {
-          updateAuthState(null, null, null);
+          updateAuthState(null, null);
         },
       };
     },
@@ -79,7 +77,6 @@ export const useUserStore = create<UserStore>()(
       partialize: (state) => ({
         user: state.user,
         session: state.session,
-        notifications: state.notifications,
       }),
     }
   )

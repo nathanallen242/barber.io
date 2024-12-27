@@ -3,10 +3,15 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { useThemeStore } from '@/store/themeStore';
+import { useUserStore } from '@/store/userStore';
+import { useHandleLogOut } from '@/lib/auth';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Setting } from '@/components/profile/Setting';
 
 export default function ProfileScreen() {
     const router = useRouter();
+    const { user } = useUserStore();
+    const handleLogout = useHandleLogOut();
     const { colors, typography } = useThemeStore();
     const [notificationsEnabled, setNotificationsEnabled] = useState(false);
     const handleNavigation = (route: any) => {
@@ -25,8 +30,11 @@ export default function ProfileScreen() {
 
       {/* User Information */}
       <View style={styles.infoContainer}>
-        <Text style={[styles.name, { fontFamily: typography.fonts.light, color: colors.text }]}>Nathan Allen</Text>
-        <Text style={[styles.email, { fontFamily: typography.fonts.light, color: colors.subtext }]}>nathan.noel.allen@gmail.com</Text>
+        <Text style={[styles.name, { fontFamily: typography.fonts.light, color: colors.text }]}>{user?.forename} {user?.surname}</Text>
+        <Text style={[styles.email, { fontFamily: typography.fonts.light, color: colors.subtext }]}>{user?.user_metadata.email}</Text>
+        <TouchableOpacity style={{marginTop: 15}}>
+          <FontAwesome6 name="edit" size={24} color={colors.icon} />
+        </TouchableOpacity>  
       </View>
 
       {/* Settings */}
@@ -72,8 +80,7 @@ export default function ProfileScreen() {
           text="Logout"
           hasArrow
           onPress={() => {
-            // Add logout logic here
-            router.replace('/login');
+            handleLogout();
           }}
         />
       </View>
@@ -111,6 +118,6 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   settingsContainer: {
-    marginTop: 20,
+    marginTop: 15,
   }
 });

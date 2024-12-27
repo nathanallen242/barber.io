@@ -9,10 +9,12 @@ import ActionSection from '@/components/home/action/ActionSection';
 import SearchButton from '@/components/ui/SearchButton';
 import { screenDimensions } from '@/utils/screenDimensions';
 import { useThemeStore } from '@/store/themeStore';
+import { useUserStore } from '@/store/userStore';
 
 export default function Home() {
   const [refreshing, setRefreshing] = useState(Boolean);
-  const { colors, sharedColors } = useThemeStore();
+  const { user } = useUserStore();
+  const { colors } = useThemeStore();
   const router = useRouter();
 
   const handleRefresh = () => {
@@ -43,7 +45,7 @@ export default function Home() {
     >
       {/* Greeting Section - TODO: Load in authenticated user's forename */}
       <View style={styles.sectionContainer}>
-        <Text style={[styles.title, { color: colors.text }]}>Welcome back, <Text style={{ color: '#7A94FE', fontFamily: 'Poppins_600SemiBold'}}>Nathan</Text></Text>
+        <Text style={[styles.title, { color: colors.text }]}>Welcome back, <Text style={{ color: '#7A94FE', fontFamily: 'Poppins_600SemiBold'}}>{user?.forename}</Text></Text>
       </View>
       
 

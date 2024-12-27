@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, View, Text, Dimensions } from 'react-native';
+import { StyleSheet, TextInput, View, Text, Dimensions, StyleProp, ViewStyle } from 'react-native';
 import { useState } from 'react';
 import { useThemeStore } from '@/store/themeStore';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -8,6 +8,7 @@ interface InputProps {
   value: string;
   onChangeText: (text: string) => void;
   error?: string;
+  style?: StyleProp<ViewStyle>;
   secureTextEntry?: boolean;
   placeholder?: string;
 }
@@ -17,6 +18,7 @@ export function Input({
   value,
   onChangeText,
   error,
+  style,
   secureTextEntry,
   placeholder,
 }: InputProps) {
@@ -24,7 +26,7 @@ export function Input({
   const { colors } = useThemeStore();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <Text style={styles.label}>{label}</Text>
       <TextInput
         value={value}

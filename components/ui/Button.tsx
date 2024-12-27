@@ -22,7 +22,7 @@ export function Button({
     <TouchableOpacity 
       style={[
         styles.button, 
-        variant === 'secondary' && [styles.buttonSecondary, { backgroundColor: colors.background, borderColor: colors.border }],
+        variant === 'secondary' && [styles.buttonSecondary, { backgroundColor: 'black', borderColor: colors.border }],
         style
       ]}
       onPress={onPress}

@@ -11,6 +11,7 @@ export default function Index() {
   const [session, setSession] = useState<Session | null | undefined>(undefined);
   const [themeLoaded, setThemeLoaded] = useState(false);
   const rootNavigationState = useRootNavigationState();
+  const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
   const setSessionStore = useUserStore((state) => state.setSession);
   const setThemeMode = useThemeStore((state) => state.setThemeMode);
@@ -36,6 +37,7 @@ export default function Index() {
 
         if (session?.user) {
           setUser(session.user);
+          console.log(JSON.stringify(user, null, 2))
         } else {
           setUser(null);
         }

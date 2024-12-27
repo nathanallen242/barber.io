@@ -2,6 +2,7 @@
   "name": "barber.io",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "type": "module",
   "expo": {
     "doctor": {
       "reactNativeDirectoryCheck": {
@@ -32,6 +33,7 @@
     "@expo/vector-icons": "^14.0.2",
     "@gorhom/bottom-sheet": "^5",
     "@react-native-async-storage/async-storage": "1.23.1",
+    "@react-native-community/datetimepicker": "8.2.0",
     "@react-native-google-signin/google-signin": "^13.1.0",
     "@react-navigation/bottom-tabs": "^7.0.0",
     "@react-navigation/drawer": "^7.1.1",
@@ -41,6 +43,7 @@
     "@types/lodash.filter": "^4.6.9",
     "@types/react-native-snap-carousel": "^3.8.11",
     "aes-js": "^3.1.2",
+    "date-fns": "^4.1.0",
     "expo": "^52.0.18",
     "expo-blur": "~14.0.1",
     "expo-constants": "~17.0.3",
@@ -68,6 +71,7 @@
     "react-native-calendar-strip": "^2.2.6",
     "react-native-calendars": "^1.1307.0",
     "react-native-dotenv": "^3.4.11",
+    "react-native-dropdown-picker": "^5.4.6",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-get-random-values": "^1.11.0",
     "react-native-otp-entry": "^1.8.1",
@@ -88,7 +92,8 @@
     "types": "github:supabase/supabase-js",
     "webpack": "^5.59.0",
     "yup": "^1.5.0",
-    "zustand": "^5.0.2"
+    "zustand": "^5.0.2",
+    "@react-native-picker/picker": "2.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

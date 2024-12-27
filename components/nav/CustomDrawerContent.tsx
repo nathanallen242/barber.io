@@ -6,25 +6,15 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { useThemeStore } from "@/store/themeStore";
 import { useUserStore } from "@/store/userStore";
+import { useHandleLogOut } from "@/lib/auth";
 
 export default function CustomDrawerContent(props: any) {
     const router = useRouter();
     const { colors } = useThemeStore();
     const insets = useSafeAreaInsets();
     const { user, clearUser } = useUserStore();
+    const handleLogout = useHandleLogOut();
     const defaultPhoto = require('@/assets/images/pfp.png');
-    const defaultName = 'Nathan';
-
-    const handleLogOut = async () => {
-        try {
-          await supabase.auth.signOut();
-          clearUser();
-          console.log("User logged out successfully!")
-          router.replace('/')
-        } catch (error) {
-          console.error("Error logging out:", error);
-        }
-      };
 
     return <DrawerContentScrollView 
     {...props} 
@@ -36,7 +26,7 @@ export default function CustomDrawerContent(props: any) {
             style={styles.profileImage}
             resizeMode="cover"
             />
-            <Text style={[styles.profileName, { color: colors.text }]}>{user?.forename || defaultName}</Text>
+            <Text style={[styles.profileName, { color: colors.text }]}>{user?.forename}</Text>
         </View>
 
         <View style={[styles.divider, { backgroundColor: colors.border }]} />
@@ -45,7 +35,7 @@ export default function CustomDrawerContent(props: any) {
         />
         <DrawerItem 
         label={'Logout'} 
-        onPress={handleLogOut} 
+        onPress={handleLogout} 
         labelStyle={[styles.label, { color: colors.text }]}
         icon={({ size }) => (
             <Ionicons name="log-out-outline" size={size} color={colors.icon} />
