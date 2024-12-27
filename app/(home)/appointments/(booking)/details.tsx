@@ -72,8 +72,8 @@ export default function DetailsSelection() {
             calendarHeaderStyle={{ color: colors.text, fontFamily: typography.fonts.regular, fontSize: typography.sizes.lg }}
             dateNumberStyle={[styles.dateNumber, { color: colors.text }]}
             dateNameStyle={[styles.dateName, { color: colors.subtext }]}
-            highlightDateNumberStyle={[styles.highlightDateNumber, { color: 'white' }]}
-            highlightDateNameStyle={[styles.highlightDateName, { color: 'white' }]}
+            highlightDateNumberStyle={[styles.highlightDateNumber, { color: colors.primary }]}
+            highlightDateNameStyle={[styles.highlightDateName, { color: colors.primary }]}
             disabledDateNameStyle={{ color: colors.subtext }}
             disabledDateNumberStyle={{ color: colors.subtext }}
             iconContainer={{ flex: 0.1 }}
@@ -105,11 +105,11 @@ export default function DetailsSelection() {
                 <Ionicons 
                   name={period === 'Morning' ? 'sunny' : period === 'Afternoon' ? 'partly-sunny' : 'moon'} 
                   size={16} 
-                  color={selectedPeriod === period ? 'white' : 'black'} 
+                  color={selectedPeriod === period ? colors.primary : 'white' } 
                 />
                 <Text style={[
                   styles.periodText,
-                  { color: selectedPeriod === period ? 'white' : 'black' }
+                  { color: selectedPeriod === period ? colors.primary : 'white' }
                 ]}>{period}</Text>
               </TouchableOpacity>
             ))}

@@ -7,6 +7,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { useThemeStore } from '@/store/themeStore';
 import { Notification as NotificationType } from '@/types/models';
 import { screenDimensions } from '@/utils/screenDimensions';
 
@@ -24,6 +25,8 @@ export default function Notification({ notification, onDismiss }: NotificationPr
   const itemHeight = useSharedValue(ITEM_HEIGHT);
   const marginVertical = useSharedValue(10);
   const opacity = useSharedValue(1);
+
+  const { colors, typography } = useThemeStore();
 
   const panGesture = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
     onActive: (event) => {
@@ -57,11 +60,11 @@ export default function Notification({ notification, onDismiss }: NotificationPr
   }));
 
   return (
-    <Animated.View style={[styles.container, containerStyle]}>
+    <Animated.View style={[styles.container, containerStyle ]}>
       <PanGestureHandler onGestureEvent={panGesture}>
-        <Animated.View style={[styles.notification, animatedStyle]}>
-          <Text style={styles.title}>{notification.title}</Text>
-          <Text style={styles.body}>{notification.body}</Text>
+        <Animated.View style={[styles.notification, animatedStyle, { backgroundColor: colors.card }]}>
+          <Text style={[styles.title, { fontFamily: typography.fonts.regular }]}>{notification.title}</Text>
+          <Text style={[styles.body, { fontFamily: typography.fonts.light }]}>{notification.body}</Text>
         </Animated.View>
       </PanGestureHandler>
     </Animated.View>

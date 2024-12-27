@@ -27,10 +27,9 @@ export default function ProfileScreen() {
       <View style={styles.infoContainer}>
         <Text style={[styles.name, { fontFamily: typography.fonts.light, color: colors.text }]}>Nathan Allen</Text>
         <Text style={[styles.email, { fontFamily: typography.fonts.light, color: colors.subtext }]}>nathan.noel.allen@gmail.com</Text>
-        {/* Add more profile information here */}
       </View>
 
-      {/* Settings Items */}
+      {/* Settings */}
       <View style={[styles.settingsContainer, { backgroundColor: colors.background }]}>
         <Setting
           icon="notifications-outline"
