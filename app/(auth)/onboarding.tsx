@@ -11,6 +11,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlatList } from 'react-native-gesture-handler';
+import { useThemeStore } from '@/store/themeStore';
 
 import data from '@/types/data';
 import Pagination from '@/components/ui/Pagination';
@@ -28,6 +29,7 @@ const OnboardingScreen: React.FC = () => {
   const flatListRef = useAnimatedRef<FlatList<DataItem>>();
   const x: SharedValue<number> = useSharedValue(0);
   const flatListIndex: SharedValue<number> = useSharedValue(0);
+  const { colors, typography } = useThemeStore();
 
   const onViewableItemsChanged = useCallback(
     ({ viewableItems }: { viewableItems: ViewToken[] }) => {
@@ -86,18 +88,22 @@ const OnboardingScreen: React.FC = () => {
     });
 
     return (
-      <View style={[styles.itemContainer, { width: SCREEN_WIDTH }]}>
+      <View style={[styles.itemContainer, { width: SCREEN_WIDTH, backgroundColor: colors.primary }]}>
         <Animated.Image source={item.image} style={imageAnimationStyle} />
         <Animated.View style={textAnimationStyle}>
-          <Text style={styles.itemTitle}>{item.title}</Text>
-          <Text style={styles.itemText}>{item.text}</Text>
+          <Text style={[styles.itemTitle, { 
+            fontFamily: typography.fonts.bold,
+            fontSize: typography.sizes.xxl }]}>{item.title}</Text>
+          <Text style={[styles.itemText, { 
+            fontFamily: typography.fonts.light,
+            fontSize: typography.sizes.lg }]}>{item.text}</Text>
         </Animated.View>
       </View>
     );
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.primary }]}>
       <Animated.FlatList<DataItem>
         ref={flatListRef}
         onScroll={onScroll}
@@ -132,7 +138,6 @@ export default OnboardingScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8E9B0',
   },
   itemContainer: {
     flex: 1,

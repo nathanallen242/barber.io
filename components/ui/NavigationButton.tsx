@@ -1,6 +1,6 @@
 import { StyleProp, ViewStyle } from 'react-native';
 import { router, Route } from 'expo-router';
-import { Button } from './Button';
+import { Button } from '@/components/ui/Button';
 
 interface NavigationButtonProps {
   to: Route;

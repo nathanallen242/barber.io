@@ -1,32 +1,35 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationButton } from '@/components/ui/NavigationButton';
+import { useThemeStore } from '@/store/themeStore';
 import { screenDimensions } from '@/utils/screenDimensions';
 const { screenWidth, screenHeight } = screenDimensions;
 
 export default function Landing() {
+  const { colors, typography } = useThemeStore();
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.primary }]}>
       <View style={styles.content}>
 
         {/* Logo/Title Section */}
         <View style={styles.titleContainer}>
-          <Text style={styles.logo}>barber.io</Text>
+          <Text style={[styles.logo, { fontFamily: typography.fonts.light }]}>barber.io</Text>
         </View>
 
         {/* Illustration Container */}
         <View style={styles.illustrationContainer}>
           <Image 
-            source={require('../../assets/images/illustration.png')} 
+            source={require('@/assets/splash/landing-page-salon.png')} 
             style={styles.illustration}
-            resizeMode="contain"
+            contentFit="contain"
           />
         </View>
 
         {/* Main Content */}
         <View style={styles.mainContent}>
-          <Text style={styles.heading}>Your Barbershop. Anywhere.</Text>
-          <Text style={styles.subheading}>
+          <Text style={[styles.heading, { fontFamily: typography.fonts.light }]}>Your Barbershop. <Text style={{ fontFamily: typography.fonts.bold }}>Anywhere.</Text></Text>
+          <Text style={[styles.subheading, { fontFamily: typography.fonts.light, color: '#FFFFF' }]}>
             Join or log in to book your next haircut!
           </Text>
         </View>
@@ -36,7 +39,7 @@ export default function Landing() {
           <NavigationButton to="/(auth)/register" variant="primary" style={styles.button}>
             Sign Up
           </NavigationButton>
-          <NavigationButton to="/(auth)/login" variant="secondary" style={styles.button}>
+          <NavigationButton to="/(auth)/login" variant="primary" style={styles.button}>
             Log In
           </NavigationButton>
         </View>
@@ -61,9 +64,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     fontSize: screenDimensions.min(0.06, 24),
-    fontWeight: '600',
     color: '#000000',
-    fontFamily: 'Poppins_300Light',
   },
   illustrationContainer: {
     position: 'absolute',
@@ -82,36 +83,32 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: screenWidth * 0.05,
-    marginBottom: screenHeight * 0.05,
+    marginTop: screenHeight * 0.05
   },
   heading: {
-    fontSize: screenDimensions.min(0.1, 40),
-    fontWeight: 'bold',
+    fontSize: screenDimensions.min(0.09, 40),
     textAlign: 'center',
     marginBottom: screenHeight * 0.02,
     color: '#000000',
-    fontFamily: 'Poppins_500Medium',
   },
   subheading: {
     fontSize: screenDimensions.min(0.05, 20),
     textAlign: 'center',
-    color: '#666666',
     marginBottom: screenHeight * 0.04,
-    fontFamily: 'Poppins_300Light',
   },
   buttonContainer: {
     width: '100%',
     paddingHorizontal: screenWidth * 0.06,
     paddingBottom: screenHeight * 0.05,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: screenWidth * 0.03,
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   button: {
     borderRadius: 10,
-    flex: 1,
+    width: '60%',
+    marginBottom: screenHeight * 0.02,
   },
 });

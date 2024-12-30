@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   },
   dots: {
     height: 10,
-    backgroundColor: 'orange',
+    backgroundColor: '#054A72',
     marginHorizontal: 10,
     borderRadius: 5,
   },

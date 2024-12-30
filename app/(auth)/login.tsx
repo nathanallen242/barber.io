@@ -2,6 +2,7 @@ import { View, StatusBar, Text, StyleSheet, Image, TouchableOpacity, Alert, Acti
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { useThemeStore } from '@/store/themeStore';
 import { screenDimensions } from '@/utils/screenDimensions';
 import { supabase } from '@/lib/supabase';
 import { useUserStore } from '@/store/userStore';
@@ -22,7 +23,7 @@ const validationSchema = Yup.object().shape({
 
 export default function Login() {
   const insets = useSafeAreaInsets();
-
+  const { colors, typography } = useThemeStore();
   const handleForgotPassword = () => {
     router.push('/(auth)/forgot-password');
   };
@@ -37,8 +38,8 @@ export default function Login() {
           paddingBottom: insets.bottom,
         }}
       >
-        <Text style={styles.title}>Login</Text>
-        <Text style={styles.subtitle}>Welcome back to our platform!</Text>
+        <Text style={[styles.title, { fontFamily: typography.fonts.bold, fontSize: typography.sizes.xxxl }]}>Login</Text>
+        <Text style={[styles.subtitle, { fontFamily: typography.fonts.regular, fontSize: typography.sizes.lg }]}>Welcome back to our platform!</Text>
 
         <Formik
           initialValues={{ email: '', password: '' }}
@@ -85,6 +86,7 @@ export default function Login() {
                 onChangeText={handleChange('email')}
                 error={touched.email ? errors.email : undefined}
                 placeholder="Enter your email"
+                iconName="mail"
               />
 
               <Input
@@ -94,13 +96,14 @@ export default function Login() {
                 error={touched.password ? errors.password : undefined}
                 secureTextEntry
                 placeholder="Enter your password"
+                iconName="lock-closed"
               />
 
               <TouchableOpacity 
                 style={styles.forgotPasswordContainer}
                 onPress={handleForgotPassword}
               >
-                <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
+                <Text style={[styles.forgotPasswordText, { fontFamily: typography.fonts.regular }]}>Forgot your password?</Text>
               </TouchableOpacity>
 
               <Button onPress={handleSubmit}>
@@ -110,9 +113,18 @@ export default function Login() {
           )}
         </Formik>
 
-        <Text style={styles.orText}>Or continue with</Text>
+        <TouchableOpacity 
+          onPress={() => router.replace('/(auth)/register')}
+          style={{ alignItems: 'center', marginTop: 10}}
+        >
+          <Text style={[{ fontFamily: typography.fonts.regular }]}>
+            New to our platform? <Text style={[{ color: colors.button }]}>Sign up</Text>
+          </Text>
+        </TouchableOpacity>
 
-        <View style={styles.socialButtons}>
+        {/* <Text style={styles.orText}>Or continue with</Text> */}
+
+        {/* <View style={styles.socialButtons}>
           <TouchableOpacity style={styles.socialButton}>
             <Image source={require('../../assets/icons/google-icon.png')} style={styles.socialIcon} />
           </TouchableOpacity>
@@ -122,7 +134,7 @@ export default function Login() {
           <TouchableOpacity style={styles.socialButton}>
             <Image source={require('../../assets/icons/apple-icon.png')} style={styles.socialIcon} />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     </SafeAreaView>
   );

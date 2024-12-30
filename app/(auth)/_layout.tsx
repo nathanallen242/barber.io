@@ -22,6 +22,9 @@ export default function Layout() {
         name="register"
       />
       <Stack.Screen
+        name="success"
+       />
+      <Stack.Screen
         name="forgot-password"
       />
     </Stack>

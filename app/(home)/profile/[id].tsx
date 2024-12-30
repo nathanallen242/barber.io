@@ -41,7 +41,7 @@ export default function ProfileScreen() {
       <View style={[styles.settingsContainer, { backgroundColor: colors.background }]}>
         <Setting
           icon="notifications-outline"
-          text="Enable notifications"
+          text="Enable Notifications"
           hasSwitch
           switchValue={notificationsEnabled}
           onSwitchChange={setNotificationsEnabled}
@@ -49,14 +49,14 @@ export default function ProfileScreen() {
         
         <Setting
           icon="card-outline"
-          text="Manage payment methods"
+          text="Manage Payment Methods"
           hasArrow
           onPress={() => handleNavigation('/payment-methods')}
         />
         
         <Setting
           icon="cash-outline"
-          text="Transaction history"
+          text="Transaction History"
           hasArrow
           onPress={() => handleNavigation('/transactions')}
         />
@@ -70,7 +70,7 @@ export default function ProfileScreen() {
         
         <Setting
           icon="key-outline"
-          text="Change password"
+          text="Change Password"
           hasArrow
           onPress={() => handleNavigation('/change-password')}
         />

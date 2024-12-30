@@ -15,6 +15,7 @@ export interface ThemeColors {
   warning: string;
   error: string;
   icon: string;
+  button: string;
 }
 
 export interface SharedColors {

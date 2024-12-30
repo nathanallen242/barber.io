@@ -22,7 +22,7 @@ const Offering: React.FC<OfferingProps> = ({ id, name, price, imageSource, isSel
       isSelected && styles.selectedContainer
     ]}>
       <Image 
-        source={require('@/assets/images/pfp.png')}
+        source={require('@/assets/images/classic-haircut.jpg')}
         style={styles.image}
       />
       <View style={styles.contentContainer}>

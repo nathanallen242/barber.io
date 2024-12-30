@@ -1,9 +1,11 @@
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import Appointment from '@/components/home/appointments/Appointment';
 import { useThemeStore } from '@/store/themeStore';
+import { useRouter } from 'expo-router';
 import { Appointment as AppointmentInterface } from '@/types/models';
 
 export default function AppointmentsSection() {
+  const router = useRouter();
   const appointments: AppointmentInterface[] = [
     {
       id: '1',
@@ -39,7 +41,9 @@ export default function AppointmentsSection() {
     <View>
       <View style={styles.textBlock}>
         <Text style={[styles.header, { color: colors.text }]}>Upcoming Appointments</Text>
-        <Text style={styles.viewAll}>View All</Text>
+        <TouchableOpacity onPress={() => router.push('/(home)/appointments/(tabs)/scheduled')}>
+          <Text style={styles.viewAll}>View All</Text>
+        </TouchableOpacity>
       </View>
       <FlatList
         horizontal

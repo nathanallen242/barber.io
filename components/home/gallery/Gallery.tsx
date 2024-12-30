@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 
 interface ServiceData {
   service: {
@@ -14,11 +14,13 @@ interface ServiceData {
 
 export default function GalleryCard({ service }: ServiceData) {
   return (
-    <TouchableOpacity onPress={() => { /* TODO: Handle press to dynamic screen for service ID */}}>
+    <TouchableOpacity onPress={() => { /* TODO: Handle press to dynamic screen for image ID */}}>
       <View style={styles.cardContainer}>
         <Image 
           source={typeof service.image === 'string' ? { uri: service.image } : service.image}
-          style={styles.image} 
+          style={styles.image}
+          contentFit="cover"
+          transition={1000}
         />
         <View style={styles.overlay}>
           <Text style={styles.barberName}>{service.name}</Text>

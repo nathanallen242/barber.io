@@ -15,7 +15,6 @@ export default function Home() {
   const [refreshing, setRefreshing] = useState(Boolean);
   const { user } = useUserStore();
   const { colors } = useThemeStore();
-  const router = useRouter();
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -43,7 +42,7 @@ export default function Home() {
       }}
       scrollEventThrottle={16}
     >
-      {/* Greeting Section - TODO: Load in authenticated user's forename */}
+      {/* Greeting Section */}
       <View style={styles.sectionContainer}>
         <Text style={[styles.title, { color: colors.text }]}>Welcome back, <Text style={{ color: '#7A94FE', fontFamily: 'Poppins_600SemiBold'}}>{user?.forename}</Text></Text>
       </View>

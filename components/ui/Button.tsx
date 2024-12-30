@@ -17,20 +17,27 @@ export function Button({
   style,
   textStyle,
 }: ButtonProps): JSX.Element {
-  const { colors } = useThemeStore();
+  const { colors, typography } = useThemeStore();
+
   return (
     <TouchableOpacity 
       style={[
-        styles.button, 
-        variant === 'secondary' && [styles.buttonSecondary, { backgroundColor: 'black', borderColor: colors.border }],
+        styles.button,
+        {
+          backgroundColor: colors.button,
+          borderColor: colors.border,
+          borderWidth: 1
+        },
         style
       ]}
       onPress={onPress}
     >
       <Text 
         style={[
-          styles.text, 
-          variant === 'secondary' && [styles.textSecondary, { color: colors.secondary }],
+          {
+            fontFamily: typography.fonts.regular,
+            color: colors.text
+          },
           textStyle
         ]}
       >
@@ -49,16 +56,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 6,
   },
-  buttonSecondary: {
-    borderWidth: 1,
-  },
   text: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 20,
     fontFamily: 'Poppins_600SemiBold',
   },
-  textSecondary: {
-    color: '#7A94FE',
-  },
-}); 
+});

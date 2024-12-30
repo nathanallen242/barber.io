@@ -6,6 +6,7 @@ import Animated, {
   withTiming,
   SharedValue,
 } from 'react-native-reanimated';
+import { useThemeStore } from '@/store/themeStore';
 import { useRouter } from 'expo-router';
 
 interface LandingButtonProps {
@@ -22,6 +23,7 @@ const LandingButton: React.FC<LandingButtonProps> = ({
   arrowIconSource = require('@/assets/icons/ArrowIcon.png'),
 }) => {
   const router = useRouter();
+  const { colors, typography } = useThemeStore();
   const buttonAnimationStyle = useAnimatedStyle(() => {
     return {
       width:
@@ -74,8 +76,8 @@ const LandingButton: React.FC<LandingButtonProps> = ({
 
   return (
     <TouchableWithoutFeedback onPress={handlePress}>
-      <Animated.View style={[styles.container, buttonAnimationStyle]}>
-        <Animated.Text style={[styles.textButton, textAnimationStyle]}>
+      <Animated.View style={[styles.container, buttonAnimationStyle, { backgroundColor: colors.button }]}>
+        <Animated.Text style={[styles.textButton, textAnimationStyle, { fontFamily: typography.fonts.regular }]}>
           Get Started
         </Animated.Text>
         <Animated.Image
@@ -91,7 +93,6 @@ export default LandingButton;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'orange',
     padding: 10,
     borderRadius: 100,
     justifyContent: 'center',

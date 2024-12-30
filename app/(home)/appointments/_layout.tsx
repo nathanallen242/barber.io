@@ -1,11 +1,13 @@
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { TouchableOpacity } from 'react-native';
 import { useThemeStore } from '@/store/themeStore';
+import { useUserStore } from '@/store/userStore';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function AppointmentsLayout() {
   const router = useRouter();
   const segments = useSegments();
+  const { user } = useUserStore();
   const { colors, typography } = useThemeStore();
 
   const isAppointmentScreen = (): boolean => {
@@ -22,6 +24,7 @@ export default function AppointmentsLayout() {
   const navigateHome = () => {
     router.push('/(home)/home');
   };
+  const isBarber = user?.job_role === "barber"
 
   return (
     <Stack
@@ -35,7 +38,7 @@ export default function AppointmentsLayout() {
         ),
         headerTitleStyle: {
           fontFamily: typography.fonts.light,
-          fontSize: typography.sizes.lg,
+          fontSize: typography.sizes.md,
           color: colors.text
         },
         headerStyle: {
@@ -50,25 +53,44 @@ export default function AppointmentsLayout() {
           headerTitle: 'Your Appointments',
           headerRight: () => (
             <TouchableOpacity
-              onPress={() => router.push('/(home)/appointments/(booking)/services')}
+              onPress={() =>
+                router.push(
+                  isBarber
+                    ? '/(home)/appointments/(availability)/schedule'
+                    : '/(home)/appointments/(booking)/services'
+                )
+              }
             >
               <Ionicons name="add" size={20} color={colors.icon} />
             </TouchableOpacity>
           ),
         }}
       />
-      <Stack.Screen
-        name="(booking)"
-        options={{
-          headerTitle: 'Book an Appointment',
-        }}
-      />
-      <Stack.Screen
-        name="(confirmation)"
-        options={{
-          headerShown: false
-        }}
-      />
+      {isBarber ? (
+        /*  If barber, show (availability) instead of (booking) & (confirmation) */
+        <Stack.Screen
+          name="(availability)"
+          options={{
+            headerTitle: 'Set Your Availability',
+          }}
+        />
+      ) : (
+        /*  If client, show (booking) and (confirmation), but not (availability) */
+        <>
+          <Stack.Screen
+            name="(booking)"
+            options={{
+              headerTitle: 'Book an Appointment',
+            }}
+          />
+          <Stack.Screen
+            name="(confirmation)"
+            options={{
+              headerShown: false,
+            }}
+          />
+        </>
+      )}
     </Stack>
   );
 }

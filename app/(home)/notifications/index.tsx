@@ -1,20 +1,17 @@
 import { useState, useEffect } from 'react';
-import { FlatList, StyleSheet, View, Pressable, ActivityIndicator, Text } from 'react-native';
+import { FlatList, StyleSheet, View, Pressable, ActivityIndicator, Text, ScrollView } from 'react-native';
 import Notification from '@/components/notifs/Notification';
 import { screenDimensions } from '@/utils/screenDimensions';
 import { useRouter } from 'expo-router';
-import { useUserStore } from '@/store/userStore';
 import { useThemeStore } from '@/store/themeStore';
 
 export default function Notifications() {
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(Boolean);
-  const notifications = useUserStore((state) => state.notifications) || [];
-  const setNotifications = useUserStore((state) => state.setNotifications);
   const { colors, typography } = useThemeStore();
 
   const handleDismiss = (id: string) => {
-    setNotifications(notifications.filter((notification) => notification.id !== id));
+    console.log("Dismiss notifications...")
   };
 
   const handleRefresh = () => {
@@ -24,72 +21,71 @@ export default function Notifications() {
     }, 2000);
   };
 
-  useEffect(() => {
-    if (notifications.length === 0) {
-      setNotifications([
-        {
-          id: '1',
-          title: 'Test Notification',
-          body: 'Test content',
-          is_read: false,
-          created_at: '2024091011:11:35DZ',
-          delivery_method: 'push',
-          type: 'reminder'
-        },
-        {
-            id: '2',
-            title: 'Test Notification',
-            body: 'Test content',
-            is_read: false,
-            created_at: '2024091011:11:35DZ',
-            delivery_method: 'push',
-            type: 'reminder'
-          },
-          {
-            id: '3',
-            title: 'Test Notification',
-            body: 'Test content',
-            is_read: false,
-            created_at: '2024091011:11:35DZ',
-            delivery_method: 'push',
-            type: 'reminder'
-          },
-          {
-            id: '4',
-            title: 'Test Notification',
-            body: 'Test content',
-            is_read: false,
-            created_at: '2024091011:11:35DZ',
-            delivery_method: 'push',
-            type: 'reminder'
-          },
-          {
-            id: '5',
-            title: 'Test Notification',
-            body: 'Test content',
-            is_read: false,
-            created_at: '2024091011:11:35DZ',
-            delivery_method: 'push',
-            type: 'reminder'
-          }
-      ]);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (notifications.length === 0) {
+  //     setNotifications([
+  //       {
+  //         id: '1',
+  //         title: 'Test Notification',
+  //         body: 'Test content',
+  //         is_read: false,
+  //         created_at: '2024091011:11:35DZ',
+  //         delivery_method: 'push',
+  //         type: 'reminder'
+  //       },
+  //       {
+  //           id: '2',
+  //           title: 'Test Notification',
+  //           body: 'Test content',
+  //           is_read: false,
+  //           created_at: '2024091011:11:35DZ',
+  //           delivery_method: 'push',
+  //           type: 'reminder'
+  //         },
+  //         {
+  //           id: '3',
+  //           title: 'Test Notification',
+  //           body: 'Test content',
+  //           is_read: false,
+  //           created_at: '2024091011:11:35DZ',
+  //           delivery_method: 'push',
+  //           type: 'reminder'
+  //         },
+  //         {
+  //           id: '4',
+  //           title: 'Test Notification',
+  //           body: 'Test content',
+  //           is_read: false,
+  //           created_at: '2024091011:11:35DZ',
+  //           delivery_method: 'push',
+  //           type: 'reminder'
+  //         },
+  //         {
+  //           id: '5',
+  //           title: 'Test Notification',
+  //           body: 'Test content',
+  //           is_read: false,
+  //           created_at: '2024091011:11:35DZ',
+  //           delivery_method: 'push',
+  //           type: 'reminder'
+  //         }
+  //     ]);
+  //   }
+  // }, []);
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
         {refreshing && (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size='large' color="#7A94FE" />
         </View>
       )}
-      {notifications.length === 0 ? (
+      {true ? (
         <View style={styles.noNotificationsContainer}>
             <Text style={styles.noNotificationsText}>No notifications at this time.</Text>
         </View>
         ) : (
         <FlatList
-            data={notifications}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
             <Pressable onPress={() => router.push({ pathname: '/(home)/notifications/[id]', params: { id: item.id } })}>
@@ -105,14 +101,13 @@ export default function Notifications() {
             scrollEventThrottle={16}
         />
         )}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   listContainer: {
     padding: 16,
@@ -129,6 +124,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    height: screenDimensions.screenHeight * 0.8,
   },
   noNotificationsText: {
     fontSize: 18,

@@ -2,7 +2,7 @@ import { ThemeColors, SharedColors } from "./types";
 
 // Light Mode Colors
 export const lightColors: ThemeColors = {
-    primary: '#ADD8E6',      // Light Blue
+    primary: '#B0E2FF',      // Light Blue
     secondary: '#87CEFA',    // Sky Blue
     background: '#FFFFFF',   // White
     card: '#F0F8FF',         // Alice Blue
@@ -14,6 +14,7 @@ export const lightColors: ThemeColors = {
     warning: '#FFCC00',      // Yellow
     error: '#FF3B30',        // Red
     icon: '#000000',
+    button: '#054A72',
   };
   
   // Dark Mode Colors
@@ -30,6 +31,7 @@ export const lightColors: ThemeColors = {
     warning: '#FFD60A',      // Yellow
     error: '#FF453A',        // Red
     icon: '#FFFFFF',
+    button: '#054A72',
   };
   
   export const sharedColors: SharedColors = {
