@@ -11,7 +11,7 @@ const SearchButton = () => {
         <View style={[styles.contentContainer, { backgroundColor: colors.border }]}>
           <Ionicons name="search" size={20} color={colors.icon} style={styles.searchIconButton} />
           <Text style={[styles.searchText, { color: colors.text }]}>
-            Search for barbers nearby...
+            Search for users nearby...
           </Text>
         </View>
       </TouchableOpacity>

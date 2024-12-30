@@ -3,23 +3,25 @@ import { View, StyleSheet, Text } from 'react-native';
 import Action from '@/components/home/action/Action'
 import { useThemeStore } from '@/store/themeStore';
 import { useUserStore } from '@/store/userStore';
-import { clientActions, barberActions } from '@/types/actions';
+import { useRouter } from 'expo-router';
+import { clientActions, barberActions, Action as ActionType } from '@/types/actions';
 
 const ActionSection: React.FC = () => {
   const { user } = useUserStore();
   const { colors } = useThemeStore();
+  const router = useRouter();
   const isBarber = user?.job_role === "barber"
   return (
     <>
       <Text style={[styles.title, { color: colors.text }]}>Quick Actions</Text>
       <View style={styles.sectionContainer}>
         {isBarber ? (
-          barberActions.map((action, index) => (
-            <Action key={index} {...action} onPress={() => { /* Handle press */ console.log(`${action.title} pressed`); }} />
+          barberActions.map((action: ActionType, index) => (
+            <Action key={index} {...action} onPress={() => { router.push(action.route) }} />
           ))
         ) : (
           clientActions.map((action, index) => (
-            <Action key={index} {...action} onPress={() => { /* Handle press */ console.log(`${action.title} pressed`); }} />
+            <Action key={index} {...action} onPress={() => { router.push(action.route) }} />
           ))
         )}
       </View>

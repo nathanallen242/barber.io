@@ -2,18 +2,21 @@ import { StyleSheet, SafeAreaView, TextInput, ActivityIndicator, View, Text, Ima
 import { useState, useEffect, useRef, useCallback } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import { useLocalSearchParams, useFocusEffect } from 'expo-router';
+import { UserView } from "@/types/models";
+import { supabase } from "@/lib/supabase";
 import { useThemeStore } from "@/store/themeStore";
+import { useUserStore } from "@/store/userStore";
 import filter from 'lodash.filter';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const API_ENDPOINT = "https://randomuser.me/api/?results=30";
-/* TODO: Overwrite with supabase db view query*/
+// const API_ENDPOINT = "https://randomuser.me/api/?results=30";
+// /* TODO: Overwrite with supabase db view query*/
 
 export default function SearchPage() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const [data, setData] = useState<any[]>([]);
-  const [fullData, setFullData] = useState<any[]>([]);
+  const [data, setData] = useState<UserView[]>([]);
+  const [fullData, setFullData] = useState<UserView[]>([]);
 
   const [error, setError] = useState(null);
   const [query, setQuery] = useState("");
@@ -22,38 +25,75 @@ export default function SearchPage() {
   const { fromSearchButton } = useLocalSearchParams();
 
   const { colors, typography } = useThemeStore();
-  
-  const fetchData = async () => {
+  const { user } = useUserStore();
+  const isBarber = user?.job_role === "barber"
+
+  const fetchUsers = async () => {
     try {
-      const response = await fetch(API_ENDPOINT);
-      const json = await response.json();
-      setData(json.results);
-      setFullData(json.results);
-      setIsLoading(false);
+      setIsLoading(true);
+      const { data: users, error: supabaseError } = await supabase
+        .from(isBarber ? 'client_view' : 'barber_view')
+        .select('*');
+
+      if (supabaseError) {
+        throw supabaseError;
+      }
+
+      setData(users || []);
+      setFullData(users || []);
     } catch (error: any) {
-      setError(error);
+      setError(error.message);
+    } finally {
       setIsLoading(false);
     }
   };
 
+    // const fetchData = async () => {
+  //   try {
+  //     const response = await fetch(API_ENDPOINT);
+  //     const json = await response.json();
+  //     setData(json.results);
+  //     setFullData(json.results);
+  //     setIsLoading(false);
+  //   } catch (error: any) {
+  //     setError(error);
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  // const handleSearch = (searchQuery: string) => {
+  //   setQuery(searchQuery);
+  //   const formattedQuery = searchQuery.toLowerCase();
+  //   const filteredData = filter(fullData, (user: any) => {
+  //     return contains(user, formattedQuery);
+  //   });
+  //   setData(filteredData);
+  // };
+
+   // useEffect(() => {
+  //   setIsLoading(true);
+  //   fetchData();
+  // }, []);
   const handleSearch = (searchQuery: string) => {
     setQuery(searchQuery);
     const formattedQuery = searchQuery.toLowerCase();
-    const filteredData = filter(fullData, (user: any) => {
-      return contains(user, formattedQuery);
+    const filteredData = filter(fullData, (barber) => {
+      return contains(barber, formattedQuery);
     });
     setData(filteredData);
   };
 
-  const contains = (user: any, query: string) => {
-    const { first, last } = user.name;
-    const email = user.email.toLowerCase();
-    return first.toLowerCase().includes(query) || last.toLowerCase().includes(query) || email.includes(query);
+  const contains = (barber: UserView, query: string) => {
+    const first = barber.forename;
+    const last = barber.surname;
+    const email = barber.email.toLowerCase();
+    return (first ? first.toLowerCase().includes(query) : false) || 
+           (last ? last.toLowerCase().includes(query) : false) || 
+           email.includes(query);
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    fetchData();
+    fetchUsers();
   }, []);
 
   useFocusEffect(
@@ -87,7 +127,7 @@ export default function SearchPage() {
             <Ionicons name="search" size={20} color={colors.icon} style={styles.searchIcon} />
             <TextInput
             ref={searchInputRef}
-            placeholder="Search for barbers in our database..."
+            placeholder="Search in our database..."
             placeholderTextColor={colors.text}
             selectionColor={colors.text}
             clearButtonMode="while-editing"
@@ -100,16 +140,16 @@ export default function SearchPage() {
         </View>
         <FlatList
             data={data}
-            keyExtractor={(item: any) => item.login.username}
+            keyExtractor={(item: any) => item.email}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
               <TouchableOpacity style={[styles.itemContainer, { backgroundColor: colors.card, borderColor: colors.border }]}>
                 <Image 
-                source={{ uri: item.picture.thumbnail }} 
+                source={{ uri: item.profile_picture }} 
                 style={styles.thumbnail}
                 />
                 <View>
-                <Text style={[styles.textName, { color: colors.text, fontFamily: typography.fonts.light }]}>{item.name.first} {item.name.last}</Text>
+                <Text style={[styles.textName, { color: colors.text, fontFamily: typography.fonts.light }]}>{item.forename} {item.surname}</Text>
                 <Text style={[styles.textEmail, { color: colors.text }]}>{item.email}</Text>
               </View>
             </TouchableOpacity>

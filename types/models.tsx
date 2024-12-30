@@ -48,4 +48,18 @@ export interface Notification {
     type: string
 }
 
+export interface UserView {
+    id: string
+    email: string
+    forename?: string
+    surname?: string
+    phone_number?: string
+    profile_picture?: string
+    birth_date?: string
+    country: string
+    job_role: string
+    created_at: string
+    updated_at: string
+}
+
 export interface UserProfile extends User, PublicUser {}

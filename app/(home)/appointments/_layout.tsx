@@ -1,5 +1,7 @@
 import { Stack, useRouter, useSegments } from 'expo-router';
-import { TouchableOpacity } from 'react-native';
+import { Popable } from 'react-native-popable';
+import { useRef, useState } from 'react';
+import { TouchableOpacity, Text, View } from 'react-native';
 import { useThemeStore } from '@/store/themeStore';
 import { useUserStore } from '@/store/userStore';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -7,16 +9,46 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 export default function AppointmentsLayout() {
   const router = useRouter();
   const segments = useSegments();
-  const { user } = useUserStore();
-  const { colors, typography } = useThemeStore();
 
+  const { colors, typography } = useThemeStore();
+  const { user } = useUserStore();
+  const isBarber = user?.job_role === 'barber';
+
+  const [popableVisible, setPopableVisible] = useState(false);
+  const togglePopable = () => {
+    setPopableVisible((prev) => !prev);
+  };
+  const navigateToRoute = (route: any) => {
+    // Hide popover, then navigate
+    setPopableVisible(false);
+    router.push(route);
+  };
+  const popableContent = (
+    <View>
+      <TouchableOpacity
+        style={{ padding: 8 }}
+        onPress={() =>
+          navigateToRoute(
+            isBarber
+              ? '/(home)/appointments/(availability)/schedule'
+              : '/(home)/appointments/(booking)/services'
+          )
+        }
+      >
+        <Text style={{ fontFamily: typography.fonts.regular }}>
+          {isBarber ? 'Add Availability' : 'Book Appointment'}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  // Check current route
   const isAppointmentScreen = (): boolean => {
     const appointmentRoutes = [
       '(home)/appointments/(tabs)/scheduled',
       '(home)/appointments/(tabs)/completed',
       '(home)/appointments/(tabs)/cancelled',
     ];
-
     const currentRoute = segments.join('/');
     return appointmentRoutes.some((route) => currentRoute === route);
   };
@@ -24,7 +56,6 @@ export default function AppointmentsLayout() {
   const navigateHome = () => {
     router.push('/(home)/home');
   };
-  const isBarber = user?.job_role === "barber"
 
   return (
     <Stack
@@ -39,10 +70,10 @@ export default function AppointmentsLayout() {
         headerTitleStyle: {
           fontFamily: typography.fonts.light,
           fontSize: typography.sizes.md,
-          color: colors.text
+          color: colors.text,
         },
         headerStyle: {
-          backgroundColor: colors.background
+          backgroundColor: colors.background,
         },
       }}
     >
@@ -52,30 +83,33 @@ export default function AppointmentsLayout() {
         options={{
           headerTitle: 'Your Appointments',
           headerRight: () => (
-            <TouchableOpacity
-              onPress={() =>
-                router.push(
-                  isBarber
-                    ? '/(home)/appointments/(availability)/schedule'
-                    : '/(home)/appointments/(booking)/services'
-                )
-              }
+            <Popable
+              visible={popableVisible}
+              position="bottom"
+              backgroundColor="white"
+              content={popableContent}
+              onAction={(visible) => {
+                if (!visible) setPopableVisible(false);
+              }}
             >
-              <Ionicons name="add" size={20} color={colors.icon} />
-            </TouchableOpacity>
+              <TouchableOpacity onPress={togglePopable}>
+                <Ionicons name="add" size={20} color={colors.icon} />
+              </TouchableOpacity>
+            </Popable>
           ),
         }}
       />
+
       {isBarber ? (
-        /*  If barber, show (availability) instead of (booking) & (confirmation) */
+        // If barber, show (availability) instead of (booking) & (confirmation)
         <Stack.Screen
           name="(availability)"
           options={{
-            headerTitle: 'Set Your Availability',
+            headerTitle: 'Your Availability'
           }}
         />
       ) : (
-        /*  If client, show (booking) and (confirmation), but not (availability) */
+        // If client, show (booking) and (confirmation)
         <>
           <Stack.Screen
             name="(booking)"
