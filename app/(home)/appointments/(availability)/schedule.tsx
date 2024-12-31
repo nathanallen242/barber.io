@@ -1,38 +1,48 @@
 import React from 'react';
 import {
+  CalendarBody,
   CalendarContainer,
   CalendarHeader,
-  CalendarBody,
-} from "@howljs/calendar-kit";
+} from '@howljs/calendar-kit';
+import { TouchableOpacity } from 'react-native';
 import { useThemeStore } from '@/store/themeStore';
+import { Feather } from '@expo/vector-icons';
 import { darkCalendarTheme } from '@/theme/colors';
 
 const Schedule: React.FC = () => {
+  const [events, setEvents] = React.useState<any[]>([]);
+
   const handleDragCreateStart = (start: any) => {
-    console.log("Started creating event at:", start);
-    // You can use this to show a UI indicator that event creation has started
+    console.log('Started creating event at:', start);
   };
-  const handleDragCreateEnd = (event: any) => {
-    console.log("New event:", event);
-    // Here you would typically add the new event to your events array
-    // and possibly open a modal for the user to add more details
+  const handleDragCreateEnd = (newEvent: any) => {
+    console.log('New event:', newEvent);
+    setEvents((prevEvents) => [...prevEvents, newEvent]);
   };
 
-  const { mode } = useThemeStore();
+  const { mode, colors } = useThemeStore();
+
   return (
+    <>
     <CalendarContainer
+      allowPinchToZoom
       theme={darkCalendarTheme}
       scrollByDay
       hideWeekDays={[7]}
-      allowDragToCreate={true}
-      onDragCreateEventStart={handleDragCreateStart}
-      onDragCreateEventEnd={handleDragCreateEnd}
-      defaultDuration={60} // New events will be 1 hour long by default
-      // ... other props
+      defaultDuration={60}
+      events={events.map(event => ({ ...event, key: event.id }))} 
     >
       <CalendarHeader />
-      <CalendarBody />
+      <CalendarBody
+      />
     </CalendarContainer>
+    <TouchableOpacity>
+        <Feather name="plus-circle"
+        size={50} 
+        color={colors.icon}
+        style={{ position: 'absolute', bottom: 60, right: 30}} />
+    </TouchableOpacity>
+    </>
   );
 };
 

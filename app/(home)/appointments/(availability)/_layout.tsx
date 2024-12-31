@@ -1,5 +1,5 @@
 import { Stack, useRouter, useSegments } from 'expo-router';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { useThemeStore } from '@/store/themeStore';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
