@@ -4,8 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useThemeStore } from '@/store/themeStore';
 import { ThemeMode } from '@/theme/types';
 import { screenDimensions } from '@/utils/screenDimensions';
-import { sharedColors } from '@/theme/colors';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import * as Haptics from 'expo-haptics';
 
 interface ThemeToggleProps {
   style?: StyleProp<ViewStyle>;
@@ -22,6 +21,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ style }) => {
     console.log('Current mode:', mode)
     setThemeMode(nextMode);
     console.log('Next mode:', nextMode)
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
   }, [mode, setThemeMode]);
 
   const getIconName = useCallback((): IoniconName => {

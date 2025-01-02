@@ -1,7 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import Feather from '@expo/vector-icons/Feather';
 import { useThemeStore } from '@/store/themeStore';
+import { screenDimensions } from '@/utils/screenDimensions';
 import { Appointment as AppointmentInterface } from '@/types/models';
 
 interface AppointmentProps {
@@ -16,10 +18,10 @@ export default function Appointment({ appointment, onEdit, onCancel }: Appointme
   const day = dateObj.getDate();
   const month = dateObj.toLocaleString('default', { month: 'short' });
   const time = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-  const { colors } = useThemeStore();
+  const { colors, typography } = useThemeStore();
 
   return (
-    <View style={[styles.card, { backgroundColor: colors.secondary }]}>
+    <View style={[styles.card, { backgroundColor: colors.card }]}>
       <View style={styles.topContainer}>
         <Image
           source={require('@/assets/images/pfp.png')}
@@ -28,23 +30,29 @@ export default function Appointment({ appointment, onEdit, onCancel }: Appointme
           transition={1000}
         />
         <View style={styles.dateContainer}>
-          <Text style={styles.day}>{day}</Text>
-          <Text style={styles.month}>{month}</Text>
+          <Text style={[styles.day, { color: colors.text, fontFamily: typography.fonts.regular }]}>{day}</Text>
+          <Text style={[styles.month, { color: colors.subtext, fontFamily: typography.fonts.medium }]}>{month}</Text>
         </View>
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={styles.name}>Nathan Allen</Text>
-        <Text style={styles.specialty}>Barber</Text>
-        <Text style={styles.time}>{time}</Text>
+        <Text style={[styles.name, { 
+          color: colors.text,
+          fontFamily: typography.fonts.medium}]}>Nathan Allen</Text>
+        <Text style={[styles.specialty, { 
+          color: colors.text,
+          fontFamily: typography.fonts.regular }]}>Barber</Text>
+        <Text style={[styles.time, { 
+          color: colors.subtext,
+          fontFamily: typography.fonts.light }]}>{time}</Text>
       </View>
 
       <View style={styles.actions}>
         <TouchableOpacity 
-          style={[styles.actionButton, styles.videoButton]} 
+          style={[styles.actionButton, styles.editButton]} 
           onPress={() => onEdit?.(appointment.id)}
         >
-          <Ionicons name="videocam-outline" size={20} color="#4CAF50" />
+          <Feather name="edit" size={20} color="#4CAF50" />
         </TouchableOpacity>
         <TouchableOpacity 
           style={[styles.actionButton, styles.cancelButton]} 
@@ -84,17 +92,15 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   dateContainer: {
-    alignItems: 'flex-end',
+    alignItems: 'flex-start',
+    marginTop: screenDimensions.screenHeight * -0.075
   },
   day: {
     fontSize: 24,
-    fontWeight: '700',
-    color: '#333',
     lineHeight: 28,
   },
   month: {
     fontSize: 16,
-    color: '#666',
   },
   infoContainer: {
     marginBottom: 16,
@@ -124,7 +130,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  videoButton: {
+  editButton: {
     backgroundColor: '#E8F5E9',
   },
   cancelButton: {

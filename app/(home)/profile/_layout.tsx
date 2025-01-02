@@ -15,6 +15,7 @@ export default function ProfileLayout() {
           fontSize: typography.sizes.md,
           color: colors.text
         },
+        headerShadowVisible: true,
         headerStyle: {
           backgroundColor: colors.background,
         },

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, StyleSheet, ActivityIndicator, Text } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Text, RefreshControl } from 'react-native';
 import { ScrollView as IOSScrollView } from 'react-native-virtualized-view';
 import { useRouter } from 'expo-router';
 import AnnouncementsSection from '@/components/home/announcements/AnnouncementSection';
@@ -25,21 +25,19 @@ export default function Home() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      {refreshing && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size='large' color="#7A94FE" />
-        </View>
-      )}
-
       <IOSScrollView 
       style={styles.scrollContainer} 
       contentContainerStyle={{ paddingBottom: screenDimensions.screenHeight * 0.03 }} 
       showsVerticalScrollIndicator={false}
-      onScroll={({ nativeEvent }) => {
-        if (nativeEvent.contentOffset.y < -125) {
-          !refreshing && handleRefresh();
-        }
-      }}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={() => {
+            console.log('User refreshed the content');
+            handleRefresh();
+          }}
+        />
+      }
       scrollEventThrottle={16}
     >
       {/* Greeting Section */}

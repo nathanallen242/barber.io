@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { TouchableOpacity, Text } from 'react-native';
 import ThemeToggle from '@/components/ui/Toggle';
+import * as Haptics from 'expo-haptics';
 import { useThemeStore } from '@/store/themeStore';
 import { screenDimensions } from '@/utils/screenDimensions';
 import CustomDrawerContent from '@/components/nav/CustomDrawerContent';
@@ -50,12 +51,15 @@ export default function HomeLayout() {
               fontSize: 20,
               color: colors.text,
             },
-            headerShadowVisible: false,
+            headerShadowVisible: true,
             headerLeft: () => {
               const navigation = useNavigation();
               return (
                   <TouchableOpacity 
-                      onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+                      onPress={() => {
+                          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                          navigation.dispatch(DrawerActions.toggleDrawer());
+                      }}
                       style={{ marginLeft: 15 }}
                   >
                       <Ionicons name="menu" size={screenDimensions.screenWidth * 0.08} color={colors.icon} />
@@ -71,11 +75,11 @@ export default function HomeLayout() {
                   <View style={{
                     position: 'absolute',
                     top: -4,
-                    right: -4,
+                    right: -1,
                     backgroundColor: '#FF3B30',
-                    borderRadius: screenDimensions.screenWidth * 0.02,
-                    paddingHorizontal: screenDimensions.screenWidth * 0.01,
-                    paddingVertical: screenDimensions.screenHeight * 0.005,
+                    borderRadius: screenDimensions.screenWidth * 0.025,
+                    paddingHorizontal: screenDimensions.screenWidth * 0.0125,
+                    paddingVertical: screenDimensions.screenHeight * 0.0025,
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
@@ -83,7 +87,7 @@ export default function HomeLayout() {
                       color: colors.icon,
                       fontSize: screenDimensions.screenWidth * 0.025,
                       fontWeight: 'bold',
-                    }}>{unseenNotifications}</Text>
+                    }}></Text>
                   </View>
                 )}
              </TouchableOpacity>

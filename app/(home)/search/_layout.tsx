@@ -11,6 +11,7 @@ export default function SearchLayout() {
     <Stack
     screenOptions={{
         title: 'Notifications',
+        headerShadowVisible: true,
         headerLeft: () => (
           <TouchableOpacity onPress={() => router.back()}>
             <Ionicons name="arrow-back" size={24} color={colors.icon} />

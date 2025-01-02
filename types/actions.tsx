@@ -15,14 +15,14 @@ const clientActions: Action[] = [
         title: 'Book an Appointment',
         description: 'Find a licensed barber',
         backgroundColor: '#b5d2f5',
-        route: "/(home)/search" as Href
+        route: "/(home)/appointments/(booking)/services" as Href
     },
     {
         icon: <MaterialIcons name="qr-code-2" size={24} color="#5a8a62" />,
         title: 'Appointment with QR',
         description: 'Queuing without the hustle',
         backgroundColor: '#b5f5c1',
-        route: "/(home)/appointments/booking" as Href
+        route: "/(home)/appointments/(booking)/services" as Href
     },
     {
         icon: <Entypo name="chat" size={24} color="#7a5e62" />,

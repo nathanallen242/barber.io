@@ -25,21 +25,40 @@ export default function AvailabilityLayout() {
 
   return (
     <Stack
-      screenOptions={{
-        headerLeft: () => (
-          <TouchableOpacity
-            onPress={isAppointmentScreen() ? navigateHome : () => router.back()}
-          >
-            <Ionicons name="arrow-back" size={20} color={colors.icon} />
-          </TouchableOpacity>
-        )
-      }}
-    >
+    screenOptions={{
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={isAppointmentScreen() ? navigateHome : () => router.back()}
+        >
+          <Ionicons name="arrow-back" size={20} color={colors.icon} />
+        </TouchableOpacity>
+      ),
+      headerTitleStyle: {
+        fontFamily: typography.fonts.light,
+        fontSize: typography.sizes.md,
+        color: colors.text
+      },
+      headerStyle: {
+        backgroundColor: colors.background
+      },
+    }}>
       {/* Main Availability Screen */}
       <Stack.Screen
         name="schedule"
         options={{
-            headerShown: false
+            headerTitle: "Schedule",
+            headerRight: () => (
+            <TouchableOpacity
+            onPress={() => router.push('/appointments/availability')}>
+            <Ionicons name="create-outline" size={20} color={colors.icon} />
+          </TouchableOpacity>
+            )
+        }}
+      />
+      <Stack.Screen
+        name="availability"
+        options={{
+          headerTitle: "Availability",
         }}
       />
     </Stack>

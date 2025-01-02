@@ -16,11 +16,26 @@ export interface ThemeColors {
   error: string;
   icon: string;
   button: string;
+  agenda: string;
 }
 
 export interface SharedColors {
   white: string;
   black: string;
+  event: {
+    available: {
+      background: string;
+      iconBackground: string;
+    };
+    unavailable: {
+      background: string;
+      iconBackground: string;
+    };
+    appointment: {
+      background: string;
+      iconBackground: string;
+    };
+  };
 }
 
 export interface Theme {

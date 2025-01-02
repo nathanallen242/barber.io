@@ -13,6 +13,7 @@ export default function NotificationsLayout() {
     <Stack
       screenOptions={{
         title: 'Notifications',
+        headerShadowVisible: true,
         headerTitleStyle: {
           fontFamily: typography.fonts.light,
           fontSize: typography.sizes.md,

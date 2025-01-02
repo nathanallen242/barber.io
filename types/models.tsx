@@ -62,4 +62,10 @@ export interface UserView {
     updated_at: string
 }
 
+export interface AnnouncementData {
+    title: string;
+    description: string;
+    image: string | number;
+  }
+
 export interface UserProfile extends User, PublicUser {}

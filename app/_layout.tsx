@@ -67,6 +67,7 @@ export default function RootLayout() {
   }
 
   return (
+    
     <View style={{ flex: 1, backgroundColor: colors.background }} onLayout={onLayoutRootView}>
       <StatusBar
         barStyle={mode === 'dark' ? 'light-content' : 'dark-content'}
