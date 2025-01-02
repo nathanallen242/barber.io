@@ -102,6 +102,7 @@
     "react-native-waves": "^1.2.5",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
+    "reanimated-color-picker": "^3.0.6",
     "types": "github:supabase/supabase-js",
     "watchman": "^1.0.0",
     "webpack": "^5.59.0",

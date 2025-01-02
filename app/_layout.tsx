@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PortalProvider } from '@gorhom/portal';
+import Toast from 'react-native-toast-message';
 import { 
   Poppins_300Light, 
   Poppins_400Regular, 
@@ -86,6 +87,7 @@ export default function RootLayout() {
             <Stack.Screen name="+not-found" options={{ headerShown: false }} />
             <Stack.Screen name="(home)" options={{ headerShown: false }} />
           </Stack>
+        <Toast />
         </View>
       </PortalProvider>
     </GestureHandlerRootView>
