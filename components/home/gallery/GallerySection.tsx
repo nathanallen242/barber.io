@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import GalleryCard from '@/components/home/gallery/Gallery';
 import { useThemeStore } from '@/store/themeStore';
 import { Service } from '@/types/models';
+import { useRouter } from 'expo-router';
+import { MaterialCommunityIcons, MaterialIcons, Ionicons } from '@expo/vector-icons';
 
 interface ServiceWithImage extends Service {
   image: string;
@@ -53,18 +55,63 @@ export default function GallerySection() {
   ];
 
   const { colors } = useThemeStore();
+  const router = useRouter();
+
+  const renderItem = ({ item }: { item: ServiceWithImage }) => (
+    <View style={styles.cardContainer}>
+      <GalleryCard service={item} />
+      <View style={styles.infoContainer}>
+        <View style={styles.leftContent}>
+          <View style={styles.serviceRow}>
+            <MaterialCommunityIcons 
+              name="content-cut" 
+              size={20} 
+              color={colors.text} 
+            />
+            <Text style={[styles.serviceName, { color: colors.text }]}>
+              {item.category}
+            </Text>
+          </View>
+          
+          <View style={styles.timeRow}>
+            <MaterialIcons 
+              name="access-time" 
+              size={18} 
+              color={colors.text} 
+            />
+            <Text style={[styles.timeText, { color: colors.text }]}>
+              {item.description}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.priceContainer}>
+          <Ionicons 
+            name="pricetag-outline" 
+            size={18} 
+            color={colors.text} 
+          />
+          <Text style={[styles.priceText, { color: colors.text }]}>
+            ${item.price}
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
       <View style={styles.textBlock}>
         <Text style={[styles.header, { color: colors.text }]}>Gallery</Text>
-        <Text style={styles.viewAll}>View All</Text>
+        <TouchableOpacity onPress={() => router.push('/(home)/gallery')}>
+          <Text style={styles.viewAll}>View All</Text>
+        </TouchableOpacity>
       </View>
       <FlatList
         data={services}
         horizontal
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <GalleryCard service={item} />}
+        renderItem={renderItem}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
       />
@@ -83,6 +130,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     paddingLeft: 16,
+    gap: 15
   },
   separator: {
     width: 1,
@@ -100,5 +148,51 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_300Light',
     fontSize: 18,
     color: 'skyblue',
+  },
+  cardContainer: {
+    marginRight: 16,
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+  },
+  leftContent: {
+    flex: 1,
+    marginRight: 8,
+  },
+  serviceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  serviceName: {
+    fontSize: 16,
+    fontFamily: 'Poppins_500Medium',
+    marginLeft: 6,
+  },
+  timeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  timeText: {
+    fontSize: 14,
+    fontFamily: 'Poppins_300Light',
+    marginLeft: 4,
+  },
+  priceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(135, 206, 235, 0.2)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  priceText: {
+    fontSize: 16,
+    fontFamily: 'Poppins_500Medium',
+    marginLeft: 4,
   }
 });

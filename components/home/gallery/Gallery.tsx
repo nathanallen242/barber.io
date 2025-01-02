@@ -14,7 +14,7 @@ interface ServiceData {
 
 export default function GalleryCard({ service }: ServiceData) {
   return (
-    <TouchableOpacity onPress={() => { /* TODO: Handle press to dynamic screen for image ID */}}>
+    <TouchableOpacity onPress={() => console.log('Add modal popup displaying gallery image data...')}>
       <View style={styles.cardContainer}>
         <Image 
           source={typeof service.image === 'string' ? { uri: service.image } : service.image}
@@ -22,10 +22,6 @@ export default function GalleryCard({ service }: ServiceData) {
           contentFit="cover"
           transition={1000}
         />
-        <View style={styles.overlay}>
-          <Text style={styles.barberName}>{service.name}</Text>
-          <Text style={styles.date}>{service.description}</Text>
-        </View>
       </View>
     </TouchableOpacity>
   );
@@ -33,7 +29,7 @@ export default function GalleryCard({ service }: ServiceData) {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    width: 150,
+    width: 200,
     overflow: 'hidden',
     backgroundColor: '#F5F5F5',
     borderWidth: 0.5,

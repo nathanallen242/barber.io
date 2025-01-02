@@ -63,6 +63,7 @@ export interface UserView {
 }
 
 export interface AnnouncementData {
+    id: string;
     title: string;
     description: string;
     image: string | number;

@@ -12,7 +12,7 @@ import CustomDrawerContent from '@/components/nav/CustomDrawerContent';
 
 export default function HomeLayout() {
   const unseenNotifications = 2; // PLACEHOLDER
-  const { mode, colors } = useThemeStore();
+  const { colors } = useThemeStore();
   const router = useRouter();
 
   return (
@@ -133,6 +133,20 @@ export default function HomeLayout() {
             ),
             drawerLabel: 'Profile',
             headerShown: false,
+          }}
+        />
+        <Drawer.Screen
+          name="dashboard"
+          options={{
+            drawerItemStyle: { display: 'none' },
+            headerShown: false
+          }}
+        />
+         <Drawer.Screen
+          name="gallery"
+          options={{
+            drawerItemStyle: { display: 'none' },
+            headerShown: false
           }}
         />
       </Drawer>

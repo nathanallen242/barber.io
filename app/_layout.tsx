@@ -1,5 +1,6 @@
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { PortalProvider } from '@gorhom/portal';
 import { 
   Poppins_300Light, 
   Poppins_400Regular, 
@@ -67,25 +68,26 @@ export default function RootLayout() {
   }
 
   return (
-    
-    <View style={{ flex: 1, backgroundColor: colors.background }} onLayout={onLayoutRootView}>
-      <StatusBar
-        barStyle={mode === 'dark' ? 'light-content' : 'dark-content'}
-        backgroundColor={colors.background}
-      />
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <Stack
-          screenOptions={{
-            headerStyle: { backgroundColor: colors.background },
-            headerTintColor: 'transparent',
-          }}
-        >
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" options={{ headerShown: false }} />
-          <Stack.Screen name="(home)" options={{ headerShown: false }} />
-        </Stack>
-      </GestureHandlerRootView>
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <PortalProvider>
+        <View style={{ flex: 1, backgroundColor: colors.background }} onLayout={onLayoutRootView}>
+          <StatusBar
+            barStyle={mode === 'dark' ? 'light-content' : 'dark-content'}
+            backgroundColor={colors.background}
+          />
+          <Stack
+            screenOptions={{
+              headerStyle: { backgroundColor: colors.background },
+              headerTintColor: 'transparent',
+            }}
+          >
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" options={{ headerShown: false }} />
+            <Stack.Screen name="(home)" options={{ headerShown: false }} />
+          </Stack>
+        </View>
+      </PortalProvider>
+    </GestureHandlerRootView>
   );
 }

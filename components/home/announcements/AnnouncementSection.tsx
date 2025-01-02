@@ -23,7 +23,7 @@ export default function AnnouncementSection() {
       >
         {announcements.map((ad, index) => (
           <View key={index} style={[styles.slide]}>
-            <Announcement title={ad.title} image={ad.image} description={ad.description} />
+            <Announcement id={ad.id} title={ad.title} image={ad.image} description={ad.description} />
           </View>
         ))}
       </Carousel>
