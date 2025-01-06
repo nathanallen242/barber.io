@@ -1,7 +1,7 @@
 import { User } from '@supabase/supabase-js'
 
-export interface PublicUser {
-    id: string
+// Base interface for your public user table fields
+export interface PublicUserFields {
     forename?: string
     surname?: string
     birth_date?: string
@@ -9,6 +9,22 @@ export interface PublicUser {
     phone_number?: string
     profile_picture?: string
     job_role?: string
+  }
+  
+// PublicUser is just the fields + id
+export interface PublicUser extends PublicUserFields {
+    id: string
+  }
+  
+// UserProfile combines Supabase User with your public fields
+export interface UserProfile extends User, PublicUserFields {}
+  
+// UserView specific fields needed for the barber view
+export interface UserView extends PublicUserFields {
+    id: string
+    email: string
+    created_at: string
+    updated_at: string
 }
 
 export interface Appointment {
@@ -23,11 +39,12 @@ export interface Appointment {
 
 export interface Availability {
     id: string
-    barber_id: string
-    date: string
-    is_booked: boolean
-    start_time: string
-    end_time: string
+    barber_id: string;
+    available: boolean;
+    date: Date;
+    start_time: Date;
+    end_time: Date;
+    period: string;
 }
 
 export interface Service {
@@ -48,25 +65,9 @@ export interface Notification {
     type: string
 }
 
-export interface UserView {
-    id: string
-    email: string
-    forename?: string
-    surname?: string
-    phone_number?: string
-    profile_picture?: string
-    birth_date?: string
-    country: string
-    job_role: string
-    created_at: string
-    updated_at: string
-}
-
 export interface AnnouncementData {
     id: string;
     title: string;
     description: string;
     image: string | number;
   }
-
-export interface UserProfile extends User, PublicUser {}

@@ -7,9 +7,9 @@ interface OfferingProps {
   id: string;
   name: string;
   price: number;
-  duration: number;
-  rating: number;
-  ratingCount: string;
+  duration?: number;
+  rating?: number;
+  ratingCount?: string;
   imageSource?: any;
   isSelected: boolean;
 }
@@ -33,9 +33,9 @@ const Offering: React.FC<OfferingProps> = ({ id, name, price, imageSource, isSel
         
         <View style={styles.ratingContainer}>
           <Ionicons name="star" size={16} color="#FFD700" />
-          <Text style={[styles.rating, { color: colors.text }]}>{rating}</Text>
-          <Text style={[styles.ratingCount, { color: colors.subtext }]}>({ratingCount})</Text>
-          <Text style={[styles.duration, { color: colors.subtext }]}>{duration} min</Text>
+          <Text style={[styles.rating, { color: colors.text }]}>5.0</Text>
+          <Text style={[styles.ratingCount, { color: colors.subtext }]}>(500+)</Text>
+          <Text style={[styles.duration, { color: colors.subtext }]}>60 min</Text>
         </View>
 
         <View style={styles.priceContainer}>

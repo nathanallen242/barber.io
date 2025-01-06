@@ -30,7 +30,6 @@ const Schedule: React.FC = () => {
       type: 'info',
       text1: 'Creating new appointment availability!',
       text2: `Be sure to include all required fields for your clientele...`,
-      visibilityTime: 2500,
     });
   };
 
@@ -49,7 +48,6 @@ const Schedule: React.FC = () => {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
         <CalendarContainer
-            
             theme={calendarTheme}
             events={events}
             onPressEvent={(event) => {

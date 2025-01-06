@@ -48,32 +48,6 @@ export default function SearchPage() {
     }
   };
 
-    // const fetchData = async () => {
-  //   try {
-  //     const response = await fetch(API_ENDPOINT);
-  //     const json = await response.json();
-  //     setData(json.results);
-  //     setFullData(json.results);
-  //     setIsLoading(false);
-  //   } catch (error: any) {
-  //     setError(error);
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // const handleSearch = (searchQuery: string) => {
-  //   setQuery(searchQuery);
-  //   const formattedQuery = searchQuery.toLowerCase();
-  //   const filteredData = filter(fullData, (user: any) => {
-  //     return contains(user, formattedQuery);
-  //   });
-  //   setData(filteredData);
-  // };
-
-   // useEffect(() => {
-  //   setIsLoading(true);
-  //   fetchData();
-  // }, []);
   const handleSearch = (searchQuery: string) => {
     setQuery(searchQuery);
     const formattedQuery = searchQuery.toLowerCase();

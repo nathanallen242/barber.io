@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/Input';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import CountryPicker, { Country, CountryCode } from 'react-native-country-picker-modal';
 import * as ImagePicker from 'expo-image-picker';
+import * as Haptic from 'expo-haptics';
 import Toast from 'react-native-toast-message';
 
 const validationSchema = Yup.object().shape({

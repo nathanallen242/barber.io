@@ -1,15 +1,15 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { PublicUser, Availability, Service } from '@/types/models';
+import { UserProfile, Availability, Service } from '@/types/models';
 import { asyncStorage } from '@/store/userStore';
 
 type BookingStore = {
   selectedService: Service | null;
-  selectedBarber: PublicUser | null;
+  selectedBarber: UserProfile | null;
   bookedAppointment: boolean;
   selectedAvailability: Availability | null;
   setSelectedService: (service: Service | null) => void;
-  setSelectedBarber: (barber: PublicUser | null) => void;
+  setSelectedBarber: (barber: UserProfile | null) => void;
   setBookedAppointment: (booked: boolean) => void;
   setSelectedAvailability: (availability: Availability | null) => void;
   clearBooking: () => void;
