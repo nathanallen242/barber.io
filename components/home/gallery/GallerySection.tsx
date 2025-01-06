@@ -63,11 +63,6 @@ export default function GallerySection() {
       <View style={styles.infoContainer}>
         <View style={styles.leftContent}>
           <View style={styles.serviceRow}>
-            <MaterialCommunityIcons 
-              name="content-cut" 
-              size={20} 
-              color={colors.text} 
-            />
             <Text style={[styles.serviceName, { color: colors.text }]}>
               {item.category}
             </Text>
@@ -171,7 +166,6 @@ const styles = StyleSheet.create({
   serviceName: {
     fontSize: 16,
     fontFamily: 'Poppins_500Medium',
-    marginLeft: 6,
   },
   timeRow: {
     flexDirection: 'row',

@@ -1,5 +1,6 @@
 // profile/index.tsx
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { useThemeStore } from '@/store/themeStore';
@@ -14,17 +15,15 @@ export default function ProfileScreen() {
     const handleLogout = useHandleLogOut();
     const { colors, typography } = useThemeStore();
     const [notificationsEnabled, setNotificationsEnabled] = useState(false);
-    const handleNavigation = (route: any) => {
-      router.push(route);
-    };
     
     return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Profile Picture */}
       <View style={styles.imageContainer}>
       <Image
-        source={require('@/assets/images/pfp.png')}
+        source={(user?.profile_picture ? { uri: user.profile_picture } : require('@/assets/images/pfp.png'))}
         style={styles.profileImage}
+        contentFit="cover"
       />
       </View>
 
@@ -32,7 +31,7 @@ export default function ProfileScreen() {
       <View style={styles.infoContainer}>
         <Text style={[styles.name, { fontFamily: typography.fonts.light, color: colors.text }]}>{user?.forename} {user?.surname}</Text>
         <Text style={[styles.email, { fontFamily: typography.fonts.light, color: colors.subtext }]}>{user?.user_metadata.email}</Text>
-        <TouchableOpacity style={{marginTop: 15}}>
+        <TouchableOpacity style={{marginTop: 15}} onPress={() => router.push('/profile/edit')}>
           <FontAwesome6 name="edit" size={24} color={colors.icon} />
         </TouchableOpacity>  
       </View>
@@ -51,28 +50,28 @@ export default function ProfileScreen() {
           icon="card-outline"
           text="Manage Payment Methods"
           hasArrow
-          onPress={() => handleNavigation('/payment-methods')}
+          onPress={() => Alert.alert("Coming soon!")}
         />
         
         <Setting
           icon="cash-outline"
           text="Transaction History"
           hasArrow
-          onPress={() => handleNavigation('/transactions')}
+          onPress={() => Alert.alert("Coming soon!")}
         />
         
         <Setting
           icon="shield-checkmark-outline"
           text="Two-Factor Authentication"
           hasArrow
-          onPress={() => handleNavigation('/two-factor')}
+          onPress={() => Alert.alert("Coming soon!")}
         />
         
         <Setting
           icon="key-outline"
           text="Change Password"
           hasArrow
-          onPress={() => handleNavigation('/change-password')}
+          onPress={() => Alert.alert("Coming soon!")}
         />
         
         <Setting

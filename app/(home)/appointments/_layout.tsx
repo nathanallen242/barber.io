@@ -67,31 +67,22 @@ export default function AppointmentsLayout() {
           )          
         }}
       />
-      {isBarber ? (
-        /*  If barber, show (availability) instead of (booking) & (confirmation) */
-        <Stack.Screen
-          name="(availability)"
-          options={{
-            headerShown: false,
-          }}
-        />
-      ) : (
-        /*  If client, show (booking) and (confirmation), but not (availability) */
-        <>
-          <Stack.Screen
-            name="(booking)"
-            options={{
-              headerTitle: 'Book an Appointment',
-            }}
-          />
-          <Stack.Screen
-            name="(confirmation)"
-            options={{
-              headerShown: false,
-            }}
-          />
-        </>
-      )}
+      
+      <Stack.Screen
+        name="(availability)"
+        options={{ headerShown: false }}
+      />
+      
+      <Stack.Screen
+        name="(booking)"
+        options={{ headerTitle: 'Book an Appointment' }}
+      />
+      
+      <Stack.Screen
+        name="(confirmation)"
+        options={{ headerShown: false }}
+      />
+
     </Stack>
   );
 }

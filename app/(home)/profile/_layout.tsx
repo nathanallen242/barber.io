@@ -8,6 +8,7 @@ export default function ProfileLayout() {
   const { colors, typography } = useThemeStore();
   return (
       <Stack
+        initialRouteName='[id]'
         screenOptions={{
         title: 'Profile',
         headerTitleStyle: {
@@ -27,7 +28,21 @@ export default function ProfileLayout() {
         }}
       >
 
-    <Stack.Screen name='[id]' />
-      </Stack>
+      <Stack.Screen name='[id]' />
+      <Stack.Screen 
+        options={{
+          headerTitle: 'Bio-data',
+          headerTitleStyle: {
+            fontFamily: typography.fonts.light,
+            fontSize: typography.sizes.md,
+            color: colors.text
+          },
+          headerShadowVisible: true,
+          headerStyle: {
+            backgroundColor: colors.background,
+          }
+        }}
+        name='edit' />
+    </Stack>
   );
 }

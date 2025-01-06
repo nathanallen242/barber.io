@@ -3,12 +3,12 @@ import {
   View,
   Text,
   StyleSheet,
-  ImageBackground,
   TouchableOpacity,
   Modal,
   Pressable,
   Dimensions
 } from 'react-native';
+import { ImageBackground } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { useThemeStore } from '@/store/themeStore';
 
@@ -39,6 +39,7 @@ export default function Announcement({ id, title, image, description }: Announce
         <ImageBackground
           source={typeof image === 'string' ? { uri: image } : image}
           style={styles.adContainer}
+          
         >
           <View style={styles.overlay}>
             <Text style={[styles.title, { 

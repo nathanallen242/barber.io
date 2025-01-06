@@ -81,6 +81,7 @@
     "react-native-country-picker-modal": "^2.0.0",
     "react-native-dotenv": "^3.4.11",
     "react-native-dropdown-picker": "^5.4.6",
+    "react-native-element-dropdown": "^2.12.2",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-get-random-values": "^1.11.0",
     "react-native-modal-datetime-picker": "^18.0.0",
@@ -107,7 +108,8 @@
     "watchman": "^1.0.0",
     "webpack": "^5.59.0",
     "yup": "^1.5.0",
-    "zustand": "^5.0.2"
+    "zustand": "^5.0.2",
+    "expo-image-picker": "~16.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

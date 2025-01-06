@@ -31,10 +31,10 @@ export function Input({
 
   return (
     <View style={[styles.container, style]}>
-      <Text style={[styles.label, { fontFamily: typography.fonts.regular }]}>{label}</Text>
+      <Text style={[styles.label, { fontFamily: typography.fonts.regular, color: colors.text }]}>{label}</Text>
       <View
         style={[
-          styles.iconInputContainer,
+          [styles.iconInputContainer, { backgroundColor: colors.border }],
           isFocused && styles.inputFocused,
           error && styles.inputError,
           { borderColor: colors.border },
@@ -45,8 +45,8 @@ export function Input({
             <Ionicons
               name={iconName}
               size={20}
-              color={colors.button}
-              style={{ marginRight: 8 }}
+              color={colors.icon}
+              style={{ marginRight: 8, backgroundColor: colors.border }}
             />
             <View style={styles.separator} />
           </>
@@ -56,7 +56,7 @@ export function Input({
           value={value}
           onChangeText={onChangeText}
           secureTextEntry={secureTextEntry}
-          style={styles.textInput}
+          style={[styles.textInput, { color: colors.text }]}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
         />
