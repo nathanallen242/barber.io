@@ -16,7 +16,7 @@ import { Asset } from 'expo-asset';
 import { useEffect, useState, useCallback } from 'react';
 import { View, StatusBar } from 'react-native';
 
-SplashScreen.preventAutoHideAsync();
+void SplashScreen.preventAutoHideAsync();
 
 const assets = [
   require('@/assets/icons/apple-icon.png'),
@@ -41,14 +41,14 @@ export default function RootLayout() {
   useEffect(() => {
     async function prepare() {
       try {
-        await Promise.all([
-          ...assets.map(asset => Asset.loadAsync(asset)),
-        ]);
+        const assetPromises = assets.map(asset => Asset.loadAsync(asset));
+        await Promise.all(assetPromises);
         setAssetsLoaded(true);
       } catch (e) {
-        console.error('Asset loading error', e);
+        console.warn('Error loading assets:', e);
       }
     }
+    
     prepare();
   }, []);
 
@@ -58,9 +58,13 @@ export default function RootLayout() {
     }
   }, [fontsLoaded, assetsLoaded, error]);
 
-  const onLayoutRootView = useCallback(() => {
+  const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
-      SplashScreen.hide();
+      try {
+        await SplashScreen.hideAsync();
+      } catch (e) {
+        console.warn('Error hiding splash screen:', e);
+      }
     }
   }, [appIsReady]);
 
@@ -69,9 +73,9 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <PortalProvider>
-        <View style={{ flex: 1, backgroundColor: colors.background }} onLayout={onLayoutRootView}>
+        <View style={{ flex: 1, backgroundColor: colors.background }}>
           <StatusBar
             barStyle={mode === 'dark' ? 'light-content' : 'dark-content'}
             backgroundColor={colors.background}

@@ -8,7 +8,7 @@ export default function ProfileLayout() {
   const { colors, typography } = useThemeStore();
   return (
       <Stack
-        initialRouteName='[id]'
+        initialRouteName='index'
         screenOptions={{
         title: 'Profile',
         headerTitleStyle: {
@@ -28,7 +28,7 @@ export default function ProfileLayout() {
         }}
       >
 
-      <Stack.Screen name='[id]' />
+      <Stack.Screen name='index' />
       <Stack.Screen 
         options={{
           headerTitle: 'Bio-data',

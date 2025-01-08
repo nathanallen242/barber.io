@@ -22,7 +22,9 @@
           "dark": {
             "image": "./assets/images/splash-dark.png"
           },
-          "imageWidth": 200
+          "backgroundColor": "#FFFFFF",
+          "darkBackgroundColor": "#000000",
+          "imageResizeMode": "contain"
         }
       ],
       [
