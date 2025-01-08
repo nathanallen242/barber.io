@@ -1,31 +1,33 @@
 import { User } from '@supabase/supabase-js'
 
-// Base interface for your public user table fields
-export interface PublicUserFields {
-    forename?: string
-    surname?: string
-    birth_date?: string
-    country?: string
-    phone_number?: string
-    profile_picture?: string
-    job_role?: string
-  }
-  
-// PublicUser is just the fields + id
-export interface PublicUser extends PublicUserFields {
-    id: string
-  }
-  
-// UserProfile combines Supabase User with your public fields
-export interface UserProfile extends User, PublicUserFields {}
-  
-// UserView specific fields needed for the barber view
-export interface UserView extends PublicUserFields {
-    id: string
-    email: string
-    created_at: string
-    updated_at: string
+// Define the role type to match database constraints
+export type UserRole = 'barber' | 'client'
+
+// Base interface matching your database schema fields
+export interface DBUserFields {
+  forename?: string
+  surname?: string
+  phone_number?: string
+  profile_picture?: string
+  birth_date?: Date
+  country?: string
+  job_role?: UserRole
 }
+
+// Complete database user (includes all fields from your public.users table)
+export interface DBUser extends DBUserFields {
+  id: string
+  email: string
+  created_at: string
+  updated_at: string
+}
+
+// UserProfile merges Supabase User with your custom fields
+// Using Omit to re-define email as a PK (cannot be undefined)
+export interface UserProfile extends Omit<User, 'email'>, DBUserFields {
+  email: string
+}
+
 
 export interface Appointment {
     id: string

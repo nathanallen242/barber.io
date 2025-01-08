@@ -1,20 +1,16 @@
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from "@react-navigation/drawer";
 import { StyleSheet, View, Image, Text } from 'react-native';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { supabase } from "@/lib/supabase";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useRouter } from 'expo-router';
 import { useThemeStore } from "@/store/themeStore";
 import { useUserStore } from "@/store/userStore";
 import { useHandleLogOut } from "@/lib/auth";
 
 export default function CustomDrawerContent(props: any) {
-    const router = useRouter();
     const { colors } = useThemeStore();
     const insets = useSafeAreaInsets();
-    const { user, clearUser } = useUserStore();
+    const { user } = useUserStore();
     const handleLogout = useHandleLogOut();
-    const defaultPhoto = require('@/assets/images/pfp.png');
 
     return <DrawerContentScrollView 
     {...props} 
@@ -22,11 +18,11 @@ export default function CustomDrawerContent(props: any) {
     contentContainerStyle={[styles.container, { paddingTop: insets.top + 50 }]}>
         <View style={styles.profileContainer}>
             <Image
-            source={ user?.profile_picture ? { uri: user.profile_picture } : defaultPhoto }
+            source={{ uri: user!.user_metadata.profile_picture }}
             style={styles.profileImage}
             resizeMode="cover"
             />
-            <Text style={[styles.profileName, { color: colors.text }]}>{user?.forename}</Text>
+            <Text style={[styles.profileName, { color: colors.text }]}>{user?.user_metadata.forename}</Text>
         </View>
 
         <View style={[styles.divider, { backgroundColor: colors.border }]} />

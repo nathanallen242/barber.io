@@ -8,20 +8,22 @@ import { useUserStore } from '@/store/userStore';
 import { useHandleLogOut } from '@/lib/auth';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Setting } from '@/components/profile/Setting';
+import Toast from 'react-native-toast-message';
+import * as Haptic from 'expo-haptics';
 
 export default function ProfileScreen() {
     const router = useRouter();
-    const { user } = useUserStore();
+    const { user, setUser } = useUserStore();
     const handleLogout = useHandleLogOut();
     const { colors, typography } = useThemeStore();
-    const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+    const [ notificationsEnabled, setNotificationsEnabled ] = useState(false);
     
     return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Profile Picture */}
       <View style={styles.imageContainer}>
       <Image
-        source={(user?.profile_picture ? { uri: user.profile_picture } : require('@/assets/images/pfp.png'))}
+        source={{ uri: user!.user_metadata.profile_picture }}
         style={styles.profileImage}
         contentFit="cover"
       />
@@ -29,7 +31,7 @@ export default function ProfileScreen() {
 
       {/* User Information */}
       <View style={styles.infoContainer}>
-        <Text style={[styles.name, { fontFamily: typography.fonts.light, color: colors.text }]}>{user?.forename} {user?.surname}</Text>
+        <Text style={[styles.name, { fontFamily: typography.fonts.light, color: colors.text }]}>{user?.user_metadata.forename} {user?.user_metadata.surname}</Text>
         <Text style={[styles.email, { fontFamily: typography.fonts.light, color: colors.subtext }]}>{user?.user_metadata.email}</Text>
         <TouchableOpacity style={{marginTop: 15}} onPress={() => router.push('/profile/edit')}>
           <FontAwesome6 name="edit" size={24} color={colors.icon} />
@@ -82,6 +84,23 @@ export default function ProfileScreen() {
             handleLogout();
           }}
         />
+
+        <Setting
+          icon="toggle-outline"
+          text="Toggle Role"
+          onPress={() => {
+            Haptic.notificationAsync(
+              Haptic.NotificationFeedbackType.Warning
+            )
+            setUser({ job_role: user?.job_role === 'barber' ? 'client' : 'barber' });
+            Toast.show({
+              type: 'info',
+              text1: 'Toggling job roles between client and barber!',
+              text2: `This will affect the screens you are able to see, for development purposes only.`,
+            });
+          }}
+        />
+
       </View>
     </View>
   );

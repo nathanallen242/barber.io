@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { View, StyleSheet, ActivityIndicator, Text, RefreshControl } from 'react-native';
+import { View, StyleSheet, Text, RefreshControl } from 'react-native';
 import { ScrollView as IOSScrollView } from 'react-native-virtualized-view';
-import { useRouter } from 'expo-router';
 import AnnouncementsSection from '@/components/home/announcements/AnnouncementSection';
 import AppointmentsSection from '@/components/home/appointments/AppointmentSection';
 import GallerySection from '@/components/home/gallery/GallerySection';
@@ -42,7 +41,7 @@ export default function Home() {
     >
       {/* Greeting Section */}
       <View style={styles.sectionContainer}>
-        <Text style={[styles.title, { color: colors.text }]}>Welcome back, <Text style={{ color: '#7A94FE', fontFamily: 'Poppins_600SemiBold'}}>{user?.forename}</Text></Text>
+        <Text style={[styles.title, { color: colors.text }]}>Welcome back, <Text style={{ color: '#7A94FE', fontFamily: 'Poppins_600SemiBold'}}>{user?.user_metadata.forename}</Text></Text>
       </View>
       
 

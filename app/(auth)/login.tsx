@@ -58,8 +58,8 @@ export default function Login() {
                 return;
               }
 
-              if (user && session) {
-                useUserStore.setState({ user, session });
+              if (user?.email && session) {
+                useUserStore.setState({ user: { ...user, email: user.email }, session });
                 Alert.alert(
                   "Login Successful!",
                   "Welcome aboard!",

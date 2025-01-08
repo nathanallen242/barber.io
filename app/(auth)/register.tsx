@@ -1,5 +1,4 @@
 import { View, StatusBar, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
-import { Image } from 'expo-image';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -7,7 +6,7 @@ import { useThemeStore } from '@/store/themeStore';
 import { screenDimensions } from '@/utils/screenDimensions';
 import { supabase } from '@/lib/supabase';
 import { useUserStore } from '@/store/userStore';
-import { UserProfile } from '@/types/models';
+import { UserProfile, UserRole } from '@/types/models';
 import { router } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -40,13 +39,8 @@ interface FormValues {
   confirmPassword: string;
   forename: string;
   surname: string;
-  role: Role;
+  role: UserRole;
   country: CountryCode;
-}
-
-enum Role {
-  Client = "client",
-  Barber = "barber"
 }
 
  /* Error suppression for react-native-country-picker: defaultProps warning   */
@@ -66,7 +60,7 @@ export default function Register() {
     email: '',
     password: '',
     confirmPassword: '',
-    role: Role.Client,
+    role: 'client',
     country: 'US'
   };
 
@@ -113,8 +107,10 @@ export default function Register() {
               if (user && session) {
                 const userProfile: UserProfile = {
                   ...user,
-                  forename: user.user_metadata.forename,
-                  surname: user.user_metadata.surname,
+                  forename: values.forename,
+                  surname: values.surname,
+                  profile_picture: "https://robohash.org/F54.png?set=set1&size=200x200",
+                  email: values.email,
                   job_role: values.role,
                   country: values.country,
                 };
@@ -157,18 +153,18 @@ export default function Register() {
                 <View style={styles.roleContainer}>
                 <Text style={{ fontFamily: typography.fonts.regular }}>Role</Text>
                   <View style={styles.roleToggle}>
-                  <Text style={[values.role === Role.Client ? styles.activeRole : styles.inactiveRole,
+                  <Text style={[values.role === 'client' ? styles.activeRole : styles.inactiveRole,
                       { fontFamily: typography.fonts.regular }
                     ]}>
                       Client
                     </Text>
                     <Switch
-                      value={values.role === Role.Barber}
+                      value={values.role === 'barber'}
                       onValueChange={(value) => 
-                        void setFieldValue('role', value ? Role.Barber : Role.Client)
+                        void setFieldValue('role', value ? 'barber' : 'client')
                       }
                     />
-                    <Text style={[values.role === Role.Barber ? styles.activeRole : styles.inactiveRole,
+                    <Text style={[values.role === 'barber' ? styles.activeRole : styles.inactiveRole,
                       { fontFamily: typography.fonts.regular }
                     ]}>
                       Barber

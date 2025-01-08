@@ -8,7 +8,6 @@ type UserStore = {
   session: Session | null;
   user: UserProfile | null;
   setSession: (session: Session | null) => void;
-  // setUser: (user: UserProfile | null) => void;
   setUser: (user: Partial<UserProfile> | null) => void;
   clearUser: () => void;
 };

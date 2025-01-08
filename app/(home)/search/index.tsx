@@ -2,21 +2,18 @@ import { StyleSheet, SafeAreaView, TextInput, ActivityIndicator, View, Text, Ima
 import { useState, useEffect, useRef, useCallback } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import { useLocalSearchParams, useFocusEffect } from 'expo-router';
-import { UserView } from "@/types/models";
+import { UserProfile } from "@/types/models";
 import { supabase } from "@/lib/supabase";
 import { useThemeStore } from "@/store/themeStore";
 import { useUserStore } from "@/store/userStore";
 import filter from 'lodash.filter';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-// const API_ENDPOINT = "https://randomuser.me/api/?results=30";
-// /* TODO: Overwrite with supabase db view query*/
-
 export default function SearchPage() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const [data, setData] = useState<UserView[]>([]);
-  const [fullData, setFullData] = useState<UserView[]>([]);
+  const [data, setData] = useState<UserProfile[]>([]);
+  const [fullData, setFullData] = useState<UserProfile[]>([]);
 
   const [error, setError] = useState(null);
   const [query, setQuery] = useState("");
@@ -26,7 +23,7 @@ export default function SearchPage() {
 
   const { colors, typography } = useThemeStore();
   const { user } = useUserStore();
-  const isBarber = user?.job_role === "barber"
+  const isBarber = user?.user_metadata.job_role === "barber"
 
   const fetchUsers = async () => {
     try {
@@ -57,7 +54,7 @@ export default function SearchPage() {
     setData(filteredData);
   };
 
-  const contains = (barber: UserView, query: string) => {
+  const contains = (barber: UserProfile, query: string) => {
     const first = barber.forename;
     const last = barber.surname;
     const email = barber.email.toLowerCase();

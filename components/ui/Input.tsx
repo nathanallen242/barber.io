@@ -14,6 +14,7 @@ interface InputProps {
   placeholder?: string;
   iconName?: keyof typeof Ionicons.glyphMap;  // e.g. "person", "mail", etc.
   props?: TextInputProps;
+  disabled?: boolean;
 }
 
 export function Input({
@@ -24,20 +25,36 @@ export function Input({
   style,
   secureTextEntry,
   iconName,
-  props
+  props,
+  disabled = false
 }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const { colors, typography } = useThemeStore();
 
   return (
     <View style={[styles.container, style]}>
-      <Text style={[styles.label, { fontFamily: typography.fonts.regular, color: colors.text }]}>{label}</Text>
+      <Text 
+        style={[
+          styles.label, 
+          { 
+            fontFamily: typography.fonts.regular, 
+            color: disabled ? '#999' : colors.text 
+          }
+        ]}
+      >
+        {label}
+      </Text>
       <View
         style={[
-          [styles.iconInputContainer, { backgroundColor: colors.border }],
-          isFocused && styles.inputFocused,
+          [
+            styles.iconInputContainer, 
+            { 
+              backgroundColor: colors.border,
+              borderColor: colors.border,
+            }
+          ],
+          isFocused && !disabled && styles.inputFocused,
           error && styles.inputError,
-          { borderColor: colors.border },
         ]}
       >
         {iconName && (
@@ -45,10 +62,14 @@ export function Input({
             <Ionicons
               name={iconName}
               size={20}
-              color={colors.icon}
-              style={{ marginRight: 8, backgroundColor: colors.border }}
+              color={disabled ? '#999' : colors.icon}
+              style={{ 
+                marginRight: 8,
+              }}
             />
-            <View style={styles.separator} />
+            <View style={[
+              styles.separator
+            ]} />
           </>
         )}
         <TextInput
@@ -56,9 +77,15 @@ export function Input({
           value={value}
           onChangeText={onChangeText}
           secureTextEntry={secureTextEntry}
-          style={[styles.textInput, { color: colors.text }]}
-          onFocus={() => setIsFocused(true)}
+          style={[
+            styles.textInput, 
+            { 
+              color: disabled ? '#999' : colors.text,
+            }
+          ]}
+          onFocus={() => !disabled && setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+          editable={!disabled}
         />
       </View>
       {error && (
