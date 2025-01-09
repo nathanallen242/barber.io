@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef, useCallback } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, StyleSheet, Modal, TextInput } from 'react-native';
 import { Button } from '@/components/ui/Button';
 import { useThemeStore } from '@/store/themeStore';
@@ -6,20 +7,38 @@ import { CalendarBody,
     CalendarContainer, 
     CalendarHeader, 
     EventItem,
+    CalendarKitHandle
 } from '@howljs/calendar-kit';
 import ColorPicker, { 
     Panel1,  
     Preview, 
     OpacitySlider, 
     HueSlider 
-  } from 'reanimated-color-picker';  
+  } from 'reanimated-color-picker';
+import Header from '@/components/calendar/Header';  
 import Toast from 'react-native-toast-message';
+import { useSharedValue } from 'react-native-reanimated';
 import useCalendarTheme from '@/theme/calendarTheme';
+
+// Date constants for the CalendarKit
+const MIN_DATE = new Date(
+  new Date().getFullYear(),
+  new Date().getMonth(),
+  new Date().getDate(),
+).toISOString();
+
+const INITIAL_DATE = new Date(
+  new Date().getFullYear(),
+  new Date().getMonth(),
+  new Date().getDate()
+).toISOString();
 
 const Schedule: React.FC = () => {
   const { colors } = useThemeStore();
   const calendarTheme = useCalendarTheme();
-  const MIN_DATE = new Date().toISOString();
+  const calendarRef = useRef<CalendarKitHandle>(null);
+  const currentDate = useSharedValue(INITIAL_DATE);
+  const { bottom: safeBottom } = useSafeAreaInsets();
 
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [draftEvent, setDraftEvent] = React.useState<EventItem | null>(null);
@@ -44,16 +63,46 @@ const Schedule: React.FC = () => {
     setDraftEvent(newEvent);
     setIsModalVisible(true);
   };
+
+  const handleDateChange = useCallback((date: string) => {
+    currentDate.value = date;
+  }, []);
+
+  const _onPressToday = useCallback(() => {
+    calendarRef.current?.goToDate({
+      date: new Date().toISOString(),
+      animatedDate: true,
+      hourScroll: true,
+    });
+  }, []);
+
+  const onPressPrevious = useCallback(() => {
+    calendarRef.current?.goToPrevPage();
+  }, []);
+
+  const onPressNext = useCallback(() => {
+    calendarRef.current?.goToNextPage();
+  }, []);
   
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Header
+        currentDate={currentDate}
+        onPressToday={_onPressToday}
+        onPressPrevious={onPressPrevious}
+        onPressNext={onPressNext}
+      />
         <CalendarContainer
+            ref={calendarRef}
             theme={calendarTheme}
             events={events}
+            overlapType='no-overlap'
             onPressEvent={(event) => {
                 console.log('Event pressed:', event);
             }}
             minDate={MIN_DATE}
+            onChange={handleDateChange}
+            onDateChanged={handleDateChange}
             defaultDuration={60}
             dragStep={60}
             allowDragToEdit={true}
@@ -61,10 +110,13 @@ const Schedule: React.FC = () => {
             onDragCreateEventStart={handleDragCreateStart}
             onDragCreateEventEnd={handleDragCreateEnd}
             useHaptic
+            scrollToNow
+            spaceFromBottom={safeBottom}
             allowPinchToZoom
             onRefresh={() => console.log('refreshing...')}
             >
-        <CalendarHeader />
+        <CalendarHeader
+           />
         <CalendarBody />
         </CalendarContainer>
         {isModalVisible && (

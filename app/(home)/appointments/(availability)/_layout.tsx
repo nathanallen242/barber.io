@@ -47,19 +47,6 @@ export default function AvailabilityLayout() {
         name="schedule"
         options={{
             headerTitle: "Schedule",
-            headerRight: () => (
-              <>
-              <TouchableOpacity
-              style={{ marginRight: 20 }}
-              onPress={() => console.log('Batch event creation/deletion')}>
-                <Ionicons name="calendar-outline" size={24} color={colors.icon} />
-              </TouchableOpacity>
-              <TouchableOpacity
-              onPress={() => console.log('Confirm all events before making batch API call')}>
-                <Ionicons name="checkbox" size={24} color={colors.icon} />
-              </TouchableOpacity>
-              </>
-            )
         }}
       />
     </Stack>
