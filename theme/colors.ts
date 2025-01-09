@@ -36,51 +36,11 @@ export const lightColors: ThemeColors = {
     button: '#054A72',
     agenda: '#555555',
   };
-
-const calendarTheme = {
-  colors: {
-    primary: '#3498db',
-    onPrimary: '#ffffff',
-    background: '#f5f5f5',
-    onBackground: '#333333',
-    border: '#e0e0e0',
-    text: '#333333',
-    surface: '#ffffff',
-    onSurface: '#666666',
-  },
-  textStyle: {
-    fontFamily: typography.fonts.regular
-  },
-  hourTextStyle: {
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  dayName: {
-    fontSize: 14,
-    color: '#666666',
-  },
-  dayNumber: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  todayNumberContainer: {
-    backgroundColor: '#3498db',
-  },
-  todayNumber: {
-    color: '#ffffff',
-  },
-  eventContainerStyle: {
-    borderRadius: 4,
-  },
-  eventTitleStyle: {
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-};
   
 export const sharedColors: SharedColors = {
   white: '#FFFFFF',
   black: '#000000',
+  gray: '#808080',
   event: {
     available: {
       background: '#73ab67',

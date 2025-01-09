@@ -21,7 +21,7 @@ const Header: FC<HeaderProps> = ({
   onPressNext,
 }) => {
   const { colors, typography } = useThemeStore();
-  const [title, setTitle] = useState('');
+  const [ title, setTitle ] = useState('');
 
   const updateTitle = (date: string) => {
     const formatted = new Date(date).toLocaleDateString('en-US', {
@@ -72,17 +72,6 @@ const Header: FC<HeaderProps> = ({
           onPress={() => console.log('Confirm event creation before navigating from screen...')}>
           <MaterialCommunityIcons
             name="sticker-check-outline"
-            size={24}
-            color={colors.text}
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
-          activeOpacity={0.6}
-          onPress={() => console.log('Batch event creation/deletion...')}>
-          <MaterialCommunityIcons
-            name="note-edit-outline"
             size={24}
             color={colors.text}
           />

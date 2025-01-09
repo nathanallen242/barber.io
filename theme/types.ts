@@ -22,6 +22,7 @@ export interface ThemeColors {
 export interface SharedColors {
   white: string;
   black: string;
+  gray: string;
   event: {
     available: {
       background: string;

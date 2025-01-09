@@ -1,7 +1,6 @@
 import React, { useRef, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { View, Text, StyleSheet, Modal, TextInput } from 'react-native';
-import { Button } from '@/components/ui/Button';
+import { View, StyleSheet } from 'react-native';
 import { useThemeStore } from '@/store/themeStore';
 import { CalendarBody, 
     CalendarContainer, 
@@ -9,16 +8,12 @@ import { CalendarBody,
     EventItem,
     CalendarKitHandle
 } from '@howljs/calendar-kit';
-import ColorPicker, { 
-    Panel1,  
-    Preview, 
-    OpacitySlider, 
-    HueSlider 
-  } from 'reanimated-color-picker';
 import Header from '@/components/calendar/Header';  
 import Toast from 'react-native-toast-message';
 import { useSharedValue } from 'react-native-reanimated';
 import useCalendarTheme from '@/theme/calendarTheme';
+import CalendarModal from '@/components/calendar/CalendarModal';
+import { IAvailabilityEvent } from '@/types/availability.types';
 
 // Date constants for the CalendarKit
 const MIN_DATE = new Date(
@@ -41,8 +36,8 @@ const Schedule: React.FC = () => {
   const { bottom: safeBottom } = useSafeAreaInsets();
 
   const [isModalVisible, setIsModalVisible] = React.useState(false);
-  const [draftEvent, setDraftEvent] = React.useState<EventItem | null>(null);
-  const [events, setEvents] = React.useState<EventItem[]>([]);
+  const [draftEvent, setDraftEvent] = React.useState<IAvailabilityEvent | null>(null);
+  const [events, setEvents] = React.useState<IAvailabilityEvent[]>([]);
 
   const handleDragCreateStart = (start: any) => {
     Toast.show({
@@ -54,11 +49,12 @@ const Schedule: React.FC = () => {
 
   const handleDragCreateEnd = (event: any) => {
     const generatedId = Date.now().toString();
-    const newEvent: EventItem = {
+    const newEvent: IAvailabilityEvent = {
         ...event,
         id: generatedId,
         title: '',
-        color: '#4285F4',  // Example default color
+        color: '#4285F4',
+        notes: '',
     };
     setDraftEvent(newEvent);
     setIsModalVisible(true);
@@ -83,7 +79,12 @@ const Schedule: React.FC = () => {
   const onPressNext = useCallback(() => {
     calendarRef.current?.goToNextPage();
   }, []);
-  
+
+  const handleSave = (newEvents: IAvailabilityEvent[]) => {
+    setEvents(prev => [...prev, ...newEvents]);
+    // TODO: API operation to add availability to table for barber
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Header
@@ -119,70 +120,14 @@ const Schedule: React.FC = () => {
            />
         <CalendarBody />
         </CalendarContainer>
-        {isModalVisible && (
-            <Modal
-                transparent
-                animationType="slide"
-                visible={isModalVisible}
-                onRequestClose={() => setIsModalVisible(false)}
-            >
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <View style={{ backgroundColor: '#fff', padding: 20, width: '80%', borderRadius: 8 }}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
-                    {draftEvent ? `New Event (ID: ${draftEvent.id})` : 'New Event'}
-                    </Text>
-
-                    {/* Pre-filled Start/End times */}
-                    <Text>Start: {draftEvent?.start?.dateTime || ''}</Text>
-                    <Text>End: {draftEvent?.end?.dateTime || ''}</Text>
-
-                    {/* Title input */}
-                    <TextInput
-                    placeholder="Enter title..."
-                    value={draftEvent?.title}
-                    onChangeText={(text) =>
-                        draftEvent && setDraftEvent({ ...draftEvent, title: text })
-                    }
-                    style={{ borderWidth: 1, borderColor: '#ccc', marginVertical: 10, padding: 8 }}
-                    />
-
-                    {/* Example Reanimated Color Picker */}
-                    <ColorPicker
-                    style={{ width: '70%', alignSelf: 'center', gap: 15, marginVertical: 20 }}
-                    value={draftEvent?.color || 'red'}
-                    onComplete={(selectedColor) => {
-                        if (draftEvent && selectedColor?.hex) {
-                        setDraftEvent({
-                            ...draftEvent,
-                            color: selectedColor.hex,
-                        });
-                        }
-                    }}
-                    >
-                    <Preview />
-                    <Panel1 />
-                    <HueSlider />
-                    <OpacitySlider />
-                    </ColorPicker>
-
-                    {/* Confirm button */}
-                    <Button
-                    children="Add Event"
-                    onPress={() => {
-                        if (draftEvent) {
-                        setEvents([...events, draftEvent]);
-                        // TODO: API operation to add availability to table for barber
-                        }
-                        setIsModalVisible(false);
-                    }}
-                    />
-
-                    {/* Cancel button */}
-                    <Button children="Cancel" onPress={() => setIsModalVisible(false)} />
-                </View>
-                </View>
-            </Modal>
-            )}
+        
+        <CalendarModal
+            isVisible={isModalVisible}
+            onClose={() => setIsModalVisible(false)}
+            draftEvent={draftEvent}
+            setDraftEvent={setDraftEvent}
+            onSave={handleSave}
+        />
     </View>
   );
 };

@@ -19,8 +19,6 @@ export default function DetailsSelection() {
   const [selectedPeriod, setSelectedPeriod] = useState<TimePeriod>('Morning');
 
   const selectedBarber = useBookingStore((state) => state.selectedBarber);
-  const setAvailability = useBookingStore((state) => state.setSelectedAvailability);
-
   const [barberAvailability, setBarberAvailability] = useState<Availability[]>([]);
 
   // 1. When user selects a date in the calendar, store it in state
@@ -110,6 +108,7 @@ export default function DetailsSelection() {
         minDate={new Date()}
         maxDate={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)}
         useIsoWeekday={false}
+        useNativeDriver
       />
 
       {/* Period Selector */}
