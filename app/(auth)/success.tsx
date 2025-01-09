@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, BackHandler } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useUserStore } from '@/store/userStore';
 import { useThemeStore } from '@/store/themeStore';
@@ -9,6 +9,15 @@ export default function Success() {
   const router = useRouter();
   const { user } = useUserStore();
   const { colors, typography } = useThemeStore();
+
+  // Add effect to prevent back navigation
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      return true; // Prevents going back
+    });
+
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
