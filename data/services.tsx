@@ -1,4 +1,4 @@
-import { Service } from "./models";
+import { Service } from "../types/models";
 
 const services: Service[] = [
     {

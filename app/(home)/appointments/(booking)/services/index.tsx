@@ -3,7 +3,7 @@ import { Service } from '@/types/models';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useThemeStore } from '@/store/themeStore';
-import services from '@/types/services';
+import services from '@/data/services';
 import { useBookingStore } from '@/store/bookingStore';
 import Offering from '@/components/booking/Offering';
 

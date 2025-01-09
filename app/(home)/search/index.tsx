@@ -1,4 +1,5 @@
-import { StyleSheet, SafeAreaView, TextInput, ActivityIndicator, View, Text, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, SafeAreaView, TextInput, ActivityIndicator, View, Text, TouchableOpacity } from "react-native";
+import { Image } from 'expo-image';
 import { useState, useEffect, useRef, useCallback } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import { useLocalSearchParams, useFocusEffect } from 'expo-router';

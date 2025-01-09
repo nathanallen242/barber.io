@@ -13,7 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlatList } from 'react-native-gesture-handler';
 import { useThemeStore } from '@/store/themeStore';
 
-import data from '@/types/data';
+import data from '@/data/onboarding';
 import Pagination from '@/components/ui/Pagination';
 import LandingButton from '@/components/ui/LandingButton';
 

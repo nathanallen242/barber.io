@@ -24,23 +24,33 @@ const validationSchema = Yup.object().shape({
     .nullable()
     .transform((curr, orig) => (orig === '' ? null : curr)),
   country: Yup.string(),
+  profile_picture: Yup.string().nullable(),
 });
 
 interface FormValues {
   forename: string;
   surname: string;
+  phone_number: string;
   birth_date: Date | null;
   country: CountryCode;
   profile_picture?: string;
 }
 
+const hasFormChanged = (currentValues: FormValues, initialValues: FormValues, currentImage: string | null, initialImage: string | null) => {
+  const formChanged = !isEqual(currentValues, initialValues);
+  const imageChanged = currentImage !== initialImage;
+  return formChanged || imageChanged;
+};
+
 export default function EditScreen() {
   const router = useRouter();
   const { user } = useUserStore();
+
   const { colors, typography, mode } = useThemeStore();
-  const [ image, setImage ] = React.useState<string | null>(null);
+  const [ image, setImage ] = React.useState<string | null>(user?.user_metadata.profile_picture || null);
+  const initialImageRef = React.useRef<string | null>(user?.user_metadata.profile_picture || null);
+  
   const [showDatePicker, setShowDatePicker] = React.useState(false);
-  // Keep a ref to Formik instance to update values from outside
   const formikRef = React.useRef<FormikProps<FormValues>>(null);
 
   // Convert string date from metadata to Date object or null
@@ -53,6 +63,7 @@ export default function EditScreen() {
   const initialValues: FormValues = {
     forename: user?.user_metadata.forename || '',
     surname: user?.user_metadata.surname || '',
+    phone_number: user?.user_metadata.phone_number || '',
     birth_date: parseInitialDate(user?.user_metadata.birth_date),
     country: (user?.user_metadata.country as CountryCode) || 'US',
     profile_picture: user?.user_metadata.profile_picture
@@ -76,10 +87,6 @@ export default function EditScreen() {
       setImage(result.assets[0].uri);
       formikRef.current?.setFieldValue('profile_picture', result.assets[0].uri);
     }
-  };
-
-  const hasFormChanged = (currentValues: FormValues, initialValues: FormValues) => {
-    return !isEqual(currentValues, initialValues);
   };
 
   const formatDate = (date: Date | null): string => {
@@ -141,7 +148,12 @@ export default function EditScreen() {
         }}
       >
         {({ handleChange, handleSubmit, setFieldValue, values, errors, touched }) => {
-          const isFormChanged = hasFormChanged(values, initialValues);
+          const isFormChanged = hasFormChanged(
+            values, 
+            initialValues, 
+            image,
+            initialImageRef.current
+          );
 
           return (
             <View style={styles.form}>
