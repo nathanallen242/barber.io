@@ -10,9 +10,10 @@ interface AppointmentProps {
   appointment: AppointmentInterface;
   onEdit?: (id: string) => void;
   onCancel?: (id: string) => void;
+  disabled?: boolean;
 }
 
-export default function Appointment({ appointment, onEdit, onCancel }: AppointmentProps) {
+export default function Appointment({ appointment, onEdit, onCancel, disabled = false }: AppointmentProps) {
   const { appointment_date } = appointment;
   const dateObj = new Date(appointment_date);
   const day = dateObj.getDate();
@@ -48,18 +49,22 @@ export default function Appointment({ appointment, onEdit, onCancel }: Appointme
       </View>
 
       <View style={styles.actions}>
-        <TouchableOpacity 
-          style={[styles.actionButton, styles.editButton]} 
-          onPress={() => onEdit?.(appointment.id)}
-        >
-          <Feather name="edit" size={20} color="#4CAF50" />
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.actionButton, styles.cancelButton]} 
-          onPress={() => onCancel?.(appointment.id)}
-        >
-          <Ionicons name="close" size={20} color="#FF5252" />
-        </TouchableOpacity>
+        {!disabled && (
+          <>
+            <TouchableOpacity 
+              style={[styles.actionButton, styles.editButton]} 
+              onPress={() => onEdit?.(appointment.id)}
+            >
+              <Feather name="edit" size={20} color="#4CAF50" />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={[styles.actionButton, styles.cancelButton]} 
+              onPress={() => onCancel?.(appointment.id)}
+            >
+              <Ionicons name="close" size={20} color="#FF5252" />
+            </TouchableOpacity>
+          </>
+        )}
         <TouchableOpacity style={[styles.actionButton, styles.calendarButton]}>
           <Ionicons name="calendar-outline" size={20} color="#2196F3" />
         </TouchableOpacity>

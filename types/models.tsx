@@ -30,13 +30,17 @@ export interface UserProfile extends Omit<User, 'email'>, DBUserFields {
 
 
 export interface Appointment {
-    id: string
-    barber_id: string
-    client_id: string
-    service_id: string
-    appointment_date: string
-    price?: number
-    status: number
+  id: string; // UUID
+  barber_id: string; // UUID
+  client_id: string; // UUID
+  service_id: string; // UUID
+  appointment_date: Date; // DATE
+  start_time: Date; // TIMESTAMP WITH TIME ZONE
+  end_time: Date; // TIMESTAMP WITH TIME ZONE
+  price?: number; // DOUBLE PRECISION
+  status: number; // INTEGER
+  client_image_url: string; // TEXT
+  barber_image_url: string; // TEXT
 }
 
 export interface Availability {

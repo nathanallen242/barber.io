@@ -4,7 +4,7 @@ import Action from '@/components/home/action/Action'
 import { useThemeStore } from '@/store/themeStore';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'expo-router';
-import { clientActions, barberActions, Action as ActionType } from '@/data/actions';
+import { clientActions, barberActions, Action as ActionType } from '@/types/actions';
 
 const ActionSection: React.FC = () => {
   const { user } = useUserStore();
