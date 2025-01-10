@@ -1,11 +1,14 @@
 import React, { useRef, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import {
+  configureReanimatedLogger,
+  ReanimatedLogLevel,
+} from 'react-native-reanimated';
 import { useThemeStore } from '@/store/themeStore';
 import { CalendarBody, 
     CalendarContainer, 
     CalendarHeader, 
-    EventItem,
     CalendarKitHandle
 } from '@howljs/calendar-kit';
 import Header from '@/components/calendar/Header';  
@@ -14,6 +17,12 @@ import { useSharedValue } from 'react-native-reanimated';
 import useCalendarTheme from '@/theme/calendarTheme';
 import CalendarModal from '@/components/calendar/CalendarModal';
 import { IAvailabilityEvent } from '@/types/availability.types';
+
+// TODO: Investigate error; likely due to imported libraries relying internally on react-native-reanimated
+configureReanimatedLogger({
+  level: ReanimatedLogLevel.warn,
+  strict: false, // Reanimated runs in strict mode by default; temporarily disabled
+});
 
 // Date constants for the CalendarKit
 const MIN_DATE = new Date(
@@ -39,7 +48,8 @@ const Schedule: React.FC = () => {
   const [draftEvent, setDraftEvent] = React.useState<IAvailabilityEvent | null>(null);
   const [events, setEvents] = React.useState<IAvailabilityEvent[]>([]);
 
-  const handleDragCreateStart = (start: any) => {
+  const handleDragCreateStart = (event: any) => {
+    console.log(event)
     Toast.show({
       type: 'info',
       text1: 'Creating new appointment availability!',
@@ -48,12 +58,13 @@ const Schedule: React.FC = () => {
   };
 
   const handleDragCreateEnd = (event: any) => {
+    console.log(event)
     const generatedId = Date.now().toString();
     const newEvent: IAvailabilityEvent = {
         ...event,
         id: generatedId,
         title: '',
-        color: '#4285F4',
+        color: '#4285F4', // default
         notes: '',
     };
     setDraftEvent(newEvent);
@@ -80,9 +91,11 @@ const Schedule: React.FC = () => {
     calendarRef.current?.goToNextPage();
   }, []);
 
+  /* Only saves events to Zustand; confirmation button within Header.tsx will confirm
+     using Supabase SDK 
+  */
   const handleSave = (newEvents: IAvailabilityEvent[]) => {
     setEvents(prev => [...prev, ...newEvents]);
-    // TODO: API operation to add availability to table for barber
   };
 
   return (

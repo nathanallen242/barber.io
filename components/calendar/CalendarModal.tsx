@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text, Modal, TextInput, StyleSheet } from 'react-native';
+import { View, Text, Modal, TextInput, StyleSheet, Animated } from 'react-native';
 import { useThemeStore } from '@/store/themeStore';
 import { Button } from '@/components/ui/Button';
-import ColorPicker, { Panel1, Preview, HueSlider } from 'reanimated-color-picker';
 import CategoryManager from '@/components/calendar/CategoryManager';
 import moment from 'moment';
 import CalendarStrip from 'react-native-calendar-strip';
 import { IAvailabilityEvent, ICategory } from '@/types/availability.types';
+import TimePicker from '@/components/calendar/TimePicker';
 
 interface CalendarModalProps {
     isVisible: boolean;
@@ -25,36 +25,32 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
 }) => {
     const { colors, sharedColors, typography } = useThemeStore();
     const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
-    const [selectedDates, setSelectedDates] = React.useState<Date[]>([]);
-
-    React.useEffect(() => {
-        if (draftEvent?.start.date) {
-            setSelectedDates([new Date(draftEvent.start.date)]);
-        }
-    }, [draftEvent]);
+    const [selectedDate, setSelectedDate] = React.useState<moment.Moment | null>
+    (draftEvent?.start.dateTime ? moment(draftEvent.start.dateTime) : null);
 
     const handleDateSelect = (date: moment.Moment) => {
-        setSelectedDates(prev => {
-            const dateStr = date.toDate().toDateString();
-            const exists = prev.some(d => d.toDateString() === dateStr);
-            
-            if (exists) {
-                return prev.filter(d => d.toDateString() !== dateStr);
-            } else {
-                return [...prev, date.toDate()].sort((a, b) => a.getTime() - b.getTime());
-            }
-        });
+        setSelectedDate(date);
     };
 
     const handleSave = () => {
-        if (draftEvent && selectedDates.length > 0) {
-            const events = selectedDates.map((date, index) => ({
+        if (draftEvent && selectedDate) {
+            const startTime = draftEvent.start.dateTime ? new Date(draftEvent.start.dateTime) : new Date();
+            const endTime = draftEvent.end.dateTime ? new Date(draftEvent.end.dateTime) : new Date();
+
+            const eventStart = selectedDate.toDate();
+            const eventEnd = selectedDate.toDate();
+
+            eventStart.setHours(startTime.getHours(), startTime.getMinutes());
+            eventEnd.setHours(endTime.getHours(), endTime.getMinutes());
+
+            const event = {
                 ...draftEvent,
-                id: `${Date.now()}-${index}`,
-                start: { date: date.toISOString() },
-                end: { date: date.toISOString() }
-            } as IAvailabilityEvent));
-            onSave(events);
+                id: `${Date.now()}`,
+                start: { dateTime: eventStart.toISOString() },
+                end: { dateTime: eventEnd.toISOString() }
+            } as IAvailabilityEvent;
+
+            onSave([event]);
             onClose();
         }
     };
@@ -87,7 +83,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
             visible={isVisible}
             onRequestClose={onClose}
         >
-            <View style={styles.overlay}>
+            <Animated.View style={styles.overlay}>
                 <View style={[styles.modalContainer, { backgroundColor: sharedColors.white }]}>
                     {/* Header */}
                     <Text style={[styles.modalTitle, { 
@@ -99,30 +95,67 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
 
                     {/* Time Section */}
                     <View style={[styles.section]}>
-                        <SectionTitle>Select Date(s)</SectionTitle>
+                        <SectionTitle>Select Date</SectionTitle>
                         <CalendarStrip
-                            markedDates={selectedDates}
-                            markedDatesStyle={{ color: colors.primary }}
-                            style={{ height: 60, paddingBottom: 10 }}
+                            dateNameStyle={{
+                                fontFamily: typography.fonts.light,
+                                fontSize: typography.sizes.md,
+                                textTransform: 'capitalize'
+                            }}
+                            dateNumberStyle={{
+                                fontFamily: typography.fonts.bold,
+                                fontSize: typography.sizes.lg
+                            }}
+                            style={{ height: 100, paddingBottom: 10 }}
                             scrollable
                             calendarHeaderStyle={{
                                 fontFamily: typography.fonts.regular,
-                                fontSize: typography.sizes.lg,
+                                fontSize: typography.sizes.xl,
                                 paddingBottom: 20
                             }}
                             iconContainer={{ flex: 0.1 }}
+                            highlightDateNumberStyle={{ 
+                                color: colors.primary,
+                                fontFamily: typography.fonts.bold,
+                                fontSize: typography.sizes.lg 
+                            }}
+                            highlightDateNameStyle={{ 
+                                color: colors.primary,
+                                fontFamily: typography.fonts.light,
+                                fontSize: typography.sizes.md,
+                                textTransform: 'capitalize' 
+                            }}
                             minDate={new Date()}
                             maxDate={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)}
                             useIsoWeekday={false}
                             useNativeDriver
+                            selectedDate={selectedDate || undefined}
                             onDateSelected={handleDateSelect}
                         />
-                        {/* <Text style={[styles.timeText, { fontFamily: typography.fonts.regular }]}>
-                            Start: {moment(draftEvent?.start?.dateTime).format("dddd, MMM DD at HH:mm a") || ''}
-                        </Text>
-                        <Text style={[styles.timeText, { fontFamily: typography.fonts.regular }]}>
-                            End: {moment(draftEvent?.end?.dateTime ).format("dddd, MMM DD at HH:mm a")|| ''}
-                        </Text> */}
+                    </View>
+
+                    <View style={styles.section}>
+                        <SectionTitle>Select Time Range</SectionTitle>
+                        <TimePicker
+                            startTime={draftEvent?.start.dateTime ? new Date(draftEvent.start.dateTime) : new Date()}
+                            endTime={draftEvent?.end.dateTime ? new Date(draftEvent.end.dateTime) : new Date()}
+                            onChangeStart={(date) => {
+                                if (draftEvent) {
+                                    setDraftEvent({
+                                        ...draftEvent,
+                                        start: { dateTime: date.toISOString() }
+                                    });
+                                }
+                            }}
+                            onChangeEnd={(date) => {
+                                if (draftEvent) {
+                                    setDraftEvent({
+                                        ...draftEvent,
+                                        end: { dateTime: date.toISOString() }
+                                    });
+                                }
+                            }}
+                        />
                     </View>
 
                     <View style={styles.section}>
@@ -173,30 +206,6 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
                         />
                     </View>
 
-                    {/* Color Section */}
-                    <View style={styles.section}>
-                        <SectionTitle>Color</SectionTitle>
-                        <ColorPicker
-                            style={styles.colorPicker}
-                            value={draftEvent?.color || '#4285F4'}
-                            onComplete={(selectedColor) => {
-                                if (draftEvent && selectedColor?.hex) {
-                                    setDraftEvent({
-                                        ...draftEvent,
-                                        color: selectedColor.hex,
-                                    });
-                                }
-                            }}
-                        >
-                            <View style={styles.colorPreviewContainer}>
-                                <Preview hideText={true} style={styles.colorPreview} />
-                                <HueSlider style={styles.hueSlider} />
-                            </View>
-                            <Panel1 style={styles.colorPanel} />
-                        </ColorPicker>
-                    </View>
-                    
-
                     {/* Action Buttons */}
                     <View style={styles.buttonContainer}>
                         <Button 
@@ -206,13 +215,13 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
                             style={styles.button} 
                         />
                         <Button
-                            children={`Save ${selectedDates.length > 1 ? `(${selectedDates.length} dates)` : ''}`}
+                            children="Save"
                             onPress={handleSave}
                             style={styles.button}
                         />
                     </View>
                 </View>
-            </View>
+            </Animated.View>
         </Modal>
     );
 };
@@ -288,4 +297,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CalendarModal;
+export default React.memo(CalendarModal);
