@@ -1,24 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
 import { useThemeStore } from '@/store/themeStore';
+import { useUserStore } from '@/store/userStore';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
-import { Availability } from '@/types/models';
+import { Availability, Period } from '@/types/models';
+import type { BookAppointmentRequest, BookAppointmentResponse } from '@/types/api';
 import CalendarStrip from 'react-native-calendar-strip';
 import { useBookingStore } from '@/store/bookingStore';
 import { Moment } from 'moment';
+import Toast from 'react-native-toast-message';
 import moment from 'moment';
 
-type TimePeriod = 'Morning' | 'Afternoon' | 'Night';
-
 export default function DetailsSelection() {
+  const router = useRouter();
   const { colors, typography } = useThemeStore();
+  const { user } = useUserStore();
 
   const [selectedDate, setSelectedDate] = useState<Moment>();
   const [selectedTime, setSelectedTime] = useState<Date | null>(null);
-  const [selectedPeriod, setSelectedPeriod] = useState<TimePeriod>('Morning');
+  const [selectedPeriod, setSelectedPeriod] = useState<Period>(Period.Morning);
+  const [isLoading, setIsLoading] = useState(false);
 
   const selectedBarber = useBookingStore((state) => state.selectedBarber);
+  const selectedService = useBookingStore((state) => state.selectedService);
+  const clearBooking = useBookingStore((state) => state.clearBooking)
   const [barberAvailability, setBarberAvailability] = useState<Availability[]>([]);
 
   // 1. When user selects a date in the calendar, store it in state
@@ -28,6 +35,7 @@ export default function DetailsSelection() {
   };
 
   // 2. Fetch barber availability via Supabase RPC
+  // TODO: Abstract to lib folder and call as RPC name
   useEffect(() => {
     const fetchBarberAvailability = async () => {
       const { data, error } = await supabase
@@ -36,7 +44,7 @@ export default function DetailsSelection() {
         console.error('Error fetching barber availability:', error);
       } else {
         setBarberAvailability(data);
-        console.log('Barber Availability:', JSON.stringify(data, null, 2));
+        // console.log('Barber Availability:', JSON.stringify(data, null, 2));
       }
     };
 
@@ -53,6 +61,67 @@ export default function DetailsSelection() {
     const samePeriod = slot.period === selectedPeriod;
     return sameDay && samePeriod;
   });
+
+  const handleConfirm = async () => {
+    if (!selectedDate || !selectedTime || !selectedBarber?.id || !user?.id || !selectedService?.id) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Please select all required booking details"
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    const startTime = new Date(selectedTime);
+    const endTime = new Date(startTime);
+    endTime.setHours(endTime.getHours() + 1);
+
+    const bookingRequest: BookAppointmentRequest = {
+      p_barber_id: selectedBarber.id,
+      p_client_id: user.id,
+      p_service_id: selectedService.id,
+      p_barber_image_url: selectedBarber.profile_picture || '',
+      p_client_image_url: user.profile_picture || '',
+      p_date: new Date(selectedDate.format('YYYY-MM-DD')),
+      p_start_time: startTime,
+      p_end_time: endTime,
+      p_price: selectedService.price || 0
+    };
+
+    // console.log(JSON.stringify(bookingRequest, null, 2))
+    // setIsLoading(false);
+    try {
+      const { data, error } = await supabase
+        .rpc('book_appointment', bookingRequest) as 
+        { data: BookAppointmentResponse | null, error: any };
+
+      if (error) {
+        throw error;
+      }
+
+      if (data?.success) {
+        Toast.show({
+          type: "success",
+          text1: data.message || "Appointment booked successfully!"
+        });
+        clearBooking();
+        router.replace('/home');
+      } else {
+        throw new Error(data?.error || "Failed to book appointment");
+      }
+    } catch (error) {
+      console.error('Booking error:', error);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: error instanceof Error ? error.message : "An unexpected error occurred"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
 
   return (
@@ -113,7 +182,7 @@ export default function DetailsSelection() {
 
       {/* Period Selector */}
       <View style={[styles.periodContainer, { backgroundColor: colors.border }]}>
-        {(['Morning', 'Afternoon', 'Night'] as TimePeriod[]).map((period) => (
+        {([Period.Morning, Period.Afternoon, Period.Night] as Period[]).map((period) => (
           <TouchableOpacity
             key={period}
             style={[
@@ -128,9 +197,9 @@ export default function DetailsSelection() {
           >
             <Ionicons
               name={
-                period === 'Morning'
+                period === Period.Morning
                   ? 'sunny'
-                  : period === 'Afternoon'
+                  : period === Period.Afternoon
                   ? 'partly-sunny'
                   : 'moon'
               }
@@ -198,16 +267,21 @@ export default function DetailsSelection() {
         })}
       </View>
       {/* Confirmation Button */}
-      <View style={{ marginTop: 30, alignItems: 'center', flex: 1 }}>
-          <TouchableOpacity
-            style={[styles.confirmButton, { backgroundColor: colors.primary }]}
-            onPress={() =>
-              console.log('Appointment confirmation button clicked! Proceed to Payment Page')
-            }
-          >
-            <Text style={styles.confirmButtonText}>Confirm</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={{ marginTop: 30, alignItems: 'center', flex: 1, paddingBottom: 25 }}>
+      <TouchableOpacity
+        style={[
+          styles.confirmButton,
+          { backgroundColor: colors.primary },
+          isLoading && { opacity: 0.7 }
+        ]}
+        onPress={handleConfirm}
+        disabled={isLoading}
+      >
+        <Text style={styles.confirmButtonText}>
+          {isLoading ? "Booking..." : "Confirm"}
+        </Text>
+      </TouchableOpacity>
+    </View>
     </ScrollView>
   );
 }
@@ -299,6 +373,7 @@ const styles = StyleSheet.create({
     periodText: {
         fontSize: 14,
         fontFamily: 'Poppins_500Regular',
+        textTransform: 'capitalize'
     },
     timeSlotsGrid: {
         flexDirection: 'row',

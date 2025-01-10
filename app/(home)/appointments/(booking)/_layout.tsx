@@ -31,6 +31,7 @@ export default function BookingLayout() {
     //   }}>
     <MaterialTopTabs
       screenOptions={{
+        swipeEnabled: false,
         tabBarActiveTintColor: colors.text,
         tabBarInactiveTintColor: colors.subtext,
         tabBarLabelStyle: { 

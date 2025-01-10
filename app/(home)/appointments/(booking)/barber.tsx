@@ -19,14 +19,12 @@ import filter from 'lodash.filter';
 export default function BarberSelection() {
   const [barbers, setBarbers] = useState<UserProfile[]>([]);
   const [fullBarbers, setFullBarbers] = useState<UserProfile[]>([]);
-  const [selectedBarberId, setSelectedBarberId] = useState<string>('');
-
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState("");
 
   const { colors, typography } = useThemeStore();
-  const setSelectedBarber = useBookingStore((state) => state.setSelectedBarber);
+  const { selectedBarber, setSelectedBarber } = useBookingStore();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -51,13 +49,10 @@ export default function BarberSelection() {
   }, []);
 
   const handleBarberPress = (barber: UserProfile) => {
-    if (selectedBarberId === barber.email) {
-      setSelectedBarberId('');
+    if (selectedBarber?.id === barber.id) {
       setSelectedBarber(null);
     } else {
-      setSelectedBarberId(barber.email || '');
       setSelectedBarber(barber);
-      // console.log("Selected Barber:", JSON.stringify(barber, null, 2));
     }
   };
 
@@ -137,7 +132,7 @@ export default function BarberSelection() {
               style={[
                 styles.barberItem,
                 { backgroundColor: colors.border },
-                selectedBarberId === item.email && styles.barberItemSelected,
+                selectedBarber?.id === item.id && styles.barberItemSelected,
               ]}
               onPress={() => handleBarberPress(item)}
             >
@@ -154,7 +149,7 @@ export default function BarberSelection() {
                 <Text style={[styles.barberEmail, { color: colors.text }]}>{item.email}</Text>
               </View>
 
-              {selectedBarberId === item.email && (
+              {selectedBarber?.id === item.id && (
                 <Ionicons name="checkmark-circle" size={24} color={colors.icon} />
               )}
             </TouchableOpacity>

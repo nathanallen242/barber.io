@@ -76,6 +76,7 @@ export default function EditScreen() {
       return;
     }
 
+    /* TODO: Optimize with compression, develop server to upload images to S3 bucket */
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       allowsEditing: true,

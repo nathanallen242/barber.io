@@ -43,6 +43,12 @@ export interface Appointment {
   barber_image_url: string; // TEXT
 }
 
+export enum Period {
+  Morning = "MORNING",
+  Afternoon = "AFTERNOON",
+  Night = "NIGHT"
+}
+
 export interface Availability {
     id: string
     barber_id: string;
@@ -50,12 +56,18 @@ export interface Availability {
     date: Date;
     start_time: Date;
     end_time: Date;
-    period: string;
+    period: Period;
+}
+
+export enum ServiceCategory {
+  Haircut = "HAIRCUT",        // Regular cuts, fades, styling
+  Grooming = "GROOMING",      // Beard trims, shaves, facial hair maintenance
+  Treatment = "TREATMENT"     // Scalp treatments, hair treatments, deep conditioning
 }
 
 export interface Service {
     id: string
-    category?: string
+    category?: ServiceCategory
     description?: string
     name: string
     price: number

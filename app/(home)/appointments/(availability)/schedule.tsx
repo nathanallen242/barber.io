@@ -59,12 +59,13 @@ const Schedule: React.FC = () => {
 
   const handleDragCreateEnd = (event: any) => {
     console.log(event)
+    const defaultColor = '#4285F4'
     const generatedId = Date.now().toString();
     const newEvent: IAvailabilityEvent = {
         ...event,
         id: generatedId,
         title: '',
-        color: '#4285F4', // default
+        color: defaultColor,
         notes: '',
     };
     setDraftEvent(newEvent);
