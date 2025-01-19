@@ -53,7 +53,7 @@ export const updateUserProfile = async ({ userId, updates }: UpdateUserParams) =
       data: {
         forename: updates.forename,
         surname: updates.surname,
-        phone_number: updates.phone_number,
+        phone_number: updates.phone_number ?? null,
         birth_date: formattedUpdates.birth_date,
         country: updates.country,
         profile_picture: updates.profile_picture

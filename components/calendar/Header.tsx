@@ -2,10 +2,12 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { FC } from 'react';
 import React, { useState } from 'react';
+import { useAvailabilityStore } from '@/store/availabilityStore';
 import { useThemeStore } from '@/store/themeStore';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
 import { runOnJS, useAnimatedReaction } from 'react-native-reanimated';
+import Toast from 'react-native-toast-message';
 
 interface HeaderProps {
   currentDate: SharedValue<string>;
@@ -22,6 +24,7 @@ const Header: FC<HeaderProps> = ({
 }) => {
   const { colors, typography } = useThemeStore();
   const [ title, setTitle ] = useState('');
+  const commit = useAvailabilityStore((state) => state.commitChanges);
 
   const updateTitle = (date: string) => {
     const formatted = new Date(date).toLocaleDateString('en-US', {
@@ -38,6 +41,40 @@ const Header: FC<HeaderProps> = ({
     },
     []
   );
+
+  const syncAvailability = () => {
+    Alert.alert(
+      'Sync',
+      'Are you sure you want to sync your availability?',
+      [
+        {
+          text: 'No',
+          onPress: () => console.log('Sync cancelled'),
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: async () => {
+            try {
+              await commit();
+              Toast.show({
+                type: 'success',
+                text1: 'Availability synced remotely!',
+                text2: `Your clientele will now be able to book appointments with you.`,
+              });
+            } catch (error: any) {
+              Toast.show({
+                type: 'error',
+                text1: 'Failed to sync availability!',
+                text2: `Error syncing availability: ${error.message || error}`,
+              });
+            }
+          }
+        },
+      ],
+      { cancelable: false }
+    )
+  }
 
   return (
     <View
@@ -69,7 +106,7 @@ const Header: FC<HeaderProps> = ({
         <TouchableOpacity
           hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
           activeOpacity={0.6}
-          onPress={() => console.log('Confirm event creation before navigating from screen...')}>
+          onPress={syncAvailability}>
           <MaterialCommunityIcons
             name="sticker-check-outline"
             size={24}

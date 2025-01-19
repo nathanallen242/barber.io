@@ -22,7 +22,6 @@ const assets = [
   require('@/assets/icons/apple-icon.png'),
   require('@/assets/icons/facebook-icon.png'),
   require('@/assets/icons/google-icon.png'),
-  require('@/assets/images/illustration.png'),
   require('@/assets/images/pfp.png')
 ];
 

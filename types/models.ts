@@ -53,10 +53,12 @@ export interface Availability {
     id: string
     barber_id: string;
     available: boolean;
-    date: Date;
-    start_time: Date;
-    end_time: Date;
+    date: string; // Represents YYYY-MM-DD
+    start_time: Date; // Represents timestamptz
+    end_time: Date; // Represents timestamptz
     period: Period;
+    title: string;
+    notes: string;
 }
 
 export enum ServiceCategory {

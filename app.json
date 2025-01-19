@@ -8,8 +8,19 @@
     "userInterfaceStyle": "automatic",
     "developmentMode": true,
     "newArchEnabled": true,
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "icon": "./assets/images/splash.png",
     "ios": {
       "supportsTablet": true
+    },
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#FFFFFF"
     },
     "plugins": [
       "expo-router",
@@ -24,7 +35,7 @@
           },
           "backgroundColor": "#FFFFFF",
           "darkBackgroundColor": "#000000",
-          "imageResizeMode": "contain"
+          "imageResizeMode": "cover"
         }
       ],
       [

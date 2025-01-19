@@ -8,12 +8,19 @@ import CalendarStrip from 'react-native-calendar-strip';
 import { IAvailabilityEvent, ICategory } from '@/types/availability.types';
 import TimePicker from '@/components/calendar/TimePicker';
 
+export enum Mode {
+    Create = 'CREATE',
+    Update = 'Update'
+}
+
 interface CalendarModalProps {
     isVisible: boolean;
     onClose: () => void;
     draftEvent: IAvailabilityEvent | null;
     setDraftEvent: (event: IAvailabilityEvent | null) => void;
-    onSave: (events: IAvailabilityEvent[]) => void;
+    onSave: (event: IAvailabilityEvent) => void;
+    onDelete?: (event: IAvailabilityEvent) => void;
+    mode: Mode;
 }
 
 const CalendarModal: React.FC<CalendarModalProps> = ({
@@ -22,6 +29,8 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
     draftEvent,
     setDraftEvent,
     onSave,
+    onDelete,
+    mode
 }) => {
     const { colors, sharedColors, typography } = useThemeStore();
     const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
@@ -45,12 +54,18 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
 
             const event = {
                 ...draftEvent,
-                id: `${Date.now()}`,
                 start: { dateTime: eventStart.toISOString() },
                 end: { dateTime: eventEnd.toISOString() }
             } as IAvailabilityEvent;
 
-            onSave([event]);
+            onSave(event);
+            onClose();
+        }
+    };
+
+    const handleDelete = () => {
+        if (draftEvent && onDelete) {
+            onDelete(draftEvent);
             onClose();
         }
     };
@@ -90,7 +105,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
                         fontFamily: typography.fonts.semiBold,
                         color: sharedColors.black
                     }]}>
-                        Add Availability
+                       {mode === Mode.Create ? 'Add Availability' : 'Update Availability'}
                     </Text>
 
                     {/* Time Section */}
@@ -214,8 +229,15 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
                             onPress={onClose}
                             style={styles.button} 
                         />
+                        {mode === Mode.Update && onDelete && (
+                            <Button
+                                children="Delete"
+                                onPress={handleDelete}
+                                style={styles.button}
+                            />
+                        )}
                         <Button
-                            children="Save"
+                            children={mode === Mode.Create ? "Save" : "Update"}
                             onPress={handleSave}
                             style={styles.button}
                         />
