@@ -3,6 +3,7 @@ import { useUserStore } from "@/store/userStore";
 import { useThemeStore } from '@/store/themeStore';
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
+import { GetAppointmentRequest, GetAppointmentResponse } from "@/types/api";
 import { Appointment as AppointmentInterface } from "@/types/models";
 import Appointment from "@/components/home/appointments/Appointment";
 
@@ -17,19 +18,20 @@ export default function ScheduledAppts() {
   const fetchAppointments = async () => {
     try {
       setLoading(true);
+      const appointmentRequest: GetAppointmentRequest = {
+        user_id: user!.id,
+        role: isBarber ? 'barber' : 'client'
+      }
       
       const { data, error } = await supabase
-        .from('appointments')
-        .select('*')
-        .eq(isBarber ? 'barber_id' : 'client_id', user?.id)
-        .eq('status', 0) // Status 0 for scheduled
-        .order('appointment_date', { ascending: false });
+      .rpc('get_appointments', appointmentRequest) as
+      { data: GetAppointmentResponse | null, error: any };
 
       if (error) {
         throw error;
       }
 
-      setAppointments(data || []);
+      setAppointments(data?.appointments || []);
     } catch (error) {
       console.error('Error fetching appointments:', error);
     } finally {

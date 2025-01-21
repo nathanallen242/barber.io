@@ -9,8 +9,7 @@ import {
 import { useThemeStore } from '@/store/themeStore';
 import { useUserStore } from '@/store/userStore';
 import { useAvailabilityStore } from '@/store/availabilityStore';
-import { 
-  availabilityToEventItem, 
+import {  
   eventItemToAvailability, 
   IAvailabilityEvent } from '@/types/availability.types';
 import { CalendarBody, 

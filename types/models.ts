@@ -41,6 +41,11 @@ export interface Appointment {
   status: number; // INTEGER
   client_image_url: string; // TEXT
   barber_image_url: string; // TEXT
+  service_name?: string;
+  client_forename?: string;
+  client_surname?: string;
+  barber_forename?: string;
+  barber_surname?: string;
 }
 
 export enum Period {

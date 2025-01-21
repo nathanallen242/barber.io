@@ -1,5 +1,6 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Image } from 'expo-image';
+import React from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import { useThemeStore } from '@/store/themeStore';
@@ -67,7 +68,9 @@ export default function Appointment({ appointment, onEdit, onCancel, disabled = 
             </TouchableOpacity>
           </>
         )}
-        <TouchableOpacity style={[styles.actionButton, styles.calendarButton]}>
+        <TouchableOpacity 
+          style={[styles.actionButton, styles.calendarButton]}
+          onPress={() => Alert.alert("Coming soon!")}>
           <Ionicons name="calendar-outline" size={20} color="#2196F3" />
         </TouchableOpacity>
       </View>
