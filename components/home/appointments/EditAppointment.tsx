@@ -59,12 +59,10 @@ export function EditAppointmentModal({
       <View style={{ padding: 20 }}>
         <Text>Edit Appointment</Text>
 
-        {/* Display uneditable date */}
         <Text>Date (Locked): {appointment?.appointment_date.toDateString()}</Text>
         
-        {/* Example placeholders for time pickers */}
         <Text>Start Time: {startTime?.toLocaleTimeString()}</Text>
-        {/* Replace the Button with a time picker of your choice */}
+    
         <Button title="Select New Start Time" onPress={() => {
           /* open time picker */
         }} />
