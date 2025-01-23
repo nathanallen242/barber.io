@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { Availability } from '@/types/models';
-import { supabase } from '@/server/supabase';
+import { supabase } from '@/server/client';
 import { formatDate } from '@/utils/date';
 import { IAvailabilityEvent, availabilityToEventItem } from '@/types/availability.types';
 
@@ -10,7 +10,7 @@ import { IAvailabilityEvent, availabilityToEventItem } from '@/types/availabilit
  */
 export type EventStatus = 'synced' | 'new' | 'updated' | 'deleted';
 
-interface AvailabilityMeta {
+export interface AvailabilityMeta {
   data: Availability;
   status: EventStatus;
 }
@@ -148,7 +148,7 @@ export const useAvailabilityStore = create<AvailabilityState>((set, get) => ({
     try {
       set({ isLoading: true });
 
-      const { events } = get();
+      const events = useAvailabilityStore((state) => state.events);
       const newEvents: Availability[] = [];
       const updatedEvents: Availability[] = [];
       const deletedEvents: Availability[] = [];
