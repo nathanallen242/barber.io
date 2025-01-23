@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { useThemeStore } from '@/store/themeStore';
 import { useUserStore } from '@/store/userStore';
-import { useHandleLogOut } from '@/lib/auth';
+import { useHandleLogOut } from '@/server/auth';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Setting } from '@/components/profile/Setting';
 import Toast from 'react-native-toast-message';

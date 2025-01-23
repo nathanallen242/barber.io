@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import { useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { UserProfile } from "@/types/models";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/server/supabase";
 import { useThemeStore } from "@/store/themeStore";
 import { useUserStore } from "@/store/userStore";
 import filter from 'lodash.filter';

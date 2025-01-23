@@ -3,7 +3,7 @@ import Appointment from '@/components/home/appointments/Appointment';
 import { useThemeStore } from '@/store/themeStore';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'expo-router';
-import { fetchAppointments, cancelAppointment } from '@/lib/appointments';
+import { fetchAppointments, cancelAppointment } from '@/server/appointments';
 import { 
   GetAppointmentRequest, 
 } from "@/types/api";;

@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/server/client";
 import { Appointment } from "@/types/models";
 import { 
     GetAppointmentRequest, 

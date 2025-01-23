@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/Input';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import CountryPicker, { Country, CountryCode } from 'react-native-country-picker-modal';
 import * as ImagePicker from 'expo-image-picker';
-import { updateUserProfile } from '@/lib/auth';
+import { updateUserProfile } from '@/server/auth';
 import Toast from 'react-native-toast-message';
 import { isEqual } from 'lodash';
 import DateTimePicker from '@react-native-community/datetimepicker';

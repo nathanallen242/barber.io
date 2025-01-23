@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useThemeStore } from '@/store/themeStore';
 import { screenDimensions } from '@/utils/screenDimensions';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/server/client';
 import { useUserStore } from '@/store/userStore';
 import { router } from 'expo-router';
 import { Formik } from 'formik';

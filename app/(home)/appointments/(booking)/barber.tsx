@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 import { UserProfile } from "@/types/models";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/server/client";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useThemeStore } from "@/store/themeStore";
 import { useBookingStore } from "@/store/bookingStore";

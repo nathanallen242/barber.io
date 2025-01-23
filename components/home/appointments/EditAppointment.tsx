@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, View, Text, Button, Alert } from 'react-native';
 import { Appointment } from '@/types/models';
-import { editAppointment } from '@/lib/appointments';
+import { editAppointment } from '@/server/appointments';
 import { RescheduleAppointmentRequest } from '@/types/api';
 import TimePicker from '@/components/calendar/TimePicker';
 

@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useRootNavigationState, Redirect } from 'expo-router';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/server/client';
 import { useUserStore } from '@/store/userStore';
 import { useThemeStore } from '@/store/themeStore';
 import { Session } from '@supabase/supabase-js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { prepareApp } from '@/lib/initialization';
 
 export default function Index() {
   const [session, setSession] = useState<Session | null | undefined>(undefined);
@@ -61,10 +60,6 @@ export default function Index() {
       subscription?.unsubscribe();
     };
   }, [setSessionStore, setUser]);
-
-  useEffect(() => {
-    prepareApp();
-  }, []);
 
   if (!rootNavigationState?.key || !themeLoaded || session === undefined) {
     return null;

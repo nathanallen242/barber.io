@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { useThemeStore } from '@/store/themeStore';
 import { useUserStore } from '@/store/userStore';
 import { Ionicons } from '@expo/vector-icons';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/server/client';
 import { Availability, Period } from '@/types/models';
 import type { BookAppointmentRequest, BookAppointmentResponse } from '@/types/api';
 import CalendarStrip from 'react-native-calendar-strip';

@@ -2,7 +2,7 @@ import { StyleSheet, Text, ScrollView, ActivityIndicator, View, RefreshControl }
 import { useUserStore } from "@/store/userStore";
 import { useThemeStore } from '@/store/themeStore';
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/server/supabase";
 import { Appointment as AppointmentInterface } from "@/types/models";
 import Appointment from "@/components/home/appointments/Appointment";
 

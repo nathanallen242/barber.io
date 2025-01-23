@@ -22,7 +22,7 @@ import Toast from 'react-native-toast-message';
 import { useSharedValue } from 'react-native-reanimated';
 import useCalendarTheme from '@/theme/calendarTheme';
 import CalendarModal from '@/components/calendar/CalendarModal';
-import { fetchAvailability } from '@/lib/availability';
+import { fetchAvailability } from '@/server/availability';
 import { Mode } from '@/components/calendar/CalendarModal';
 
 // TODO: Investigate error; likely due to imported libraries relying internally on react-native-reanimated

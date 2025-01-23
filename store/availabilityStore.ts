@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { Availability } from '@/types/models';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/server/supabase';
 import { formatDate } from '@/utils/date';
 import { IAvailabilityEvent, availabilityToEventItem } from '@/types/availability.types';
 

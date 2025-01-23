@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useThemeStore } from "@/store/themeStore";
 import { useUserStore } from "@/store/userStore";
-import { useHandleLogOut } from "@/lib/auth";
+import { useHandleLogOut } from "@/server/auth";
 
 export default function CustomDrawerContent(props: any) {
     const { colors } = useThemeStore();
