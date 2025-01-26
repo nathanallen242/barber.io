@@ -35,9 +35,9 @@ interface AvailabilityState {
   initializeEvents: (serverEvents: Availability[]) => void;
 
   /**
-   * Creates a new Availability in the local store with status 'new'.
+   * Creates multiple Availabilities in the local store with status 'new'.
    */
-  addEvent: (newEvent: Availability) => void;
+  addEvents: (newEvents: Availability[]) => void;
 
   /**
    * Updates an existing Availability. If it was 'synced', it becomes 'updated'.
@@ -85,12 +85,14 @@ export const useAvailabilityStore = create<AvailabilityState>((set, get) => ({
     set({ events: map });
   },
 
-  addEvent: (newEvent) => {
+  addEvents: (newEvents: Availability[]) => {
     set((state) => {
       const eventsCopy = new Map(state.events);
-      eventsCopy.set(newEvent.id, {
-        data: newEvent,
-        status: 'new',
+      newEvents.forEach(newEvent => {
+        eventsCopy.set(newEvent.id, {
+          data: newEvent,
+          status: 'new',
+        });
       });
       return { events: eventsCopy };
     });
@@ -148,7 +150,7 @@ export const useAvailabilityStore = create<AvailabilityState>((set, get) => ({
     try {
       set({ isLoading: true });
 
-      const events = useAvailabilityStore((state) => state.events);
+      const events = get().events;
       const newEvents: Availability[] = [];
       const updatedEvents: Availability[] = [];
       const deletedEvents: Availability[] = [];

@@ -44,7 +44,7 @@ export default function DetailsSelection() {
         console.error('Error fetching barber availability:', error);
       } else {
         setBarberAvailability(data);
-        // console.log('Barber Availability:', JSON.stringify(data, null, 2));
+        console.log('Barber Availability:', JSON.stringify(data, null, 2));
       }
     };
 
@@ -75,6 +75,7 @@ export default function DetailsSelection() {
     setIsLoading(true);
 
     const startTime = new Date(selectedTime);
+    console.log(startTime)
     const endTime = new Date(startTime);
     endTime.setHours(endTime.getHours() + 1);
 
@@ -84,13 +85,17 @@ export default function DetailsSelection() {
       p_service_id: selectedService.id,
       p_barber_image_url: selectedBarber.profile_picture || '',
       p_client_image_url: user.profile_picture || '',
-      p_date: new Date(selectedDate.format('YYYY-MM-DD')),
+      p_barber_forename: selectedBarber.forename,
+      p_barber_surname: selectedBarber.surname,
+      p_client_forename: user.user_metadata.forename,
+      p_client_surname: user.user_metadata.surname,
+      p_date: new Date(selectedDate.toDate().toISOString().split('T')[0]),
       p_start_time: startTime,
       p_end_time: endTime,
       p_price: selectedService.price || 0
     };
 
-    // console.log(JSON.stringify(bookingRequest, null, 2))
+    console.log(JSON.stringify(bookingRequest, null, 2))
     // setIsLoading(false);
     try {
       const { data, error } = await supabase

@@ -22,13 +22,14 @@ export default function Appointment({ appointment, onEdit, onCancel, disabled = 
   const month = dateObj.toLocaleString('default', { month: 'short' });
   const time = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
   const { colors, typography } = useThemeStore();
-  const { user } = useUserStore();
+  const user = useUserStore((state) => state.user);
+  const isBarber = user?.user_metadata.job_role === 'barber'
 
   return (
     <View style={[styles.card, { backgroundColor: colors.card }]}>
       <View style={styles.topContainer}>
         <Image
-          source={{ uri: user?.job_role === 'barber' ? appointment.client_image_url : appointment.barber_image_url }} 
+          source={{ uri: isBarber ? appointment.client_image_url : appointment.barber_image_url }} 
           style={styles.profileImage}
           contentFit="contain"
           transition={1000}
@@ -42,10 +43,14 @@ export default function Appointment({ appointment, onEdit, onCancel, disabled = 
       <View style={styles.infoContainer}>
         <Text style={[styles.name, { 
           color: colors.text,
-          fontFamily: typography.fonts.medium}]}>{appointment.barber_id}</Text>
+          fontFamily: typography.fonts.medium}]}>
+          {isBarber ? `${appointment.client_forename} ${appointment.client_surname}` : `${appointment.barber_forename} ${appointment.barber_surname}`}
+            </Text>
         <Text style={[styles.specialty, { 
           color: colors.text,
-          fontFamily: typography.fonts.regular }]}>Barber</Text>
+          fontFamily: typography.fonts.regular }]}>
+            {isBarber ? 'Client': 'Barber'}
+            </Text>
         <Text style={[styles.time, { 
           color: colors.subtext,
           fontFamily: typography.fonts.light }]}>{time}</Text>

@@ -33,8 +33,8 @@ const clientActions: Action[] = [
     },
     {
         icon: <Entypo name="location" size={24} color="#594346" />,
-        title: 'Locate Professionals',
-        description: 'Locate barbers near you',
+        title: 'Find Professionals',
+        description: 'Discover the best-rated barbers in your area',
         backgroundColor: '#f7c1c8',
         route: "/(home)/locate" as Href
     },

@@ -22,7 +22,7 @@ import Toast from 'react-native-toast-message';
 import { useSharedValue } from 'react-native-reanimated';
 import useCalendarTheme from '@/theme/calendarTheme';
 import CalendarModal from '@/components/calendar/CalendarModal';
-import { fetchAvailability } from '@/server/availability';
+import { initializeAvailability } from '@/server/availability';
 import { Mode } from '@/components/calendar/CalendarModal';
 
 // TODO: Investigate error; likely due to imported libraries relying internally on react-native-reanimated
@@ -58,7 +58,7 @@ const Schedule: React.FC = () => {
 
   const { 
     getCalendarEvents,
-    addEvent,
+    addEvents,
     updateEvent,
     deleteEvent
   } = useAvailabilityStore();
@@ -137,13 +137,13 @@ const Schedule: React.FC = () => {
       const availability = eventItemToAvailability(event, user!.id);
           
       if (modalMode === Mode.Create) {
-          addEvent(availability);
+          addEvents(availability);
           Toast.show({
               type: 'success',
               text1: 'Availability added successfully',
           });
         } else {
-            updateEvent(availability.id, availability);
+            updateEvent(availability[0].id, availability[0]);
             Toast.show({
                 type: 'success',
                 text1: 'Availability updated successfully',
@@ -164,7 +164,7 @@ const Schedule: React.FC = () => {
     if (user?.id) {
       try {
         console.log('Refreshing availability events...')
-        await fetchAvailability(user.id);
+        await initializeAvailability(user.id);
       } catch (error) {
         console.log(error)
         Toast.show({

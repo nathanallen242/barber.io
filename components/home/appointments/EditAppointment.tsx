@@ -21,8 +21,8 @@ export function EditAppointmentModal({
 
   useEffect(() => {
     if (appointment) {
-      setStartTime(appointment.start_time);
-      setEndTime(appointment.end_time);
+      setStartTime(new Date(appointment.start_time));
+      setEndTime(new Date(appointment.end_time));
     }
   }, [appointment]);
 
@@ -58,11 +58,10 @@ export function EditAppointmentModal({
     >
       <View style={{ padding: 20 }}>
         <Text>Edit Appointment</Text>
-
-        <Text>Date (Locked): {appointment?.appointment_date.toDateString()}</Text>
+        
+        {/* <Text>Date (Locked): {appointment?.appointment_date}</Text> */}
         
         <Text>Start Time: {startTime?.toLocaleTimeString()}</Text>
-    
         <Button title="Select New Start Time" onPress={() => {
           /* open time picker */
         }} />

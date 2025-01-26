@@ -1,9 +1,13 @@
 import { EventItem } from '@howljs/calendar-kit';
 import { Availability, Period } from '@/types/models';
-import { format, parseISO } from 'date-fns';
-import { toZonedTime, fromZonedTime } from 'date-fns-tz';
+import uuid from 'react-native-uuid';
+import { parseISO, differenceInHours, addHours } from 'date-fns';
+
+import { toZonedTime } from 'date-fns-tz';
 import { DateTimeType } from '@howljs/calendar-kit';
 import { formatDate } from '@/utils/date';
+
+const DEFAULT_TIMEZONE = 'America/New_York';
 
 export interface ICategory {
     label: string;      // 'Available' | 'Unavailable'
@@ -33,7 +37,7 @@ export const DEFAULT_CATEGORIES: ICategory[] = [
 
 
 /**
- * The above function convert between availability data and event items in TypeScript.
+ * The above function converts between availability data and event items in TypeScript.
  * @param {Availability} availability - The `availabilityToEventItem` function takes an `Availability`
  * object as a parameter and converts it into an `IAvailabilityEvent` object with specific properties.
  */
@@ -47,6 +51,14 @@ export const availabilityToEventItem = (availability: Availability): IAvailabili
     color: availability.available ? '#4CAF50' : '#9E9E9E',
     category: availability.available ? 'Available' : 'Unavailable'
   });
+
+  export const eventItemToAvailability = (
+    event: IAvailabilityEvent, 
+    barberId: string
+  ): Availability[] => {
+    return createMultiHourAvailabilities(event, barberId);
+  };
+  
   
 /**
  * The function `eventItemToAvailability` converts an event item to an availability object in
@@ -55,36 +67,46 @@ export const availabilityToEventItem = (availability: Availability): IAvailabili
  * event with properties like id, start, end, category, title, and notes.
  * @param {string} barberId - The `barberId` parameter is a string representing the unique identifier
  * of a barber. It is used in the `eventItemToAvailability` function to associate the availability
- * event with a specific barber.
+ * events with a specific barber.
  * @returns The function `eventItemToAvailability` returns an object of type `Availability`.
  */
-export const eventItemToAvailability = (
-    event: IAvailabilityEvent, 
-    barberId: string
-  ): Availability => {
-    const startTime = fromDateTime(event.start.dateTime ?? '')
-    const endTime = fromDateTime(event.end.dateTime ?? '')
-    const date = formatDate(startTime);
-    // console.log('Start Date:', formatDate(startTime))
-    return {
-      id: event.id,
+export const createMultiHourAvailabilities = (
+  event: IAvailabilityEvent, 
+  barberId: string
+): Availability[] => {
+  const startTime = fromDateTime(event.start.dateTime ?? '');
+  const endTime = fromDateTime(event.end.dateTime ?? '');
+  const totalHours = differenceInHours(endTime, startTime);
+  
+  const availabilities: Availability[] = [];
+  
+  for (let i = 0; i < totalHours; i++) {
+    const intervalStart = addHours(startTime, i);
+    const intervalEnd = addHours(startTime, i + 1);
+    const date = formatDate(intervalStart);
+    
+    availabilities.push({
+      id: uuid.v4(),
       barber_id: barberId,
       available: event.color === '#4CAF50',
       date: date,
-      start_time: startTime,
-      end_time: endTime,
-      period: determinePeriod(new Date(date)),
+      start_time: intervalStart,
+      end_time: intervalEnd,
+      period: determinePeriod(intervalStart),
       title: event.title || '',
       notes: event.notes || ''
-    };
-};
-  
+    });
+  }
+  return availabilities
+}
+
 // Helper function to determine period based on time
 export const determinePeriod = (date: Date): Period => {
-    const hours = date.getHours();
-    if (hours >= 5 && hours < 12) return Period.Morning;
-    if (hours >= 12 && hours < 17) return Period.Afternoon;
-    return Period.Night;
+  const zonedDate = toZonedTime(date, DEFAULT_TIMEZONE);
+  const hours = zonedDate.getHours();
+  if (hours >= 5 && hours < 12) return Period.Morning;
+  if (hours >= 12 && hours < 17) return Period.Afternoon;
+  return Period.Night;
 };
 
 function toDateTime(date: Date | string | undefined | null, timeZone?: string): DateTimeType {

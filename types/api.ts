@@ -41,6 +41,10 @@ export type BookAppointmentRequest = {
     p_service_id: string;
     p_barber_image_url: string;
     p_client_image_url: string;
+    p_barber_forename?: string;
+    p_barber_surname?: string;
+    p_client_forename?: string;
+    p_client_surname?: string;
     p_date: Date;
     p_start_time: Date;
     p_end_time: Date;

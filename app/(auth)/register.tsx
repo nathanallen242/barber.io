@@ -1,4 +1,13 @@
-import { View, StatusBar, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { 
+  View, 
+  StatusBar, 
+  Text, 
+  StyleSheet, 
+  TouchableOpacity, 
+  ActivityIndicator, 
+  Alert, 
+  KeyboardAvoidingView, 
+  Platform } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -199,24 +208,28 @@ export default function Register() {
                 error={touched.email ? errors.email : undefined}
                 iconName="mail"
               />
-
-              <Input
-                label="Password"
-                value={values.password}
-                onChangeText={handleChange('password')}
-                error={touched.password ? errors.password : undefined}
-                secureTextEntry
-                iconName="lock-closed"
-              />
-
-              <Input
-                label="Confirm Password"
-                value={values.confirmPassword}
-                onChangeText={handleChange('confirmPassword')}
-                error={touched.confirmPassword ? errors.confirmPassword : undefined}
-                secureTextEntry
-                iconName="lock-closed-outline"
-              />
+  
+                <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={{ flex: 1 }}
+              >
+                <Input
+                  label="Password"
+                  value={values.password}
+                  onChangeText={handleChange('password')}
+                  error={touched.password ? errors.password : undefined}
+                  secureTextEntry
+                  iconName="lock-closed"
+                />
+                <Input
+                  label="Confirm Password"
+                  value={values.confirmPassword}
+                  onChangeText={handleChange('confirmPassword')}
+                  error={touched.confirmPassword ? errors.confirmPassword : undefined}
+                  secureTextEntry
+                  iconName="lock-closed-outline"
+                />
+              </KeyboardAvoidingView>
 
               <Button onPress={handleSubmit}>
                 {isSubmitting ? <ActivityIndicator color="#ffffff" /> : 'Sign up'}

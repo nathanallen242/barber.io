@@ -6,7 +6,9 @@ import { useRouter } from 'expo-router';
 import { fetchAppointments, cancelAppointment } from '@/server/appointments';
 import { 
   GetAppointmentRequest, 
-} from "@/types/api";;
+} from "@/types/api";
+import { supabase } from "@/server/client";
+import { GetAppointmentResponse } from "@/types/api";
 import { EditAppointmentModal } from '@/components/home/appointments/EditAppointment';
 import { Appointment as AppointmentInterface } from '@/types/models';
 import { useState, useEffect } from 'react';
@@ -20,6 +22,7 @@ export default function AppointmentsSection() {
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<AppointmentInterface | null>(null);
   const [appointments, setAppointments] = useState<AppointmentInterface[]>([]);
+  const isBarber = user?.job_role === "barber";
 
   const handleEdit = (id: string) => {
     const found = appointments.find((item) => item.id === id);
@@ -59,31 +62,33 @@ export default function AppointmentsSection() {
     );
   };
 
-  const getAppointments = async () => {
-    if (!user) return;
-
+  const fetchAppointments = async () => {
     try {
       setIsLoading(true);
-      setError(null);
-      
       const appointmentRequest: GetAppointmentRequest = {
-        user_id: user.id,
-        role: user.job_role === 'client' ? 'client' : 'barber',
-      };
-
-      const appointments = await fetchAppointments(appointmentRequest);
-      if (error) {
-        setError(error);
-        return;
+        user_id: user!.id,
+        role: isBarber ? 'barber' : 'client'
       }
-      setAppointments(appointments || []);
+      
+      const { data, error } = await supabase
+      .rpc('get_appointments', appointmentRequest) as
+      { data: GetAppointmentResponse | null, error: any };
+
+      if (error) {
+        throw error;
+      }
+
+      setAppointments(data?.appointments || []);
+      console.log(JSON.stringify(data?.appointments, null, 2))
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    getAppointments();
+    fetchAppointments();
   }, [user]);
 
   if (isLoading) {

@@ -24,7 +24,6 @@ const Header: FC<HeaderProps> = ({
 }) => {
   const { colors, typography } = useThemeStore();
   const [ title, setTitle ] = useState('');
-  const commit = useAvailabilityStore((state) => state.commitChanges);
 
   const updateTitle = (date: string) => {
     const formatted = new Date(date).toLocaleDateString('en-US', {
@@ -56,7 +55,8 @@ const Header: FC<HeaderProps> = ({
           text: 'Yes',
           onPress: async () => {
             try {
-              await commit();
+              const { commitChanges } = useAvailabilityStore.getState();
+              await commitChanges();
               Toast.show({
                 type: 'success',
                 text1: 'Availability synced remotely!',

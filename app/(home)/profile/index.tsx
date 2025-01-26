@@ -1,5 +1,5 @@
 // profile/index.tsx
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
@@ -39,7 +39,9 @@ export default function ProfileScreen() {
       </View>
 
       {/* Settings */}
-      <View style={[styles.settingsContainer, { backgroundColor: colors.background }]}>
+      <ScrollView 
+      showsVerticalScrollIndicator={false} 
+      contentContainerStyle={[styles.settingsContainer, { backgroundColor: colors.background }]}>
         <Setting
           icon="notifications-outline"
           text="Enable Notifications"
@@ -101,7 +103,7 @@ export default function ProfileScreen() {
           }}
         />
 
-      </View>
+      </ScrollView>
     </View>
   );
 }

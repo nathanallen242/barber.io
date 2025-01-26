@@ -4,7 +4,7 @@ import GalleryCard from '@/components/home/gallery/Gallery';
 import { useThemeStore } from '@/store/themeStore';
 import { Service } from '@/types/models';
 import { useRouter } from 'expo-router';
-import { MaterialCommunityIcons, MaterialIcons, Ionicons } from '@expo/vector-icons';
+import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 
 interface ServiceWithImage extends Service {
   image: string;
@@ -17,7 +17,7 @@ export default function GallerySection() {
       category: 'Taper Fade',
       description: '45 mins',
       name: 'Haircut',
-      price: 90,
+      price: 25,
       image: require('@/assets/ads/portfolio.jpg'),
     },
     {
@@ -25,7 +25,7 @@ export default function GallerySection() {
       category: 'Bald Fade',
       description: '60 mins',
       name: 'Massage',
-      price: 60,
+      price: 25,
       image: require('@/assets/ads/portfolio.jpg'),
     },
     {
@@ -33,7 +33,7 @@ export default function GallerySection() {
       category: 'Shadow Fade',
       description: '45 mins',
       name: 'Haircut',
-      price: 90,
+      price: 25,
       image: require('@/assets/ads/portfolio.jpg'),
     },
     {
@@ -41,7 +41,7 @@ export default function GallerySection() {
       category: 'Eyebrow Line-up',
       description: '45 mins',
       name: 'Haircut',
-      price: 90,
+      price: 10,
       image: require('@/assets/ads/portfolio.jpg'),
     },
     {
@@ -49,7 +49,7 @@ export default function GallerySection() {
       category: 'Beard Line-up',
       description: '45 mins',
       name: 'Haircut',
-      price: 90,  
+      price: 15,  
       image: require('@/assets/ads/portfolio.jpg'),
     },
   ];

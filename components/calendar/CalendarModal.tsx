@@ -99,7 +99,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
             onRequestClose={onClose}
         >
             <Animated.View style={styles.overlay}>
-                <View style={[styles.modalContainer, { backgroundColor: sharedColors.white }]}>
+                <View style={[styles.modalContainer, { backgroundColor: sharedColors.white, minHeight: 1, minWidth: 1 }]}>
                     {/* Header */}
                     <Text style={[styles.modalTitle, { 
                         fontFamily: typography.fonts.semiBold,
@@ -146,6 +146,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
                             useNativeDriver
                             selectedDate={selectedDate || undefined}
                             onDateSelected={handleDateSelect}
+                            showMonth={false}
                         />
                     </View>
 
