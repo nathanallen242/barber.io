@@ -1,28 +1,49 @@
 {
   "expo": {
     "name": "barber.io",
-    "slug": "barber.io",
+    "slug": "barber-io",
+    "scheme": "com.supabase",
     "version": "1.0.0",
     "orientation": "portrait",
-    "scheme": "myapp",
     "userInterfaceStyle": "automatic",
+    "developmentMode": true,
     "newArchEnabled": true,
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "icon": "./assets/images/splash.png",
     "ios": {
       "supportsTablet": true
     },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#FFFFFF"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-font",
+      "expo-secure-store",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash.png",
+          "dark": {
+            "image": "./assets/images/splash-dark.png"
+          },
+          "backgroundColor": "#FFFFFF",
+          "darkBackgroundColor": "#000000",
+          "imageResizeMode": "cover"
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

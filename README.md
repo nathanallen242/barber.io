@@ -1,50 +1,52 @@
-# Welcome to your Expo app 👋
+# Barber.io 💈
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Description
 
-## Get started
+Barber.io is a cross-platform mobile application 📱 built with React Native that connects barbers to their clientele through a central platform. It facilitates client and appointment management, service selection, and secure payment processing.
 
-1. Install dependencies
+## Features
 
-   ```bash
-   npm install
-   ```
+### For Clients 👥
 
-2. Start the app
+- **Book Appointments 📅:** Schedule appointments for requested services with barbers of your choice, using the time slots they have allotted.
+- **Leave Reviews (Coming Soon) ⭐:** Share your experiences by leaving public reviews on your appointments.
 
-   ```bash
-    npx expo start
-   ```
+### For Barbers ✂️
 
-In the output, you'll find options to open the app in a
+- **Manage Availabilities 🕒:** Upload your available times for clients to book appointments.
+- **Attach Images to Gallery (Coming Soon) 🖼️:** Showcase your work by attaching images from appointments to a public gallery for future reference.
+- **Secure Payments (Coming Soon) 💳:** Safely transmit payments using Stripe.
+- **View Dashboard (Coming Soon) 📊:** Access an internal dashboard to view payment periods, haircut style frequencies, and more.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Technologies Used
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- [**React Native**](https://github.com/facebook/react-native) ⚛️
+- [**Supabase**](https://github.com/supabase/supabase) ☁️
+- [**PostgreSQL**](https://github.com/postgres/postgres) 🗄️
+- [**React Native Calendar Kit**](https://github.com/howljs/react-native-calendar-kit) 📅
+- [**Stripe React Native SDK**](https://github.com/stripe/stripe-react-native) 💳
 
-## Get a fresh project
+## iOS Screenshots
 
-When you're ready, run:
+### Splash Screen
+<img src="https://github.com/user-attachments/assets/4b796e27-8a72-4f86-96cc-d8ee57ed1424" alt="IMG_0248" width="300"/>
 
-```bash
-npm run reset-project
-```
+### Homepage 🏠
+<img src="https://github.com/user-attachments/assets/cd5e1beb-d3f4-4d07-901f-5d4f11a84012" alt="IMG_0249" width="300"/>
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Scheduling Flow 🔄
 
-## Learn more
+<img src="https://github.com/user-attachments/assets/6b8f86bf-912a-4dd6-b49f-9ae244dae952" alt="IMG_0250" width="300"/>
+<img src="https://github.com/user-attachments/assets/4554f776-a3a1-4d0f-9192-62e205aa1daf" alt="IMG_0251" width="300"/>
+<img src="https://github.com/user-attachments/assets/e5f4a93b-65b0-42a0-8606-d906b91d7601" alt="IMG_0252" width="300"/>
 
-To learn more about developing your project with Expo, look at the following resources:
+### Availability Creation 🗓️
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+<img src="https://github.com/user-attachments/assets/a95bfef6-248c-492b-a215-e696e4f0c8d7" alt="IMG_0253" width="300"/>
+<img src="https://github.com/user-attachments/assets/a42f1def-ccf8-417f-b7a2-fd36b63cb141" alt="IMG_0254" width="300"/>
+<img src="https://github.com/user-attachments/assets/e4b543c9-e474-4a1b-8480-5c08da8f1a5f" alt="IMG_0255" width="300"/>
 
-## Join the community
 
-Join our community of developers creating universal apps.
+## Development Status 🚧
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Development is currently in progress. Stay tuned for updates and new features!
