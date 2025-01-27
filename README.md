@@ -36,15 +36,15 @@ Barber.io is a cross-platform mobile application 📱 built with React Native th
 
 ### Scheduling Flow 🔄
 
-<img src="https://github.com/user-attachments/assets/6b8f86bf-912a-4dd6-b49f-9ae244dae952" alt="IMG_0250" width="300"/>
-<img src="https://github.com/user-attachments/assets/4554f776-a3a1-4d0f-9192-62e205aa1daf" alt="IMG_0251" width="300"/>
-<img src="https://github.com/user-attachments/assets/e5f4a93b-65b0-42a0-8606-d906b91d7601" alt="IMG_0252" width="300"/>
+<img src="https://github.com/user-attachments/assets/6b8f86bf-912a-4dd6-b49f-9ae244dae952" alt="IMG_0250" width="200"/>
+<img src="https://github.com/user-attachments/assets/4554f776-a3a1-4d0f-9192-62e205aa1daf" alt="IMG_0251" width="200"/>
+<img src="https://github.com/user-attachments/assets/e5f4a93b-65b0-42a0-8606-d906b91d7601" alt="IMG_0252" width="200"/>
 
 ### Availability Creation 🗓️
 
-<img src="https://github.com/user-attachments/assets/a95bfef6-248c-492b-a215-e696e4f0c8d7" alt="IMG_0253" width="300"/>
-<img src="https://github.com/user-attachments/assets/a42f1def-ccf8-417f-b7a2-fd36b63cb141" alt="IMG_0254" width="300"/>
-<img src="https://github.com/user-attachments/assets/e4b543c9-e474-4a1b-8480-5c08da8f1a5f" alt="IMG_0255" width="300"/>
+<img src="https://github.com/user-attachments/assets/a95bfef6-248c-492b-a215-e696e4f0c8d7" alt="IMG_0253" width="200"/>
+<img src="https://github.com/user-attachments/assets/a42f1def-ccf8-417f-b7a2-fd36b63cb141" alt="IMG_0254" width="200"/>
+<img src="https://github.com/user-attachments/assets/e4b543c9-e474-4a1b-8480-5c08da8f1a5f" alt="IMG_0255" width="200"/>
 
 
 ## Development Status 🚧
